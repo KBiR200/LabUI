@@ -1,0 +1,27 @@
+{% extends "admin.html" %}
+
+
+{% block report_card %}
+
+{% for r in reports %}
+<div class="admin-container16">
+  <h1>{{r.title}}</h1>
+  <span style="white-space:pre">{{r.formula}}</span>
+
+  <span style="white-space:pre">{{r.author.all}}</span>
+  <div class="admin-container17">
+    <button type="button" class="admin-button11 button">
+      <span>
+        <span>edit</span>
+        <br />
+      </span>
+    </button>
+  </div>
+</div>
+{% endfor %}
+
+{% endblock report_card %}
+
+{% block task_card %}
+
+{% endblock task_card %}

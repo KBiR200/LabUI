@@ -6,7 +6,7 @@ from chem.settings import BASE_DIR
 
 
 def home(request):
-    return render(request, 'index.html')
+    return render(request, 'reports.html')
 
 
 def signin(request):

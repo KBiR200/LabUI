@@ -16,7 +16,7 @@ class Machine(models.Model):
         return self.name
 
 class Laberatory(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50,)
     location = models.TextField(null=True)
     LC = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     def __str__(self) -> str:

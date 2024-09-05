@@ -12,8 +12,6 @@ def home(request):
 def signin(request):
     return render(request, 'signin.html')
 
-def post(request):
-    return render(request, 'reports.html')
 
 def admin(request):
 

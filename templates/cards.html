@@ -8,7 +8,7 @@
   <h1>{{r.title}}</h1>
   <span style="white-space:pre">{{r.formula}}</span>
 
-  <span style="white-space:pre">{{r.author.all}}</span>
+  <span style="white-space:pre">{% for auth in r.author.all %}{{auth.username}} {% endfor %}</span>
   <div class="admin-container17">
     <button type="button" class="admin-button11 button">
       <span>
@@ -16,6 +16,12 @@
         <br />
       </span>
     </button>
+    <a class="admin-button11 button" href="{% url 'report' r.id %}">
+    <span>
+      <span>view</span>
+      <br />
+    </span>
+  </a>
   </div>
 </div>
 {% endfor %}

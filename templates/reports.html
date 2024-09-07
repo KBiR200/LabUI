@@ -26,16 +26,29 @@
         }
 
         .selection-area {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
             margin-bottom: 20px;
         }
 
         .machine-option {
-            display: block;
-            margin: 10px 0;
-            font-size: 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+
+        .machine-option input[type="checkbox"] {
+            margin-bottom: 10px;
+        }
+
+        .machine-option input[type="number"] {
+            width: 50px;
+            text-align: center;
         }
 
         button {
@@ -107,17 +120,61 @@
     {% include "components/navbar8.html" %}
     <div class="container">
         <h1>Generate Machine Reports</h1>
-        <p>Select machines to generate reports:</p>
+        <p>Select machines and the number of report cards to generate:</p>
         
         <div class="selection-area">
             {% for i in machines %}
-            <label class="machine-option"><input type="checkbox" value="{{i.name}}"> {{i.name}}</label>
-            
+            <div class="machine-option">
+                <label>
+                    <input type="checkbox" class="machine-checkbox" value="{{ i.name }}">
+                    {{ i.name }}
+                </label>
+                <label>
+                    Number of Cards: 
+                    <input type="number" class="machine-cards" id="num-cards-{{ i.name }}" min="1" value="1" disabled>
+                </label>
+            </div>
             {% endfor %}
-            <label class="machine-option"><input type="checkbox" value="Machine 1"> Machine 1</label>
-            <label class="machine-option"><input type="checkbox" value="Machine 2"> Machine 2</label>
-            <label class="machine-option"><input type="checkbox" value="Machine 3"> Machine 3</label>
-            <label class="machine-option"><input type="checkbox" value="Machine 4"> Machine 4</label>
+            <div class="machine-option">
+                <label>
+                    <input type="checkbox" class="machine-checkbox" value="Machine 1">
+                    Machine 1
+                </label>
+                <label>
+                    Number of Cards:
+                    <input type="number" class="machine-cards" id="num-cards-Machine 1" min="1" value="1" disabled>
+                </label>
+            </div>
+            <div class="machine-option">
+                <label>
+                    <input type="checkbox" class="machine-checkbox" value="Machine 2">
+                    Machine 2
+                </label>
+                <label>
+                    Number of Cards:
+                    <input type="number" class="machine-cards" id="num-cards-Machine 2" min="1" value="1" disabled>
+                </label>
+            </div>
+            <div class="machine-option">
+                <label>
+                    <input type="checkbox" class="machine-checkbox" value="Machine 3">
+                    Machine 3
+                </label>
+                <label>
+                    Number of Cards:
+                    <input type="number" class="machine-cards" id="num-cards-Machine 3" min="1" value="1" disabled>
+                </label>
+            </div>
+            <div class="machine-option">
+                <label>
+                    <input type="checkbox" class="machine-checkbox" value="Machine 4">
+                    Machine 4
+                </label>
+                <label>
+                    Number of Cards:
+                    <input type="number" class="machine-cards" id="num-cards-Machine 4" min="1" value="1" disabled>
+                </label>
+            </div>
             <button id="generateReportBtn">Generate Report</button>
         </div>
 
@@ -125,111 +182,142 @@
             <p id="placeholder">Select machines to generate reports</p>
         </div>
     </div>
-    <iframe name="hidden_iframe" style="display:none;"></iframe>
+    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
     <script>
+        // Enable/disable number input based on checkbox selection
+        const checkboxes = document.querySelectorAll('.machine-checkbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const numCardsInput = document.getElementById(`num-cards-${checkbox.value}`);
+                numCardsInput.disabled = !checkbox.checked; // Enable or disable based on checkbox state
+            });
+        });
+    
         document.getElementById('generateReportBtn').addEventListener('click', function() {
-            const selectedMachines = Array.from(document.querySelectorAll('.machine-option input:checked')).map(input => input.value);
+            const selectedMachines = Array.from(document.querySelectorAll('.machine-checkbox:checked')).map(input => input.value);
             const reportSection = document.getElementById('reportSection');
             reportSection.innerHTML = ''; // Clear existing reports
-
+    
             if (selectedMachines.length > 0) {
                 selectedMachines.forEach(machine => {
-                    const reportCard = document.createElement('div');
-                    reportCard.classList.add('report-card');
-
-                    let formContent = '';
-
-                    switch(machine) {
-                        {% for i in machines %}
-                        case '{{i.name}}':
-                        formContent = `{{ i.form_template|safe }}`;
-                        break;
-                        {% endfor %}
-                        case 'Machine 1':
-                            formContent = `
-                                <h3>${machine}</h3>
-                                <form action="{% url 'save_record' rep.id %}" method="post" target="hidden_iframe">
-                                {% csrf_token %}
-                                    <label for="status-${machine}">Status:</label>
-                                    <input type="text" id="status-${machine}" name="status-${machine}" placeholder="e.g., Operational">
-
-                                    <label for="temperature-${machine}">Temperature:</label>
-                                    <input type="number" id="temperature-${machine}" name="temperature-${machine}" placeholder="e.g., 75°C">
-
-                                    <button type="submit">Submit Report</button>
-                                </form>
-                            `;
-                            break;
-                        case 'Machine 2':
-                            formContent = `
-                                <h3>${machine}</h3>
-                                <form>
-                                    <label for="load-${machine}">Load Capacity:</label>
-                                    <input type="number" id="load-${machine}" name="load-${machine}" placeholder="e.g., 500kg">
-
-                                    <label for="hours-${machine}">Operating Hours:</label>
-                                    <input type="number" id="hours-${machine}" name="hours-${machine}" placeholder="e.g., 1200 hours">
-
-                                    <label for="maintenance-${machine}">Maintenance Notes:</label>
-                                    <textarea id="maintenance-${machine}" name="maintenance-${machine}" rows="3" placeholder="e.g., Scheduled for next week"></textarea>
-
-                                    <button type="submit">Submit Report</button>
-                                </form>
-                            `;
-                            break;
-                        case 'Machine 3':
-                            formContent = `
-                                <h3>${machine}</h3>
-                                <form>
-                                    <label for="speed-${machine}">Speed:</label>
-                                    <input type="number" id="speed-${machine}" name="speed-${machine}" placeholder="e.g., 1500 RPM">
-
-                                    <label for="voltage-${machine}">Voltage:</label>
-                                    <input type="number" id="voltage-${machine}" name="voltage-${machine}" placeholder="e.g., 220V">
-
-                                    <label for="notes-${machine}">Performance Notes:</label>
-                                    <textarea id="notes-${machine}" name="notes-${machine}" rows="3" placeholder="e.g., No issues detected"></textarea>
-
-                                    <button type="submit">Submit Report</button>
-                                </form>
-                            `;
-                            break;
-                        case 'Machine 4':
-                            formContent = `
-                                <h3>${machine}</h3>
-                                <form>
-                                    <label for="pressure-${machine}">Pressure Level:</label>
-                                    <input type="number" id="pressure-${machine}" name="pressure-${machine}" placeholder="e.g., 5 bar">
-
-                                    <label for="flowrate-${machine}">Flow Rate:</label>
-                                    <input type="number" id="flowrate-${machine}" name="flowrate-${machine}" placeholder="e.g., 300 L/min">
-
-                                    <label for="comments-${machine}">Comments:</label>
-                                    <textarea id="comments-${machine}" name="comments-${machine}" rows="3" placeholder="e.g., Slight vibration observed"></textarea>
-
-                                    <button type="submit">Submit Report</button>
-                                </form>
-                            `;
-                            break;
-                        default:
-                            formContent = `
-                                <h3>${machine}</h3>
-                                <form>
-                                    <label for="status-${machine}">Status:</label>
-                                    <input type="text" id="status-${machine}" name="status-${machine}" placeholder="e.g., Operational">
-
-                                    <button type="submit">Submit Report</button>
-                                </form>
-                            `; 
+                    const numCards = document.getElementById(`num-cards-${machine}`).value;
+                    for (let i = 0; i < numCards; i++) {
+                        addReportCard(machine, i + 1); // Create multiple cards
                     }
-
-                    reportCard.innerHTML = formContent;
-                    reportSection.appendChild(reportCard);
                 });
             } else {
                 reportSection.innerHTML = '<p id="placeholder">Select machines to generate reports</p>';
             }
         });
+    
+        function addReportCard(machine, cardNumber) {
+            const reportCard = document.createElement('div');
+            reportCard.classList.add('report-card');
+            reportCard.id = `report-card-${machine}-${cardNumber}`; // Add unique id to each card
+    
+            let formContent = '';
+            
+            switch (machine) {
+                {% for i in machines %}
+                case '{{i.name}}':
+                    formContent = ` <form id="form-${machine}-${cardNumber}" class="machine-form" data-machine="${machine}" action="{% url 'save_record' rep.id %}" method="post" target="hidden_iframe">
+                        {% csrf_token %}
+                         <input type="hidden" name="machine_id" value="{{i.id}}">  
+                        {{ i.form_template|safe }}
+                    </form>
+                    `;
+                break;
+                
+                {% endfor %}
+                case 'Machine 1':
+                    formContent = `
+                    <form id="form-${machine}-${cardNumber}" class="machine-form" data-machine="${machine}" action="{% url 'save_record' rep.id %}" method="post" target="hidden_iframe">
+                        <h3>${machine} - Record ${cardNumber}</h3>
+                            {% csrf_token %}
+                            <label for="status-${machine}-${cardNumber}">Status:</label>
+                            <input type="text" id="status-${machine}-${cardNumber}" name="status-${machine}-${cardNumber}" placeholder="e.g., Operational">
+        
+                            <label for="temperature-${machine}-${cardNumber}">Temperature:</label>
+                            <input type="number" id="temperature-${machine}-${cardNumber}" name="temperature-${machine}-${cardNumber}" placeholder="e.g., 75°C">
+        
+                            <button type="submit">Submit Report</button>
+                        </form>
+                    `;
+                    break;
+                case 'Machine 2':
+                    formContent = `
+                        <h3>${machine} - Record ${cardNumber}</h3>
+                        <form id="form-${machine}-${cardNumber}" class="machine-form" data-machine="${machine}">
+                            <label for="load-${machine}-${cardNumber}">Load Capacity:</label>
+                            <input type="number" id="load-${machine}-${cardNumber}" name="load-${machine}-${cardNumber}" placeholder="e.g., 500kg">
+        
+                            <label for="hours-${machine}-${cardNumber}">Operating Hours:</label>
+                            <input type="number" id="hours-${machine}-${cardNumber}" name="hours-${machine}-${cardNumber}" placeholder="e.g., 1200 hours">
+        
+                            <label for="maintenance-${machine}-${cardNumber}">Maintenance Notes:</label>
+                            <textarea id="maintenance-${machine}-${cardNumber}" name="maintenance-${machine}-${cardNumber}" rows="3" placeholder="e.g., Scheduled for next week"></textarea>
+        
+                            <button type="submit">Submit Report</button>
+                        </form>
+                    `;
+                    break;
+                case 'Machine 3':
+                    formContent = `
+                        <h3>${machine} - Record ${cardNumber}</h3>
+                        <form id="form-${machine}-${cardNumber}" class="machine-form" data-machine="${machine}">
+                            <label for="speed-${machine}-${cardNumber}">Speed:</label>
+                            <input type="number" id="speed-${machine}-${cardNumber}" name="speed-${machine}-${cardNumber}" placeholder="e.g., 1500 RPM">
+        
+                            <label for="voltage-${machine}-${cardNumber}">Voltage:</label>
+                            <input type="number" id="voltage-${machine}-${cardNumber}" name="voltage-${machine}-${cardNumber}" placeholder="e.g., 220V">
+        
+                            <label for="notes-${machine}-${cardNumber}">Performance Notes:</label>
+                            <textarea id="notes-${machine}-${cardNumber}" name="notes-${machine}-${cardNumber}" rows="3" placeholder="e.g., No issues detected"></textarea>
+        
+                            <button type="submit">Submit Report</button>
+                        </form>
+                    `;
+                    break;
+                case 'Machine 4':
+                    formContent = `
+                        <h3>${machine} - Record ${cardNumber}</h3>
+                        <form id="form-${machine}-${cardNumber}" class="machine-form" data-machine="${machine}">
+                            <label for="pressure-${machine}-${cardNumber}">Pressure Level:</label>
+                            <input type="number" id="pressure-${machine}-${cardNumber}" name="pressure-${machine}-${cardNumber}" placeholder="e.g., 5 bar">
+        
+                            <label for="flowrate-${machine}-${cardNumber}">Flow Rate:</label>
+                            <input type="number" id="flowrate-${machine}-${cardNumber}" name="flowrate-${machine}-${cardNumber}" placeholder="e.g., 300 L/min">
+        
+                            <label for="comments-${machine}-${cardNumber}">Comments:</label>
+                            <textarea id="comments-${machine}-${cardNumber}" name="comments-${machine}-${cardNumber}" rows="3" placeholder="e.g., Slight vibration observed"></textarea>
+        
+                            <button type="submit">Submit Report</button>
+                        </form>
+                    `;
+                    break;
+                default:
+                    formContent = `
+                        <h3>${machine} - Record ${cardNumber}</h3>
+                        <form id="form-${machine}-${cardNumber}" class="machine-form" data-machine="${machine}">
+                            <label for="status-${machine}-${cardNumber}">Status:</label>
+                            <input type="text" id="status-${machine}-${cardNumber}" name="status-${machine}-${cardNumber}" placeholder="e.g., Operational">
+        
+                            <button type="submit">Submit Report</button>
+                        </form>
+                    `;
+            }
+    
+            reportCard.innerHTML = formContent;
+            document.getElementById('reportSection').appendChild(reportCard);
+    
+            // Add event listener to handle form submission
+            const form = document.getElementById(`form-${machine}-${cardNumber}`);
+            form.addEventListener('submit', function(event) {
+
+                document.getElementById(`report-card-${machine}-${cardNumber}`).style.display = 'none'; // Hide card after submission
+            });
+        }
+    
     </script>
 </body>
 </html>

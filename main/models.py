@@ -11,7 +11,7 @@ class Project(models.Model):
 
 class Machine(models.Model):
     name = models.CharField(max_length=20)
-
+    form_template = models.TextField(default='add template')
     def __str__(self) -> str:
         return self.name
 

@@ -109,51 +109,20 @@
 
     <div class="container">
       <!-- Reports Section -->
-      <h2>Reports</h2>
       <div class="grid">
-        {% comment %} begain card {% endcomment %}
-        {% block report_card %}
+        {% for rec in records %}
+        <div class="card">
+          <h1>Report: {{rec.report.get.title}}</h1>
+          <p>Machine: {{rec.machine.get.name}}</p>
+            {% for key, data in rec.data.values.items %}
+            <p><label for="temperature-${machine}">{{key}}: {{data}}</label></p>
+            
+            {% endfor %}
+          <button>delete</button>
 
-        {% endblock report_card %}
-        <div class="card">
-          <h1>Performance Report</h1>
-          <p>Created: Last Week</p>
-          <button>Edit</button>
         </div>
-        <div class="card">
-          <h1>Inventory Report</h1>
-          <p>Created: Today</p>
-          <button>Edit</button>
-        </div>
-      </div>
-
-      <!-- Tasks Section -->
-      <h2>Tasks</h2>
-      <div class="grid">
-        {% block task_card %}
-        
-        {% endblock task_card %}
-        <div class="card">
-          <h1>Task 2</h1>
-          <p>Due: Next Week</p>
-          <button>Edit</button>
-        </div>
-        <div class="card">
-          <h1>Task 3</h1>
-          <p>Due: In 2 Days</p>
-          <button>Edit</button>
-        </div>
-        <div class="card">
-          <h1>Task 3</h1>
-          <p>Due: In 2 Days</p>
-          <button>Edit</button>
-        </div>
-        <div class="card">
-          <h1>Task 3</h1>
-          <p>Due: In 2 Days</p>
-          <button>Edit</button>
-        </div>
-      </div>
+        {% endfor %}  
+    </div>
     </div>
   </body>
 </html>

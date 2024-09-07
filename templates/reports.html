@@ -110,6 +110,10 @@
         <p>Select machines to generate reports:</p>
         
         <div class="selection-area">
+            {% for i in machines %}
+            <label class="machine-option"><input type="checkbox" value="{{i.name}}"> {{i.name}}</label>
+            
+            {% endfor %}
             <label class="machine-option"><input type="checkbox" value="Machine 1"> Machine 1</label>
             <label class="machine-option"><input type="checkbox" value="Machine 2"> Machine 2</label>
             <label class="machine-option"><input type="checkbox" value="Machine 3"> Machine 3</label>
@@ -121,7 +125,7 @@
             <p id="placeholder">Select machines to generate reports</p>
         </div>
     </div>
-
+    <iframe name="hidden_iframe" style="display:none;"></iframe>
     <script>
         document.getElementById('generateReportBtn').addEventListener('click', function() {
             const selectedMachines = Array.from(document.querySelectorAll('.machine-option input:checked')).map(input => input.value);
@@ -136,10 +140,16 @@
                     let formContent = '';
 
                     switch(machine) {
+                        {% for i in machines %}
+                        case '{{i.name}}':
+                        formContent = `{{ i.form_template|safe }}`;
+                        break;
+                        {% endfor %}
                         case 'Machine 1':
                             formContent = `
                                 <h3>${machine}</h3>
-                                <form>
+                                <form action="{% url 'save_record' rep.id %}" method="post" target="hidden_iframe">
+                                {% csrf_token %}
                                     <label for="status-${machine}">Status:</label>
                                     <input type="text" id="status-${machine}" name="status-${machine}" placeholder="e.g., Operational">
 
@@ -210,7 +220,7 @@
 
                                     <button type="submit">Submit Report</button>
                                 </form>
-                            `;
+                            `; 
                     }
 
                     reportCard.innerHTML = formContent;

@@ -13,9 +13,9 @@ class Report(models.Model):
         return f"# {self.title}"
     
 class Records(models.Model):
-    report = models.ManyToManyField(Report)
+    report = models.ManyToManyField(Report, related_name='reports')
     data = models.JSONField(blank=True)
-    machine = models.ManyToManyField(Machine)
+    machine = models.ManyToManyField(Machine,related_name='machines',default=1)
 
     def __str__(self) -> str:
         return f"record for report: {''.join(self.report.values_list('title',flat=True))} "

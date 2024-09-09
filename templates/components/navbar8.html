@@ -6,17 +6,18 @@
         <header data-thq="thq-navbar" class="navbar8-navbar-interactive">
           <div data-thq="thq-navbar-nav" class="navbar8-desktop-menu">
             <nav class="navbar8-links">
-              <a href="https://www.teleporthq.io">
+              <button onclick="history.back()" class="back-button">Back</button>
+              <a href="{% url "home" %}">
                 <fragment class="navbar8-fragment4">
                   <span class="navbar8-text6 thq-body-small thq-link">
-                    Projects
+                    Home
                   </span>
                 </fragment>
               </a>
-              <a href="https://www.teleporthq.io">
+              <a href="{% url "control" %}">
                 <fragment class="navbar8-fragment2">
                   <span class="navbar8-text4 thq-body-small thq-link">
-                    Updates
+                    My View
                   </span>
                 </fragment>
               </a>
@@ -47,6 +48,5 @@
       </header>
 
     <script
-      defer=""
-      src="https://unpkg.com/@teleporthq/teleport-custom-scripts"
+
     ></script>

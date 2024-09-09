@@ -18,4 +18,4 @@ class Records(models.Model):
     machine = models.ManyToManyField(Machine,related_name='machines',default=1)
 
     def __str__(self) -> str:
-        return f"record for report: {''.join(self.report.values_list('title',flat=True))} "
+        return f"record for report {''.join(self.report.values_list('title',flat=True))}: {''.join(self.machine.values_list('name',flat=True))} "

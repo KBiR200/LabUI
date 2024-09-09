@@ -35,38 +35,68 @@
         max-width: 1200px;
       }
 
-      /* Table styling */
-      table {
-        width: 100%;
-        border-collapse: collapse;
+      /* Navbar styling */
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        padding: 15px 20px;
+        background-color: #4a90e2;
+        color: #fff;
+      }
+      .navbar a {
+        color: #fff;
+        margin: 0 15px;
+        font-size: 18px;
+      }
+
+      /* Card layout becomes block-like rows */
+      .card {
+        display: block;
+        padding: 20px;
         margin-bottom: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
       }
 
-      th, td {
-        border: 1px solid #eaeaea;
-        padding: 10px;
-        text-align: left;
+      .card h1 {
+        font-size: 22px;
+        margin-bottom: 15px;
       }
 
-      th {
-        background-color: #f2f2f2;
-        font-weight: bold;
+      .card-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid #eaeaea;
       }
 
-      /* Button styling */
+      .card-row:last-child {
+        border-bottom: none;
+      }
+
+      .card-row label {
+        font-weight: 600;
+      }
+
       .card button {
         background-color: #4a90e2;
         color: #fff;
         padding: 10px 15px;
         border-radius: 5px;
-        font-size: 14px;
         margin-top: 15px;
-        display: inline-block;
-        cursor: pointer;
+        font-size: 14px;
       }
 
       .card button:hover {
         background-color: #357ABD;
+      }
+
+      /* Responsiveness */
+      @media (max-width: 768px) {
+        .navbar a {
+          font-size: 16px;
+        }
       }
     </style>
 
@@ -81,30 +111,19 @@
 
       {% for rec in records %}
       <div class="card">
-        <h2>{{ rec.machine.get.name }}</h2>
-
-        <!-- Excel-like table layout with keys as columns -->
-        <table>
-          <thead>
-            <tr>
-              <!-- Display keys as table headers -->
-              <th>Machine</th>
-              {% for key, data in rec.data.values.items %}
-              <th>{{ key }}</th>
-              {% endfor %}
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <!-- Display corresponding data for each key -->
-              <td>{{ rec.machine.get.name }}</td>
-              {% for key, data in rec.data.values.items %}
-              <td>{{ data }}</td>
-              {% endfor %}
-            </tr>
-          </tbody>
-        </table>
-
+        <h1>{{ rec.machine.get.name }}</h1>
+        <div class="card-row">
+          <label for="machine-name">Machine:</label>
+          <span>{{ rec.machine.get.name }}</span>
+        </div>
+        
+        {% for key, data in rec.data.values.items %}
+        <div class="card-row">
+          <label>{{ key }}:</label>
+          <span>{{ data }}</span>
+        </div>
+        {% endfor %}
+        
         <button>Delete</button>
       </div>
       {% endfor %}

@@ -3,10 +3,7 @@
 <html lang="en">
   <head>
     <title>Admin - Modern Dashboard</title>
-    <meta
-      property="og:title"
-      content="Admin - Modern Dashboard"
-    />
+    <meta property="og:title" content="Admin - Modern Dashboard" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="utf-8" />
     <meta property="twitter:card" content="summary_large_image" />
@@ -86,6 +83,19 @@
         background-color: #357ABD;
       }
 
+      /* New Report Button Styling */
+      .add-report-btn {
+        background-color: #28a745;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 5px;
+        margin-left: 20px;
+        font-size: 14px;
+      }
+      .add-report-btn:hover {
+        background-color: #218838;
+      }
+
       /* Responsiveness */
       @media (max-width: 768px) {
         .navbar a {
@@ -97,55 +107,36 @@
       }
     </style>
 
-    <!-- Fonts -->
-    {% comment %} <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
-    /> {% endcomment %}
   </head>
 
   <body>
-{% include "components/navbar8.html"  %}
+{% include "components/navbar8.html" %}
 
     <div class="container">
       <!-- Reports Section -->
-      <h2>Reports</h2>
+      <div style="display: flex; align-items: center;">
+        <h2>Reports</h2>
+        <!-- Add New Report Button -->
+        <a href="">
+          <button class="add-report-btn">+ Add New Report</button>
+        </a>
+      </div>
+      
       <div class="grid">
-        {% comment %} begain card {% endcomment %}
         {% block report_card %}
-
+        <!-- Your report cards will go here -->
         {% endblock report_card %}
-        <div class="card">
-          <h1>Performance Report</h1>
-          <p>Created: Last Week</p>
-          <button>Edit</button>
-        </div>
-        <div class="card">
-          <h1>Inventory Report</h1>
-          <p>Created: Today</p>
-          <button>Edit</button>
-        </div>
       </div>
 
       <!-- Tasks Section -->
       <h2>Tasks</h2>
       <div class="grid">
         {% block task_card %}
-        
+        <!-- Your task cards will go here -->
         {% endblock task_card %}
         <div class="card">
           <h1>Task 2</h1>
           <p>Due: Next Week</p>
-          <button>Edit</button>
-        </div>
-        <div class="card">
-          <h1>Task 3</h1>
-          <p>Due: In 2 Days</p>
-          <button>Edit</button>
-        </div>
-        <div class="card">
-          <h1>Task 3</h1>
-          <p>Due: In 2 Days</p>
           <button>Edit</button>
         </div>
         <div class="card">

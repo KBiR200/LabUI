@@ -23,10 +23,10 @@ import reports.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', main.views.home),
+    path('', main.views.home, name='home'),
     path('signin/', main.views.signin),
     path('report/<int:pk>/', reports.views.report, name='report'),
     path('report/<int:pk>/save/', reports.views.save_record, name='save_record'),
     path('report/<int:pk>/data/', reports.views.show_report, name='show_report'),
-    path('control/', main.views.admin),
+    path('control/', main.views.admin, name='control'),
 ]

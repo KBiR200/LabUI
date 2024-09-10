@@ -20,8 +20,8 @@ class Records(models.Model):
     def __str__(self) -> str:
         return f"record for report {''.join(self.report.values_list('title',flat=True))}: {''.join(self.machine.values_list('name',flat=True))} "
     
-# class Tasks(models.Model):
-#     creator = models.ForeignKey(User, on_delete=models.CASCADE)
-#     assigned = models.ManyToManyField(User, name='signed', default=None, blank=True)
-#     data = models.JSONField(blank=True)
-#     status = models.IntegerField(name='status', default=0)
+class Tasks(models.Model):
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_task')
+    assigned = models.ManyToManyField(User, default=None, blank=True, related_name='assigned_task')
+    data = models.JSONField(blank=True)
+    status = models.IntegerField(name='status', default=0)

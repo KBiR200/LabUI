@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Task - Task Management</title>
+    <link rel="stylesheet" href="{% static 'css/tasks.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/navbar8.css' %}" />
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f4f7fa;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 24px;
+        color: #4a90e2;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #333;
+      }
+
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        font-size: 16px;
+        outline: none;
+      }
+
+      .form-group textarea {
+        height: 120px;
+        resize: vertical;
+      }
+
+      .btn {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        background-color: #4a90e2;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 18px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        text-align: center;
+      }
+
+      .btn:hover {
+        background-color: #357abd;
+      }
+
+      .navbar8-container {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 100;
+      }
+
+      .back-button {
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 18px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    {% include "components/navbar8.html"  %}
+
+    <div class="container">
+      <h1>Create a New Task</h1>
+
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="task-title">Task Title:</label>
+          <input
+            type="text"
+            id="task-title"
+            name="title"
+            placeholder="Enter task title"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="task-status">Task Status:</label>
+          <select id="task-status" name="status" required>
+            <option value="0">Pending</option>
+            <option value="1">In Progress</option>
+            <option value="2">Completed</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="task-users">Assign to Users:</label>
+          <select id="task-users" name="assigned_users" multiple required>
+            {% for user in users %}
+            <option value="{{ user.id }}">{{ user.username }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="task-data">Task Description / Data:</label>
+          <textarea
+            id="task-data"
+            name="data"
+            placeholder="Enter task details"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn">Create Task</button>
+        </div>
+      </form>
+    </div>
+
+    <script
+      defer=""
+      src="https://unpkg.com/@teleporthq/teleport-custom-scripts"
+    ></script>
+  </body>
+</html>

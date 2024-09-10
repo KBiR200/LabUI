@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from main.models import Machine
-from reports.models import Report, Records
+from reports.models import Report, Records, Tasks
+from django.contrib.auth.models import User
 from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404
 from chem.settings import BASE_DIR
@@ -15,11 +16,11 @@ def update_report(request,pk):
     return render(request, 'reports.html',{'machines': Machine.objects.all(), 'rep':rep})
 
 def new_report(request):
-    r= Report.objects.all()
-    rep = get_object_or_404(Report, id=pk)
-    if request.user.id not in list(rep.author.values_list("id", flat=True)):
-        return HttpResponseForbidden("You are not allowed to edit this form.")
-    return render(request, 'reports.html',{'machines': Machine.objects.all(), 'rep':rep})
+    # r= Report.objects.all()
+    # rep = get_object_or_404(Report, id=pk)
+    # if request.user.id not in list(rep.author.values_list("id", flat=True)):
+    #     return HttpResponseForbidden("You are not allowed to edit this form.")
+    return render(request, 'reports.html',{'machines': Machine.objects.all()})
 
 
 def save_record(request, pk):
@@ -59,3 +60,19 @@ def show_report(request, pk):
     for i in related_records:
         print(i.data)
     return render(request, 'show_report.html', {'records':related_records, 'reports':rep})
+
+
+def create_task_view(request):
+    users = User.objects.all()  # Fetch all users
+    if request.method == 'POST':
+        title = request.POST['title']
+        status = request.POST['status']
+        assigned_users = request.POST.getlist('assigned_users')
+        data = request.POST.get('data', '')
+        
+        task = Tasks.objects.create(initiator=request.user, status=status, data=data)
+        task.signed.set(assigned_users)
+        task.save()
+        return redirect('admin.html')  # Redirect to a task list or another page after creation
+    
+    return render(request, 'task.html', {'users': users})

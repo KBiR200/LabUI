@@ -117,7 +117,7 @@
       <div style="display: flex; align-items: center;">
         <h2>Reports</h2>
         <!-- Add New Report Button -->
-        <a href="">
+        <a href= {% url "new_report" %}>
           <button class="add-report-btn">+ Add New Report</button>
         </a>
       </div>
@@ -129,7 +129,12 @@
       </div>
 
       <!-- Tasks Section -->
+      <div style="display: flex; align-items: center;">
       <h2>Tasks</h2>
+      <a href= {% url "new_task" %}>
+        <button class="add-report-btn">+ Add New Task</button>
+      </a>
+    </div>
       <div class="grid">
         {% block task_card %}
         <!-- Your task cards will go here -->

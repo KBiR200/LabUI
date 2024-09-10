@@ -7,7 +7,14 @@ from chem.settings import BASE_DIR
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 @login_required
-def report(request,pk):
+def update_report(request,pk):
+    r= Report.objects.all()
+    rep = get_object_or_404(Report, id=pk)
+    if request.user.id not in list(rep.author.values_list("id", flat=True)):
+        return HttpResponseForbidden("You are not allowed to edit this form.")
+    return render(request, 'reports.html',{'machines': Machine.objects.all(), 'rep':rep})
+
+def new_report(request):
     r= Report.objects.all()
     rep = get_object_or_404(Report, id=pk)
     if request.user.id not in list(rep.author.values_list("id", flat=True)):

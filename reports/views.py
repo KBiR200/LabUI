@@ -96,6 +96,7 @@ def accept_task(request, pk):
     print(f"Task ID = {pk}")
     task = get_object_or_404(Tasks, id=pk)
     task.assigned.add(request.user)
-
+    task.status = 1
+    task.save()
     print("u are assigned")
     return redirect('control')

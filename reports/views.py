@@ -13,8 +13,18 @@ def update_report(request,pk):
     rep = get_object_or_404(Report, id=pk)
     if request.user.id not in list(rep.author.values_list("id", flat=True)):
         return HttpResponseForbidden("You are not allowed to edit this form.")
-    return render(request, 'reports.html',{'machines': Machine.objects.all(), 'rep':rep})
+    task = Tasks.objects.filter(assigned=request.user)
+    if request.method == "POST":
+        try:
+            t = request.POST['task']
+            print(t)
+            rep.task = get_object_or_404(Tasks, id=t)
+            rep.save()
+        except:
+            print('something off')
+    return render(request, 'reports.html',{'machines': Machine.objects.all(), 'rep':rep, 'tasks':task})
 
+@login_required
 def new_report(request):
     # r= Report.objects.all()
     # rep = get_object_or_404(Report, id=pk)
@@ -23,13 +33,12 @@ def new_report(request):
     return render(request, 'reports.html',{'machines': Machine.objects.all()})
 
 
+@login_required
 def save_record(request, pk):
     if request.method == 'POST':
         try:
             print('Processing POST request')
             form_data = {}
-
-            # Loop through POST data and add the form fields to the dictionary
             for key, value in request.POST.items():
                 if key != 'csrfmiddlewaretoken' and key != 'machine_id':  # Ignore the CSRF token field and machine ID 
                     form_data[key] = value
@@ -39,13 +48,9 @@ def save_record(request, pk):
             print(f'Machine ID: {machine_id}')
             report = Report.objects.get(id=pk)
             machine = Machine.objects.get(id=machine_id)
-
-            # Create the Record object first (without Many-to-Many relationships)
             record = Records.objects.create(data=final_data)
             record.report.add(report)
             record.machine.add(machine)
-
-            # Save the record
             record.save()
             return JsonResponse({'success': True, 'data': form_data})
         except Exception as e:
@@ -54,6 +59,7 @@ def save_record(request, pk):
         return JsonResponse({'success': False, 'message': 'Invalid request method'})
     
 
+@login_required
 def show_report(request, pk):
     rep = get_object_or_404(Report, id=pk)
     related_records = rep.reports.all()
@@ -62,17 +68,34 @@ def show_report(request, pk):
     return render(request, 'show_report.html', {'records':related_records, 'reports':rep})
 
 
-def create_task_view(request):
+@login_required
+def create_task(request):
+    
     users = User.objects.all()  # Fetch all users
     if request.method == 'POST':
         title = request.POST['title']
-        status = request.POST['status']
-        assigned_users = request.POST.getlist('assigned_users')
         data = request.POST.get('data', '')
         
-        task = Tasks.objects.create(initiator=request.user, status=status, data=data)
-        task.signed.set(assigned_users)
+        task = Tasks.objects.create(creator=request.user, data=data, title = title)
+        # task.signed.set(assigned_users)
         task.save()
-        return redirect('admin.html')  # Redirect to a task list or another page after creation
+        print(f'task: {title} is created')
+        return redirect('control')  # Redirect to a task list or another page after creation
     
     return render(request, 'task.html', {'users': users})
+
+@login_required
+def show_task(request, pk):
+    task = get_object_or_404(Tasks, id=pk)
+    print(task.assigned.all().count())
+
+    return redirect('control')
+
+@login_required
+def accept_task(request, pk):
+    print(f"Task ID = {pk}")
+    task = get_object_or_404(Tasks, id=pk)
+    task.assigned.add(request.user)
+
+    print("u are assigned")
+    return redirect('control')

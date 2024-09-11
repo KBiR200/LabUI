@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from reports.models import Report
+from reports.models import Report, Tasks
 from chem.settings import BASE_DIR
 # Create your views here.
 
@@ -14,6 +14,6 @@ def signin(request):
 
 
 def admin(request):
-
-    reports = Report.objects.all()
-    return render(request, 'cards.html', {'reports': reports})
+    tasks = Tasks.objects.all()
+    reports = Report.objects.filter(author=request.user)
+    return render(request, 'cards.html', {'reports': reports, 'tasks':tasks})

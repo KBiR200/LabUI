@@ -98,7 +98,7 @@
     <div class="container">
       <h1>Create a New Task</h1>
 
-      <form method="post">
+      <form method="post" action= {% url "new_task" %}>
         {% csrf_token %}
         <div class="form-group">
           <label for="task-title">Task Title:</label>
@@ -111,23 +111,23 @@
           />
         </div>
 
-        <div class="form-group">
+        {% comment %} <div class="form-group">
           <label for="task-status">Task Status:</label>
           <select id="task-status" name="status" required>
             <option value="0">Pending</option>
             <option value="1">In Progress</option>
             <option value="2">Completed</option>
           </select>
-        </div>
+        </div> {% endcomment %}
 
-        <div class="form-group">
+        {% comment %} <div class="form-group">
           <label for="task-users">Assign to Users:</label>
           <select id="task-users" name="assigned_users" multiple required>
             {% for user in users %}
             <option value="{{ user.id }}">{{ user.username }}</option>
             {% endfor %}
           </select>
-        </div>
+        </div> {% endcomment %}
 
         <div class="form-group">
           <label for="task-data">Task Description / Data:</label>

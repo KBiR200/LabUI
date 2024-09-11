@@ -13,5 +13,12 @@
 {% endblock report_card %}
 
 {% block task_card %}
-
+{% for t in tasks %}
+<div class="card">
+  <h1>Title: {{t.title}}</h1>
+  <p>Requester: {{t.creator}}</p>
+  <button onclick="window.location.href='{% url 'show_task' t.id %}';">View</button>
+  <button onclick="window.location.href='{% url 'accept_task' t.id %}';">Accept</button>
+</div>
+{% endfor %}
 {% endblock task_card %}

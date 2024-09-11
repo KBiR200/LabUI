@@ -49,11 +49,16 @@
         font-size: 18px;
       }
 
-      /* Grid layout */
-      .grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      /* Layout for reports and tasks sections */
+      .reports-tasks {
+        display: flex;
         gap: 20px;
+        justify-content: space-between;
+        margin-top: 20px;
+      }
+
+      .section {
+        width: 48%;
       }
 
       /* Card design */
@@ -63,6 +68,7 @@
         border-radius: 10px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         transition: transform 0.2s, box-shadow 0.2s;
+        margin-bottom: 20px;
       }
       .card:hover {
         transform: translateY(-5px);
@@ -83,8 +89,8 @@
         background-color: #357ABD;
       }
 
-      /* New Report Button Styling */
-      .add-report-btn {
+      /* Add New Button Styling */
+      .add-report-btn, .add-task-btn {
         background-color: #28a745;
         color: white;
         padding: 10px 15px;
@@ -92,17 +98,17 @@
         margin-left: 20px;
         font-size: 14px;
       }
-      .add-report-btn:hover {
+      .add-report-btn:hover, .add-task-btn:hover {
         background-color: #218838;
       }
 
       /* Responsiveness */
       @media (max-width: 768px) {
-        .navbar a {
-          font-size: 16px;
+        .reports-tasks {
+          flex-direction: column;
         }
-        .grid {
-          grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        .section {
+          width: 100%;
         }
       }
     </style>
@@ -113,41 +119,35 @@
 {% include "components/navbar8.html" %}
 
     <div class="container">
-      <!-- Reports Section -->
-      <div style="display: flex; align-items: center;">
-        <h2>Reports</h2>
-        <!-- Add New Report Button -->
-        <a href= {% url "new_report" %}>
-          <button class="add-report-btn">+ Add New Report</button>
-        </a>
-      </div>
-      
-      <div class="grid">
-        {% block report_card %}
-        <!-- Your report cards will go here -->
-        {% endblock report_card %}
-      </div>
-
-      <!-- Tasks Section -->
-      <div style="display: flex; align-items: center;">
-      <h2>Tasks</h2>
-      <a href= {% url "new_task" %}>
-        <button class="add-report-btn">+ Add New Task</button>
-      </a>
-    </div>
-      <div class="grid">
-        {% block task_card %}
-        <!-- Your task cards will go here -->
-        {% endblock task_card %}
-        <div class="card">
-          <h1>Task 2</h1>
-          <p>Due: Next Week</p>
-          <button>Edit</button>
+      <div class="reports-tasks">
+        <!-- Reports Section -->
+        <div class="section">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <h2>My Reports</h2>
+            <a href="{% url 'new_report' %}">
+              <button class="add-report-btn">+ Add New Report</button>
+            </a>
+          </div>
+          <div class="grid">
+            {% block report_card %}
+            <!-- Your report cards will go here -->
+            {% endblock report_card %}
+          </div>
         </div>
-        <div class="card">
-          <h1>Task 3</h1>
-          <p>Due: In 2 Days</p>
-          <button>Edit</button>
+
+        <!-- Tasks Section -->
+        <div class="section">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <h2>My Tasks</h2>
+            <a href="{% url 'new_task' %}">
+              <button class="add-task-btn">+ Add New Task</button>
+            </a>
+          </div>
+          <div class="grid">
+            {% block task_card %}
+            <!-- Your task cards will go here -->
+            {% endblock task_card %}
+          </div>
         </div>
       </div>
     </div>

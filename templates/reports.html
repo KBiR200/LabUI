@@ -114,12 +114,42 @@
         .report-card button:hover {
             background-color: #27ae60;
         }
+        .task-selection {
+            margin: 20px 0;
+        }
+
+        .task-selection select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .task-selection label {
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
     </style>
 </head>
 <body>
     {% include "components/navbar8.html" %}
     <div class="container">
         <h1>Generate Machine Reports</h1>
+        <div class="task-selection">
+            <form method='POST' id='task_select' target="hidden_iframe">
+                {% csrf_token %}
+                <label for="task">Select Task for the Report:</label>
+                <select id="task" name="task">
+                    <option value="">-- Choose a Task --</option>
+                    {% for task in tasks %}
+                    <option value="{{ task.id }}">{{ task.title }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Submit Report</button>
+            </form>
+        </div>
         <p>Select machines and the number of report cards to generate:</p>
         
         <div class="selection-area">
@@ -138,7 +168,7 @@
             <div class="machine-option">
                 <label>
                     <input type="checkbox" class="machine-checkbox" value="Machine 1">
-                    Machine 1
+                    for testing 1
                 </label>
                 <label>
                     Number of Cards:
@@ -146,8 +176,8 @@
                 </label>
             </div>
             
-            <button id="generateReportBtn">Generate Report</button>
         </div>
+        <button id="generateReportBtn">Generate Report</button>
 
         <div id="reportSection" class="report-section">
             <p id="placeholder">Select machines to generate reports</p>

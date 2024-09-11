@@ -6,10 +6,11 @@ from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404
 from chem.settings import BASE_DIR
 from django.contrib.auth.decorators import login_required
-# Create your views here.
+
+
+# report view function
 @login_required
 def update_report(request,pk):
-    r= Report.objects.all()
     rep = get_object_or_404(Report, id=pk)
     if request.user.id not in list(rep.author.values_list("id", flat=True)):
         return HttpResponseForbidden("You are not allowed to edit this form.")
@@ -32,6 +33,16 @@ def new_report(request):
     #     return HttpResponseForbidden("You are not allowed to edit this form.")
     return render(request, 'reports.html',{'machines': Machine.objects.all()})
 
+
+@login_required
+def show_report(request, pk):
+    rep = get_object_or_404(Report, id=pk)
+    related_records = rep.reports.all()
+    for i in related_records:
+        print(i.data)
+    return render(request, 'show_report.html', {'records':related_records, 'reports':rep})
+
+# record view function
 
 @login_required
 def save_record(request, pk):
@@ -59,14 +70,8 @@ def save_record(request, pk):
         return JsonResponse({'success': False, 'message': 'Invalid request method'})
     
 
-@login_required
-def show_report(request, pk):
-    rep = get_object_or_404(Report, id=pk)
-    related_records = rep.reports.all()
-    for i in related_records:
-        print(i.data)
-    return render(request, 'show_report.html', {'records':related_records, 'reports':rep})
 
+# Tasks view function
 
 @login_required
 def create_task(request):

@@ -10,8 +10,14 @@ from django.contrib.auth.decorators import login_required
 
 # report view function
 @login_required
+def new_report(request):
+    return render(request, 'reports.html',{'machines': Machine.objects.all()})
+
+
+@login_required
 def update_report(request,pk):
     rep = get_object_or_404(Report, id=pk)
+    # check user 
     if request.user.id not in list(rep.author.values_list("id", flat=True)):
         return HttpResponseForbidden("You are not allowed to edit this form.")
     task = Tasks.objects.filter(assigned=request.user)
@@ -25,19 +31,13 @@ def update_report(request,pk):
             print('something off')
     return render(request, 'reports.html',{'machines': Machine.objects.all(), 'rep':rep, 'tasks':task})
 
-@login_required
-def new_report(request):
-    # r= Report.objects.all()
-    # rep = get_object_or_404(Report, id=pk)
-    # if request.user.id not in list(rep.author.values_list("id", flat=True)):
-    #     return HttpResponseForbidden("You are not allowed to edit this form.")
-    return render(request, 'reports.html',{'machines': Machine.objects.all()})
-
 
 @login_required
 def show_report(request, pk):
     rep = get_object_or_404(Report, id=pk)
-    related_records = rep.reports.all()
+    if request.user.id not in list(rep.author.values_list("id", flat=True)):
+        return HttpResponseForbidden("You are not allowed to edit this form.")
+    related_records = rep.reports_records.all()
     for i in related_records:
         print(i.data)
     return render(request, 'show_report.html', {'records':related_records, 'reports':rep})

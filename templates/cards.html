@@ -8,6 +8,7 @@
   <p>Authors: {% for auth in r.author.all %}{{auth.username}} {% endfor %}</p>
   <button onclick="window.location.href='{% url 'report' r.id %}';">edit</button>
   <button onclick="window.location.href='{% url 'show_report' r.id %}';">View</button>
+  <button onclick="window.location.href='{% url 'show_report' r.id %}';">Submit</button>
 </div>
 {% endfor %}
 {% endblock report_card %}
@@ -18,7 +19,7 @@
   <h1>Title: {{t.title}}</h1>
   <p>Requester: {{t.creator}}</p>
   <button onclick="window.location.href='{% url 'show_task' t.id %}';">View</button>
-  <button onclick="window.location.href='{% url 'accept_task' t.id %}';">Accept</button>
+  <button onclick="window.location.href='{% url 'submit_task' t.id %}';">Submit</button>
 </div>
 {% endfor %}
 {% endblock task_card %}

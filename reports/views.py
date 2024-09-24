@@ -11,7 +11,11 @@ from django.contrib.auth.decorators import login_required
 # report view function
 @login_required
 def new_report(request):
-    return render(request, 'reports.html',{'machines': Machine.objects.all()})
+    test_name= 'Change the Name'
+    r = Report.objects.create(title=test_name)
+    r.author.set([request.user])
+    print(r.id)
+    return redirect("report", pk=r.id)
 
 
 @login_required
@@ -24,7 +28,7 @@ def update_report(request,pk):
     if request.method == "POST":
         try:
             t = request.POST['task']
-            print(t)
+            print(f'the task is {t}')
             rep.task = get_object_or_404(Tasks, id=t)
             rep.save()
         except:
@@ -93,7 +97,7 @@ def create_task(request):
 def show_task(request, pk):
     task = get_object_or_404(Tasks, id=pk)
     print(task.assigned.all().count())
-
+    print(task.title)
     return redirect('control')
 
 @login_required
@@ -104,4 +108,13 @@ def accept_task(request, pk):
     task.status = 1
     task.save()
     print("u are assigned")
+    return redirect('control')
+
+@login_required
+def submit_task(req, pk):
+    print(f"Task ID = {pk}")
+    task = get_object_or_404(Tasks, id=pk)
+    task.status = 2
+    task.save()
+    print('task is handed')
     return redirect('control')

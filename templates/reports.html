@@ -114,6 +114,7 @@
         .report-card button:hover {
             background-color: #27ae60;
         }
+
         .task-selection {
             margin: 20px 0;
         }
@@ -131,12 +132,54 @@
             margin-bottom: 10px;
             display: block;
         }
+
+        /* New styles for the report name input */
+        .report-name-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .report-name-section input[type="text"] {
+            padding: 10px;
+            font-size: 18px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 400px;
+            margin-top: 10px;
+        }
+
+        .report-name-section button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-top: 10px;
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .report-name-section button:hover {
+            background-color: #27ae60;
+        }
     </style>
 </head>
 <body>
     {% include "components/navbar8.html" %}
     <div class="container">
         <h1>Generate Machine Reports</h1>
+
+        <!-- New section for changing the report name -->
+        <div class="report-name-section">
+            <form method="POST">
+                {% csrf_token %}
+                <label for="reportName">Report Name:</label>
+                <input type="text" id="reportName" name="report_name" value="{{ rep.title }}" placeholder="Enter report name">
+                <button type="submit">Update Name</button>
+            </form>
+        </div>
+
         <div class="task-selection">
             <form method='POST' id='task_select' target="hidden_iframe">
                 {% csrf_token %}
@@ -239,7 +282,7 @@
                             <input type="text" id="status-${machine}-${cardNumber}" name="status-${machine}-${cardNumber}" placeholder="e.g., Operational">
         
                             <label for="temperature">Temperature:</label>
-                            <input type="number" id="temperature-${machine}-${cardNumber}" name="temperature-${machine}-${cardNumber}" placeholder="e.g., 75°C">
+                            <input type="number" id="temperature-${cardNumber}" name="temperature-${cardNumber}" placeholder="e.g., 75°C">
         
                             <button type="submit">Submit Report</button>
                         </form>
@@ -263,11 +306,9 @@
             // Add event listener to handle form submission
             const form = document.getElementById(`form-${machine}-${cardNumber}`);
             form.addEventListener('submit', function(event) {
-
                 document.getElementById(`report-card-${machine}-${cardNumber}`).style.display = 'none'; // Hide card after submission
             });
         }
-    
     </script>
 </body>
 </html>

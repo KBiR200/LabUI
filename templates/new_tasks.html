@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View and Accept Tasks</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        .task-list {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .task-card {
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-details {
+            flex-grow: 1;
+            margin-right: 20px;
+        }
+
+        .task-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #34495e;
+        }
+
+        .task-info {
+            margin-top: 10px;
+            color: #555;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .task-actions button {
+            padding: 8px 12px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .accept-btn {
+            background-color: #2ecc71;
+        }
+
+        .accept-btn:hover {
+            background-color: #27ae60;
+        }
+
+        .reject-btn {
+            background-color: #e74c3c;
+        }
+
+        .reject-btn:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    {% include "components/navbar8.html" %}
+    <div class="container">
+        <h1>View and Accept Tasks</h1>
+
+        <div class="task-list">
+            {% for task in tasks %}
+            <div class="task-card">
+                <div class="task-details">
+                    <div class="task-title">{{ task.title }}</div>
+                    <div class="task-info">
+                        <p><strong>Description:</strong> {{ task.description }}</p>
+                        <p><strong>Due Date:</strong> {{ task.due_date }}</p>
+                    </div>
+                </div>
+                <div class="task-actions">
+                    <form method="POST" action="{% url 'accept_task' task.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="accept-btn">Accept</button>
+                    </form>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="reject-btn">Reject</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

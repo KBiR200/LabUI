@@ -10,10 +10,14 @@ def home(request):
 
 
 def signin(request):
-    return render(request, 'signin.html')
+    return render(request, 'login.html')
 
 
-def admin(request):
-    tasks = Tasks.objects.all()
-    reports = Report.objects.filter(author=request.user)
+def control(request):
+    tasks = Tasks.objects.filter(status=1, assigned=request.user)
+    reports = Report.objects.filter(status=0,author=request.user).order_by('-date_added')
     return render(request, 'cards.html', {'reports': reports, 'tasks':tasks})
+
+def new_requests(request):
+    tasks = Tasks.objects.filter(status=0)
+    return render(request, 'new_tasks.html',{'tasks':tasks})

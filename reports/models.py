@@ -16,15 +16,17 @@ class Tasks(models.Model):
         return self.title
 
 class Report(models.Model):
-    prjct = models.ForeignKey(Project, on_delete=models.CASCADE)
+    prjct = models.ForeignKey(Project, on_delete=models.CASCADE,blank=True, null=True)
     title = models.TextField()
     author = models.ManyToManyField(User)
     date_added = models.DateField(auto_now=True)
     task = models.ForeignKey(Tasks, on_delete=models.CASCADE,
                               related_name='task_report', blank=True, null=True)
+    status = models.IntegerField(name='status', default=0)
     def __str__(self) -> str:
         return f"# {self.title}"
-    
+    class Meta:
+        ordering = ['-date_added']
 class Records(models.Model):
     report = models.ManyToManyField(Report, related_name='reports_records')
     data = models.JSONField(blank=True)

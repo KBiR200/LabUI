@@ -11,7 +11,8 @@ class Tasks(models.Model):
                                        related_name='assigned_task')
     data = models.JSONField(blank=True)
     status = models.IntegerField(name='status', default=0)
-
+    created_at = models.DateTimeField(auto_now=True)
+    due_date = models.DateTimeField()
     def __str__(self) -> str:
         return self.title
 
@@ -19,7 +20,7 @@ class Report(models.Model):
     prjct = models.ForeignKey(Project, on_delete=models.CASCADE,blank=True, null=True)
     title = models.TextField()
     author = models.ManyToManyField(User)
-    date_added = models.DateField(auto_now=True)
+    date_added = models.DateTimeField(auto_now=True)
     task = models.ForeignKey(Tasks, on_delete=models.CASCADE,
                               related_name='task_report', blank=True, null=True)
     status = models.IntegerField(name='status', default=0)

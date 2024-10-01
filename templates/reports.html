@@ -7,11 +7,14 @@
     <title>Generate Machine Reports</title>
     <style>
         body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fafafa; /* Or any preferred background color */
             color: #333;
             margin: 0;
             padding: 0;
+            justify-content: center;
+            align-items: flex-start; /* Aligns content to the top */
+            min-height: 100vh; /* Ensures the minimum height is full viewport height */
         }
 
         .container {
@@ -172,7 +175,7 @@
 
         <!-- New section for changing the report name -->
         <div class="report-name-section">
-            <form method="POST">
+            <form method="POST" target="hidden_iframe">
                 {% csrf_token %}
                 <label for="reportName">Report Name:</label>
                 <input type="text" id="reportName" name="report_name" value="{{ rep.title }}" placeholder="Enter report name">

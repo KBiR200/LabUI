@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <style>
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #fafafa; /* Or any preferred background color */
+        color: #333;
+        margin: 0;
+        padding: 0;
+        justify-content: center;
+        align-items: flex-start; /* Aligns content to the top */
+        min-height: 100vh; /* Ensures the minimum height is full viewport height */
+    }
+    
+    .container {
+        width: 100%; /* Full width of the viewport */
+        max-width: none; /* Removes any maximum width constraint */
+        margin: 0; /* Resets any margin */
+        padding: 20px; /* Maintains padding within the container for spacing */
+        box-sizing: border-box; /* Includes padding in the width calculation */
+    }
+    
+    .tasks-section {
+        width: 100%; /* Ensures task section uses full width */
+    }
+    
+    .task-card {
+        background: #fff; /* Sets a white background for visibility */
+        padding: 20px;
+        margin-bottom: 10px; /* Spacing between cards */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    }
+    
+    .task-card h2 {
+        color: #34495e; /* Stylish text color for headers */
+    }
+    
+    .reports-list {
+        list-style: none; /* Removes list styling */
+        padding: 0; /* Resets padding */
+        margin-top: 10px; /* Space above the list */
+    }
+    
+    .report-item {
+        padding: 10px;
+        background-color: #f0f0f0; /* Light grey background for report items */
+        border-left: 4px solid #3498db; /* Blue border on the left for styling */
+        margin-bottom: 5px; /* Spacing between report items */
+        transition: background-color 0.3s; /* Smooth transition for hover effects */
+    }
+    
+    .report-item:hover {
+        background-color: #e0e0e0; /* Darker on hover */
+    }
+    
+    .report-link {
+        color: #2980b9; /* Link color */
+        text-decoration: none; /* No underline */
+    }
+    
+    .report-link:hover {
+        text-decoration: underline; /* Underline on hover for better interaction feedback */
+    }
+    .complete-task-btn {
+      padding: 8px 16px;
+      background-color: #28a745; /* Green color for completion, indicating 'success' or 'done' */
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      text-decoration: none; /* Removes underline if using <a> tags styled as buttons */
+      display: inline-block;
+      margin-top: 10px;
+  }
+  
+  .complete-task-btn:hover {
+      background-color: #218838; /* Darker green on hover */
+  }
+  
+  .create-report-btn {
+      padding: 8px 16px;
+      background-color: #007bff; /* Blue, suggesting a 'primary action', suitable for creation */
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      text-decoration: none; /* Ensures text remains clean without underline */
+      display: inline-block;
+      margin-top: 10px;
+  }
+  
+  .create-report-btn:hover {
+      background-color: #0056b3; /* Darker blue on hover */
+  }
+      </style>
+    </head>
+    <body>
+      {% include "components/navbar8.html" %}
+      <div class="container">
+            <h1>User Dashboard</h1>
+            <div class="tasks-section">
+                {% for task in tasks %}
+                <div class="task-card">
+                    <h2>{{ task.title }}</h2>
+                    <span class="details">Assigned to: {{ task.assigned.all|join:", " }}</span>
+                    <ul class="reports-list">
+                      <h5>Reports</h5>
+                        {% for report in task.task_report.all %}
+                        <a href="{% url 'show_report' report.id %}">
+                        <li class="report-item">
+                                {{ report.title }}
+                                - <span class="details">Created: {{ report.date_added }}</span>
+                            </li>
+                        </a>
+                        {% endfor %}
+                      </ul>
+                      <a class="create-report-btn" href={% url "new_task" %}>Create Report</a>
+                      <form method="POST" style="display: inline;" action="{% url "submit_task" task.id%}">
+                        {% csrf_token %}
+                        <button type="submit" class="complete-task-btn">Complete Task</button>
+                    </form>
+                    <!-- Create Report link styled as a button -->
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </body>
+    </html>

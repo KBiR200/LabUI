@@ -13,11 +13,18 @@ def signin(request):
     return render(request, 'login.html')
 
 
-def control(request):
-    tasks = Tasks.objects.filter(status=1, assigned=request.user)
-    reports = Report.objects.filter(status=0,author=request.user).order_by('-date_added')
-    return render(request, 'cards.html', {'reports': reports, 'tasks':tasks})
+def dashboard(request):
+    tasks = Tasks.objects.filter(status=1, assigned=request.user).order_by('-created_at')
+    report = Report.objects.filter(author=request.user)
+    for i in report:
+        print(i.pk)
+        print(i.title)
+    context = {
+        'tasks': tasks,
+        'reports':report
+    }
+    return render(request, 'dahsboard copy.html', context)
 
 def new_requests(request):
-    tasks = Tasks.objects.filter(status=0)
+    tasks = Tasks.objects.filter(status=0).order_by('-created_at')
     return render(request, 'new_tasks.html',{'tasks':tasks})

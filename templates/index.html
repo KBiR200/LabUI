@@ -18,43 +18,19 @@
       }
 
       body {
-        font-weight: 400;
-        font-style:normal;
-        text-decoration: none;
-        text-transform: none;
-        letter-spacing: normal;
-        line-height: 1.15;
-        color: var(--dl-color-theme-neutral-dark);
-        background: var(--dl-color-theme-neutral-light);
-
-        fill: var(--dl-color-theme-neutral-dark);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #fafafa; /* Or any preferred background color */
+        color: #333;
+        margin: 0;
+        padding: 0;
+        justify-content: center;
+        align-items: flex-start; /* Aligns content to the top */
+        min-height: 100vh; /* Ensures the minimum height is full viewport height */
       }
     </style>
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/animate.css@4.1.1/animate.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
-      data-tag="font"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
-      data-tag="font"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&amp;display=swap"
-      data-tag="font"
-    />
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/@teleporthq/teleport-custom-scripts/dist/style.css"
-    />
   </head>
   <body>
+    {% include "components/navbar8.html" %}
     <link rel="stylesheet" href=" {% static 'css/style.css' %}" />
     <div>
       <link href="{% static 'css/index.css' %}" rel="stylesheet" />
@@ -62,7 +38,6 @@
 
       <div class="home-container">
         <navbar8-wrapper class="navbar8-wrapper">
-          {% include "components/navbar8.html" %}
         </navbar8-wrapper>
         <blog-post-header9-wrapper class="blog-post-header9-wrapper">
           <!--BlogPostHeader9 component-->

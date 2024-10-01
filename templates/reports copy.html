@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Machine Reports</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .selection-area {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .machine-option {
+            display: flex;
+            flex-direction: column;
+            align-items: start;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f8f8f8;
+        }
+        .machine-option label {
+            font-weight: 600;
+            margin: 5px 0;
+        }
+        .machine-option input, .machine-option select, .machine-option textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .report-section {
+            margin-top: 20px;
+        }
+        .report-card {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Generate Machine Reports</h1>
+        <div class="selection-area">
+            <!-- Mock-up data for demonstration -->
+            <div class="machine-option">
+                <input type="checkbox" id="rheology" checked>
+                <label for="rheology">Rheology</label>
+                <input type="number" value="1" min="1">
+            </div>
+            <!-- Repeat for other machines -->
+        </div>
+        <button id="generateReportBtn">Generate Report</button>
+        <div class="report-section">
+            <div class="report-card">
+                <h3>Rheology - Card 1</h3>
+                <form>
+                    <label>Status:</label>
+                    <input type="text" placeholder="Enter status">
+                    <label>Temperature:</label>
+                    <input type="number" placeholder="Enter temperature">
+                    <button type="submit">Save Report</button>
+                </form>
+            </div>
+            <!-- More report cards as needed -->
+        </div>
+    </div>
+</body>
+</html>

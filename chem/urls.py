@@ -40,6 +40,6 @@ urlpatterns = [
     path('report/<int:pk>/data/', reports.views.show_report, name='show_report'),
     
     
-    path('control/', main.views.control, name='control'),
+    path('dashboard/', main.views.dashboard, name='control'),
     path('requests/', main.views.new_requests, name='requests'),
 ]

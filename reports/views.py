@@ -24,7 +24,7 @@ def update_report(request,pk):
     # check user 
     if request.user.id not in list(rep.author.values_list("id", flat=True)):
         return HttpResponseForbidden("You are not allowed to edit this form.")
-    task = Tasks.objects.filter(assigned=request.user)
+    task = Tasks.objects.filter(assigned=request.user, status=1)
     if request.method == "POST":
         try:
             t = request.POST['task']
@@ -84,8 +84,8 @@ def create_task(request):
     if request.method == 'POST':
         title = request.POST['title']
         data = request.POST.get('data', '')
-        
-        task = Tasks.objects.create(creator=request.user, data=data, title = title)
+        due_date = request.POST['due_date']
+        task = Tasks.objects.create(creator=request.user, data=data, title = title, due_date=due_date)
         # task.signed.set(assigned_users)
         task.save()
         print(f'task: {title} is created')

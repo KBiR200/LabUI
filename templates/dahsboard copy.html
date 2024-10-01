@@ -198,6 +198,7 @@
                 <div class="card">
                   <h1>Title: {{r.title}}</h1>
                   <p>Authors: {% for auth in r.author.all %}{{auth.username}} {% endfor %}</p>
+                  <p>Task: {{r.task}}</p>
                   <button onclick="window.location.href='{% url 'report' r.id %}';">edit</button>
                   <button onclick="window.location.href='{% url 'show_report' r.id %}';">View</button>
                   <button onclick="window.location.href='{% url 'show_report' r.id %}';">Submit</button>

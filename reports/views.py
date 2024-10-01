@@ -6,12 +6,12 @@ from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404
 from chem.settings import BASE_DIR
 from django.contrib.auth.decorators import login_required
-
+import datetime
 
 # report view function
 @login_required
 def new_report(request):
-    test_name= 'Change the Name'
+    test_name= f'Created: {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}'
     r = Report.objects.create(title=test_name)
     r.author.set([request.user])
     print(r.id)

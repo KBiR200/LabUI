@@ -30,28 +30,47 @@
               </a>
             </nav>
             <div class="navbar8-buttons">
-
+              {% if user.is_authenticated %}
+              <p>Welcome, {{ user.username }}!</p>
+              {% endif %}
               <button
                 class="navbar8-action1 thq-button-filled thq-button-animated"
               >
                 <span class="thq-body-small">
                   <fragment class="navbar8-fragment1">
-                    <a href="{% url "signin" %}">
-                    <span class="navbar8-text3">LOGIN</span>
-                    </a>
+                    {% if user.is_authenticated %}
+                      <a href="{% url 'logout' %}">
+                        <span class="navbar8-text5">LOGOUT</span>
+                      </a>
+                    {% else %}
+                      <a href="{% url "signin" %}">
+                      <span class="navbar8-text5">LOGIN</span>
+                      </a>
+                    {% endif %}
                   </fragment>
                 </span>
               </button>
               <button
-                class="navbar8-action2 thq-button-animated thq-button-outline"
+                class="navbar8-action1 thq-button-filled thq-button-animated"
               >
                 <span class="thq-body-small">
-                  <fragment class="navbar8-fragment3">
+                  <fragment class="navbar8-fragment1">
+                    <a href="{% url "contactus" %}">
                     <span class="navbar8-text5">Contact us</span>
+                  </a>
                   </fragment>
                 </span>
               </button>
             </div>
           </div>
+          <script>
+            document.addEventListener("DOMContentLoaded", function() {
+              window.addEventListener("pageshow", function(event) {
+                  if (event.persisted) {  // Check if the page was loaded from cache
+                      window.location.reload();  // Reload the page from the server
+                  }
+              });
+          });
+          </script>
         </header>
       </header>

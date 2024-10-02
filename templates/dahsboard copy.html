@@ -23,6 +23,7 @@
         .sidebar {
             width: 200px;
             background-color: #2c3e50;
+            position:fixed;
             color: white;
             padding: 20px;
             display: flex;
@@ -46,6 +47,7 @@
         .content {
             flex-grow: 1;
             padding: 20px;
+            margin-left: 230px; /* Add margin to avoid overlap with the fixed sidebar */
         }
         .section {
             display: none; /* Initially hide all sections */
@@ -164,22 +166,28 @@
             <a href="#" data-target="reports">Reports</a>
             <a href="#" data-target="laboratory">Laboratory</a>
             <a href="#" data-target="machines">Machines</a>
+            <a href="#" data-target="tasks_hstry">History</a>
+
         </div>
         <div class="content">
             <div id="tasks" class="section active">
-    {% for task in tasks %}
-                    <div class="task-card">
-                        <h2>{{ task.title }}</h2>
+                {% comment %} <a href="#" class='complete-task-btn' data-target="tasks_hstry">History</a> {% endcomment %}
+                {% for task in tasks %}
+                <div class="task-card">
+                        <h2>
+                            <a href='{% url "show_task" task.id %}'>{{ task.title }}</a>
+                            </h2>
                         <span class="details">Assigned to: {{ task.assigned.all|join:", " }}</span>
+                        <p class="details">Requested By: {{ task.creator}}</p>
                         <ul class="reports-list">
                         <h5>Reports</h5>
                             {% for report in task.task_report.all %}
-                            <a href="{% url 'show_report' report.id %}">
-                            <li class="report-item">
-                                    {{ report.title }}
-                                    - <span class="details">Created: {{ report.date_added }}</span>
-                                </li>
-                            </a>
+                                <a href="{% url 'show_report' report.id %}">
+                                <li class="report-item">
+                                        {{ report.title }}
+                                        - <span class="details">Created: {{ report.date_added }}</span>
+                                    </li>
+                                </a>
                             {% endfor %}
                         </ul>
                         <a class="create-report-btn" href={% url "new_report" %}>Create Report</a>
@@ -189,8 +197,38 @@
                         </form>
                         <!-- Create Report link styled as a button -->
                     </div>
-                    {% endfor %}
+                {% endfor %}
             </div>
+            
+            <div id="tasks_hstry" class="section">
+                {% for task in tasks_history %}
+                <div class="task-card">
+                        <h2>
+                            <a href='{% url "show_task" task.id %}'>{{ task.title }}</a>
+                        </h2>
+                        <span class="details">Assigned to: {{ task.assigned.all|join:", " }}</span>
+                        <p class="details">Requested By: {{ task.creator}}</p>
+                        <ul class="reports-list">
+                        <h5>Reports</h5>
+                            {% for report in task.task_report.all %}
+                                <a href="{% url 'show_report' report.id %}">
+                                <li class="report-item">
+                                        {{ report.title }}
+                                        - <span class="details">Created: {{ report.date_added }}</span>
+                                    </li>
+                                </a>
+                            {% endfor %}
+                        </ul>
+                        <a class="create-report-btn" href={% url "new_report" %}>Create Report</a>
+                        <form method="POST" style="display: inline;" action="{% url "submit_task" task.id%}">
+                            {% csrf_token %}
+                            <button type="submit" class="complete-task-btn">Complete Task</button>
+                        </form>
+                        <!-- Create Report link styled as a button -->
+                    </div>
+                {% endfor %}
+            </div>
+            
             <div id="reports" class="section">
                 <h2>Title</h2>
 

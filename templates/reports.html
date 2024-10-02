@@ -267,7 +267,7 @@
             switch (machine) {
                 {% for i in machines %}
                 case '{{i.name}}':
-                    formContent = ` <form id="form-${machine}-${cardNumber}" class="machine-form" data-machine="${machine}" action="{% url 'save_record' rep.id %}" method="post" target="hidden_iframe">
+                    formContent = ` <form id="form-${machine}-${cardNumber}" class="machine-form" data-machine="${machine}" action="{% url 'save_record' rep.id %}" method="post" enctype="multipart/form-data" target="hidden_iframe">
                         {% csrf_token %}
                          <input type="hidden" name="machine_id" value="{{i.id}}">  
                         {{ i.form_template|safe }}

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task Details - Task Management</title>
+    <link rel="stylesheet" href="{% static 'css/tasks.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/navbar8.css' %}" />
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fafafa;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #4a90e2;
+        }
+
+        .detail-group {
+            margin-bottom: 15px;
+        }
+
+        .detail-group label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .detail-group p {
+            padding: 10px;
+            background: #e8e8e8;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #4a90e2;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background-color: #357abd;
+        }
+
+        .navbar8-container {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    {% include "components/navbar8.html" %}
+
+    <div class="container">
+        <h1>Task Details: {{ task.title }}</h1>
+        
+        <div class="detail-group">
+            <label>Title:</label>
+            <p>{{ task.title }}</p>
+        </div>
+        
+        <div class="detail-group">
+            <label>Description:</label>
+            <p>{{ task.data }}</p>
+        </div>
+        
+        <div class="detail-group">
+            <label>Due Date:</label>
+            <p>{{ task.due_date|date:"D, d M Y H:i" }}</p>
+        </div>
+        <div class="detail-group">
+            <label>Attachments:</label>
+            {% for atta in task.attachments.all %}
+            <li>
+                <a href="{{ atta.attachment.url }}" download="{{ atta.attachment.name }}">
+                  {{ atta.attachment.name|slice:"20:" }}
+                </a>
+            </li>
+            {% endfor %}
+        </div>
+        
+        {% comment %} <button onclick="window.location.href='{% url "edit_task" task.id %}'">Edit Task</button> {% endcomment %}
+    </div>
+</body>
+</html>

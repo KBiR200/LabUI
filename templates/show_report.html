@@ -110,6 +110,18 @@
                     {% endfor %}
                 </tbody>
             </table>
+            <div>
+              <h3>Attachments:</h3>
+              <ul>
+                  {% for atta in rec.attachments.all %}
+                  <li>
+                      <a href="{{ atta.attachment.url }}" download="{{ atta.attachment.name }}">
+                        {{ atta.attachment.name|slice:"20:" }}
+                      </a>
+                  </li>
+                  {% endfor %}
+              </ul>
+          </div>
         </div>
         {% endfor %}
         <button onclick="window.location.href='{% url "report" reports.id %}'">Add More Records</button>

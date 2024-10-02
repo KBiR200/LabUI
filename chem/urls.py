@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 import main.views
 # import main, reports
 import reports.views 
@@ -26,6 +28,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', main.views.home, name='home'),
     path('signin/', main.views.signin, name='signin'),
+    path('logout/', main.views.logout_view, name='logout'),
+    path('contact/', main.views.contact, name='contactus'),
 
     # """ tasks """
     path('task/new/', reports.views.create_task, name='new_task'),
@@ -42,4 +46,4 @@ urlpatterns = [
     
     path('dashboard/', main.views.dashboard, name='control'),
     path('requests/', main.views.new_requests, name='requests'),
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

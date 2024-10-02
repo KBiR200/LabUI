@@ -107,7 +107,7 @@
             <div class="tasks-section">
                 {% for task in tasks %}
                 <div class="task-card">
-                    <h2>{{ task.title }}</h2>
+                    <a href='{% url "show_task" task.id %}'>{{ task.title }}</a>
                     <span class="details">Assigned to: {{ task.assigned.all|join:", " }}</span>
                     <ul class="reports-list">
                       <h5>Reports</h5>

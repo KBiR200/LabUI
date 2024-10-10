@@ -10,7 +10,8 @@ from chem.settings import BASE_DIR
 
 
 def home(request):
-    return render(request, 'index.html')
+    # return render(request, 'index.html')
+    return redirect('control')
 
 def contact(request):
     return render(request, 'contactus.html')

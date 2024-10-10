@@ -90,7 +90,7 @@ def save_record(request, pk):
 @login_required(login_url='signin')
 def create_task(request):
     
-    users = User.objects.all()  # Fetch all users
+    users = User.objects.all()
     if request.method == 'POST':
         title = request.POST['title']
         data = request.POST.get('data', '')
@@ -104,7 +104,7 @@ def create_task(request):
         for i in form_attachment:
             print(i)
             r= Task_attachment.objects.create(task=task, attachment=i)
-        return redirect('control')  # Redirect to a task list or another page after creation
+        return redirect('control')
     
     return render(request, 'task.html', {'users': users})
 

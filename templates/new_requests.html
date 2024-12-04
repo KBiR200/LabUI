@@ -11,6 +11,7 @@
             background-color: #fafafa; /* Or any preferred background color */
             color: #333;
             margin: 0;
+            underline:false;
             padding: 0;
             justify-content: center;
             align-items: flex-start; /* Aligns content to the top */
@@ -107,6 +108,18 @@ th {
     background-color: #218838;
 }
 
+.new-btn {
+    padding: 8px 16px;
+    background-color: #f26e2e;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.new-btn:hover {
+    background-color: #f78148;
+}
 
         
     </style>
@@ -117,7 +130,9 @@ th {
     <!-- Main container for your tasks table -->
     <div class="container">
         <h1>Assigned Tasks</h1>
-        <a href="{% url 'new_task' %}" >Create Task</a>
+
+            
+            <a style="text-decoration:none;" class="new-btn" href="{% url 'new_task' %}" >Create Task</a>
         <table>
             <thead>
                 <tr>

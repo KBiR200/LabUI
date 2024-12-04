@@ -190,7 +190,7 @@
                                 </a>
                             {% endfor %}
                         </ul>
-                        <a class="create-report-btn" href={% url "new_report" %}>Create Report</a>
+                        <a class="create-report-btn" href={% url "new_report" task.id %}>Create Report</a>
                         <form method="POST" style="display: inline;" action="{% url "submit_task" task.id%}">
                             {% csrf_token %}
                             <button type="submit" class="complete-task-btn">Complete Task</button>
@@ -219,7 +219,7 @@
                                 </a>
                             {% endfor %}
                         </ul>
-                        <a class="create-report-btn" href={% url "new_report" %}>Create Report</a>
+                        <a class="create-report-btn" href={% url "new_report" task.id%}>Create Report</a>
                         <form method="POST" style="display: inline;" action="{% url "submit_task" task.id%}">
                             {% csrf_token %}
                             <button type="submit" class="complete-task-btn">Complete Task</button>

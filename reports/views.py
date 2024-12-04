@@ -10,9 +10,11 @@ import datetime
 
 # report view function
 @login_required(login_url='signin')
-def new_report(request):
+def new_report(request, task_id):
     test_name= f'Created: {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}'
-    r = Report.objects.create(title=test_name)
+    task = get_object_or_404(Tasks, id=task_id)
+    print(task)
+    r = Report.objects.create(title=test_name, task=task)
     r.author.set([request.user])
     print(r.id)
     return redirect("report", pk=r.id)
@@ -24,7 +26,7 @@ def update_report(request,pk):
     # check user 
     if request.user.id not in list(rep.author.values_list("id", flat=True)):
         return HttpResponseForbidden("You are not allowed to edit this form.")
-    task = Tasks.objects.filter(assigned=request.user, status=1)
+    task = Tasks.objects.filter(assigned=request.user, status=1).order_by('-created_at')
     if request.method == "POST":
         try:
             t = request.POST['task']
@@ -62,30 +64,22 @@ def save_record(request, pk):
             form_attachment = request.FILES.getlist('attachment')
             print(form_attachment)
             final_data = {"values": form_data}
-            # print('Form Data:', final_data)
             machine_id = request.POST.get('machine_id')
-            # print(f'Machine ID: {machine_id}')
             report = Report.objects.get(id=pk)
             machine = Machine.objects.get(id=machine_id)
             record = Records.objects.create(data=final_data)
             record.report.add(report)
             record.machine.add(machine)
             record.save()
-            # print(record.id)
             for i in form_attachment:
                 print(i)
                 r= Records_attachment.objects.create(record=record, attachment=i)
                 print(r.id)
-
             return JsonResponse({'success': True, 'data': form_data})
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)})
     else:
         return JsonResponse({'success': False, 'message': 'Invalid request method'})
-    
-
-
-# Tasks view function
 
 @login_required(login_url='signin')
 def create_task(request):
@@ -97,7 +91,6 @@ def create_task(request):
         due_date = request.POST['due_date']
         form_attachment = request.FILES.getlist('attachment')
         task = Tasks.objects.create(creator=request.user, data=data, title = title, due_date=due_date)
-        # task.signed.set(assigned_users)
         task.save()
         print(f'task: {title} is created')
         print(form_attachment)

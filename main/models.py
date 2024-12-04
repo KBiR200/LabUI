@@ -28,8 +28,12 @@ class Machine(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     is_supervisor = models.BooleanField(default=False)
-    supervisor = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='employees')
+    supervisor = models.ManyToManyField('self', symmetrical=False, blank=True, related_name='employees')
 
     
     def __str__(self):
         return self.user.username
+    
+    def get_supervisor_users(self):
+        # Return a QuerySet of all User objects who are the supervisors
+        return User.objects.filter(userprofile__in=self.supervisor.all())

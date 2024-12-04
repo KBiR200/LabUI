@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from reports.models import Report, Tasks
+from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
+from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from chem.settings import BASE_DIR
 # Create your views here.
@@ -54,5 +56,10 @@ def dashboard(request):
 
 @login_required(login_url='signin')
 def new_requests(request):
-    tasks = Tasks.objects.filter(status=0).order_by('-created_at')
+    supervisors = User.objects.filter(userprofile__in=request.user.userprofile.supervisor.all())
+    tasks = Tasks.objects.filter(
+        Q(creator=request.user) | Q(creator__in=supervisors),
+        status=0,
+        ).order_by('-created_at')
+    print(len(supervisors))
     return render(request, 'new_requests.html',{'tasks':tasks})

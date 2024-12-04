@@ -186,13 +186,12 @@
         <div class="task-selection">
             <form method='POST' id='task_select' target="hidden_iframe">
                 {% csrf_token %}
-                <label for="task">Select Task for the Report:</label>
-                <select id="task" name="task">
+                {% comment %} <select id="task" name="task">
                     <option value="">-- Choose a Task --</option>
                     {% for task in tasks %}
                     <option value="{{ task.id }}">{{ task.title }}</option>
                     {% endfor %}
-                </select>
+                </select> {% endcomment %}
                 <button type="submit">Submit Report</button>
             </form>
         </div>

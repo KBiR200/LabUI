@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Task</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            height: 100%;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.light {
+            background-color: #ffffff;
+            color: #333333;
+        }
+
+        header {
+            background-color: #1e1e2f;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        header.light {
+            background-color: #f4f4f9;
+            color: #333333;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 1rem 0;
+        }
+
+        nav a {
+            color: inherit;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        nav a.active {
+            background-color: #007bff;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        .theme-toggle:hover {
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 3rem;
+            background-color: #1e1e2f;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container.light {
+            background-color: #ffffff;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            width: 100%;
+            min-width: 600px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input, textarea {
+            width: 100%;
+            max-width: 1000px;
+            padding: 0.75rem;
+            border: 1px solid #333;
+            border-radius: 5px;
+            background-color: #2c2c3e;
+            color: white;
+        }
+
+        input.light, textarea.light {
+            background-color: #ffffff;
+            color: #333333;
+            border: 1px solid #ddd;
+        }
+
+        button {
+            padding: 0.75rem 1.5rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">Switch to Light Theme</button>
+    <header>
+        <h1>Create Task</h1>
+        <nav>
+            <a href="#">Dashboard</a>
+            <a href="#">Labs</a>
+            <a href="#" class="active">Create Task</a>
+            <a href="#">History</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <form>
+            <div class="form-group">
+                <label for="task-name">Task Name</label>
+                <input type="text" id="task-name" name="task-name" placeholder="Enter task name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="task-desc">Task Description</label>
+                <textarea id="task-desc" name="task-desc" rows="7" placeholder="Enter task description" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="task-date">Task Due Date</label>
+                <input type="date" id="task-date" name="task-date" required>
+            </div>
+
+            <div class="form-group">
+                <label for="task-attachment">Attachment</label>
+                <input type="file" id="task-attachment" name="task-attachment" accept=".pdf,.doc,.docx,.txt,.jpg,.png">
+            </div>
+
+            <button type="submit">Create Task</button>
+        </form>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const header = document.querySelector('header');
+            const container = document.querySelector('.container');
+            const inputs = document.querySelectorAll('input, textarea');
+
+            body.classList.toggle('light');
+            header.classList.toggle('light');
+            container.classList.toggle('light');
+            inputs.forEach(input => input.classList.toggle('light'));
+
+            const themeToggle = document.querySelector('.theme-toggle');
+            themeToggle.textContent = body.classList.contains('light') ? 'Switch to Dark Theme' : 'Switch to Light Theme';
+        }
+    </script>
+</body>
+</html>

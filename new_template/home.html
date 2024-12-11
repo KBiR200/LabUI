@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.light {
+            background-color: #ffffff;
+            color: #333333;
+        }
+
+        header {
+            background-color: #1e1e2f;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        header.light {
+            background-color: #f4f4f9;
+            color: #333333;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 1rem 0;
+        }
+
+        nav a {
+            color: inherit;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        nav a.active {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+        nav a:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 2rem auto;
+            padding: 1rem;
+            max-width: 1200px;
+            flex: 1;
+        }
+
+        .task-section {
+            background-color: #1e1e2f;
+            border-radius: 5px;
+            padding: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .task-section.light {
+            background-color: #f4f4f9;
+        }
+
+        h2 {
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 0.5rem;
+        }
+
+        .task-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .task {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid #333;
+            border-radius: 5px;
+            margin-bottom: 0.5rem;
+            background-color: #2c2c3e;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .task.light {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+        }
+
+        .task-actions button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            margin-left: 0.5rem;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .task-actions button.reject {
+            background-color: #dc3545;
+        }
+
+        .task-actions button:hover {
+            opacity: 0.9;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: #1e1e2f;
+            color: white;
+        }
+
+        footer.light {
+            background-color: #f4f4f9;
+            color: #333333;
+        }
+
+        .add-task {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .add-task input[type="text"] {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #333;
+            border-radius: 5px;
+            background-color: #2c2c3e;
+            color: white;
+            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+        }
+
+        .add-task.light input[type="text"] {
+            background-color: #ffffff;
+            color: #333333;
+            border: 1px solid #ddd;
+        }
+
+        .add-task button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            margin-left: 0.5rem;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .add-task button:hover {
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        .theme-toggle:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">Switch to Light Theme</button>
+    <header class="header">
+        <h1>Task Manager</h1>
+        <nav>
+            <a href="#" class="active">Report</a>
+            <a href="#">Laboratory</a>
+            <a href="#">Machine</a>
+            <a href="#">History</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <!-- Add New Task Section -->
+        <div class="task-section">
+            <h2>Add New Task</h2>
+            <div class="add-task">
+                <input type="text" placeholder="Enter new task...">
+                <button>Add Task</button>
+            </div>
+        </div>
+
+        <!-- Pending Tasks Section -->
+        <div class="task-section">
+            <h2>Pending Tasks</h2>
+            <ul class="task-list">
+                <li class="task">
+                    <span>Complete project report</span>
+                    <div class="task-actions">
+                        <button class="accept">Accept</button>
+                        <button class="reject">Reject</button>
+                    </div>
+                </li>
+                <li class="task">
+                    <span>Prepare for team meeting</span>
+                    <div class="task-actions">
+                        <button class="accept">Accept</button>
+                        <button class="reject">Reject</button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Accepted Tasks Section -->
+        <div class="task-section">
+            <h2>Accepted Tasks</h2>
+            <ul class="task-list">
+                <li class="task">
+                    <span>Update website design</span>
+                    <div class="task-actions">
+                        <button class="complete">Mark Complete</button>
+                    </div>
+                </li>
+                <li class="task">
+                    <span>Review code submissions</span>
+                    <div class="task-actions">
+                        <button class="complete">Mark Complete</button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Completed Tasks Section -->
+        <div class="task-section">
+            <h2>Completed Tasks</h2>
+            <ul class="task-list">
+                <li class="task">
+                    <span>Fix bug in app</span>
+                </li>
+                <li class="task">
+                    <span>Send weekly report</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Task Manager</p>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const header = document.querySelector('header');
+            const footer = document.querySelector('footer');
+            const sections = document.querySelectorAll('.task-section');
+            const input = document.querySelector('.add-task input[type="text"]');
+            const tasks = document.querySelectorAll('.task');
+
+            body.classList.toggle('light');
+            header.classList.toggle('light');
+            footer.classList.toggle('light');
+
+            sections.forEach(section => section.classList.toggle('light'));
+            input.classList.toggle('light');
+            tasks.forEach(task => task.classList.toggle('light'));
+
+            const themeToggle = document.querySelector('.theme-toggle');
+            if (body.classList.contains('light')) {
+                themeToggle.textContent = 'Switch to Dark Theme';
+            } else {
+                themeToggle.textContent = 'Switch to Light Theme';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -35,7 +35,7 @@ def update_report(request,pk):
             rep.save()
         except:
             print('something off')
-    return render(request, 'reports.html',{'machines': Machine.objects.all(), 'rep':rep, 'tasks':task})
+    return render(request, 'reports copy.html',{'machines': Machine.objects.all(), 'rep':rep, 'tasks':task})
 
 
 @login_required(login_url='signin')
@@ -106,7 +106,7 @@ def show_task(request, pk):
     task = get_object_or_404(Tasks, id=pk)
     print(task.assigned.all().count())
     print(task.title)
-    return render(request, 'task_view.html', {"task":task})
+    return render(request, 'task_view15.html', {"task":task})
 
 @login_required(login_url='signin')
 def accept_task(request, pk):

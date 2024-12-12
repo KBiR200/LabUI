@@ -93,18 +93,18 @@
         }
 
         .task-list {
+            width:500px
             list-style: none;
             padding: 0;
         }
 
         .task {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
             padding: 1rem;
             border: 1px solid #333;
             border-radius: 5px;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
             background-color: #2c2c3e;
             transition: background-color 0.3s, border-color 0.3s;
         }
@@ -206,7 +206,8 @@
     </style>
 </head>
 <body>
-    <button class="theme-toggle" onclick="toggleTheme()">Switch to Light Theme</button>
+    {% include "components/navbar815.html" %}
+    {% comment %} <button class="theme-toggle" onclick="toggleTheme()">Switch to Light Theme</button>
     <header class="header">
         <h1>Task Manager</h1>
         <nav>
@@ -215,29 +216,35 @@
             <a href="#">Machine</a>
             <a href="#">History</a>
         </nav>
-    </header>
+    </header> {% endcomment %}
 
     <div class="container">
         <!-- Add New Task Section -->
-        <div class="task-section">
+        {% comment %} <div class="task-section">
             <h2>Add New Task</h2>
             <div class="add-task">
                 <input type="text" placeholder="Enter new task...">
                 <button>Add Task</button>
             </div>
-        </div>
+        </div> {% endcomment %}
 
         <!-- Pending Tasks Section -->
         <div class="task-section">
             <h2>Pending Tasks</h2>
             <ul class="task-list">
+                 {% for task in tasks %}
                 <li class="task">
-                    <span>Complete project report</span>
+                    <span>Title: {{task.title}}</span>
+                    <span>Creator: {{ task.creator }}</span>
+                    <span>Due Date: {{ task.due_date}}</span>
                     <div class="task-actions">
-                        <button class="accept">Accept</button>
-                        <button class="reject">Reject</button>
+                        <form method="post" action="{% url 'accept_task' task.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="accept-btn">Accept</button>
+                        </form>
                     </div>
                 </li>
+                {% endfor %}
                 <li class="task">
                     <span>Prepare for team meeting</span>
                     <div class="task-actions">
@@ -247,6 +254,45 @@
                 </li>
             </ul>
         </div>
+
+        <div class="task-section">
+            <h2>OnGoing Tasks</h2>
+            <ul class="task-list">
+                {% for task in tasks %}
+                <li class="task">
+                    <h2 href='{% url "show_task" task.id %}' style="text-decoration:none">
+                        {% comment %} <a href='{% url "show_task" task.id %}' style="text-decoration:none">{{ task.title }}</a> {% endcomment %}
+                        {{ task.title }}
+                    </h2>
+                    <span class="details">Assigned to: {{ task.assigned.all|join:", " }}</span>
+                    <p class="details">Requested By: {{ task.creator}}</p>
+                    <ul class="reports-list">
+                        <h5>Reports</h5>
+                        {% comment %} {% for report in task.task_report.all %}
+                        <a href="{% url 'show_report' report.id %}">
+                            <li class="report-item">
+                                {{ report.title }}
+                                - <span class="details">Created: {{ report.date_added }}</span>
+                            </li>
+                        </a>
+                        {% endfor %} {% endcomment %}
+                    </ul>
+                    <div class="task-actions">
+                        {% comment %} <form style="display: inline;" action='{% url "new_report" task.id %}'> {% endcomment %}
+                            <button onclick="location.href='{% url "new_report" task.id %}'" class="complete">Create Report</button>
+                    {% comment %} <form method="POST" style="display: inline;" action="{% url "submit_task" task.id%}"> {% endcomment %}
+                    {% comment %} </form> {% endcomment %}
+                    {% comment %} <form style="display: inline;" action='{% url "show_task" task.id %}'> {% endcomment %}
+                        {% comment %} {% csrf_token %} {% endcomment %}
+                            {% comment %} <button type="submit" class="complete">Complete Task</button> {% endcomment %}
+                            <button onclick="location.href='{% url "show_task" task.id %}'" class="complete">View Task</button>
+                        {% comment %} </div> {% endcomment %}
+                    </form>
+                    <!-- Create Report link styled as a button -->
+                </li>
+                    {% endfor %}
+                </ul>
+            </div>
 
         <!-- Accepted Tasks Section -->
         <div class="task-section">

@@ -55,6 +55,18 @@ def dashboard(request):
     return render(request, 'dahsboard.html', context)
 
 @login_required(login_url='signin')
+def dashboard15(request):
+    tasks = Tasks.objects.filter(status=1, assigned=request.user).order_by('-created_at')
+    tasks_history = Tasks.objects.filter(assigned=request.user).order_by('-created_at')
+    report = Report.objects.filter(author=request.user)
+    context = {
+        'tasks': tasks,
+        'tasks_history': tasks_history,
+        'reports':report
+    }
+    return render(request, 'dashboard15.html', context)
+
+@login_required(login_url='signin')
 def new_requests(request):
     supervisors = User.objects.filter(userprofile__in=request.user.userprofile.supervisor.all())
     tasks = Tasks.objects.filter(

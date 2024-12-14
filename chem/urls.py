@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth.views import PasswordResetView
 import main.views
 # import main, reports
 import reports.views 
@@ -46,4 +47,5 @@ urlpatterns = [
     
     path('dashboard/', main.views.dashboard, name='control'),
     path('requests/', main.views.new_requests, name='requests'),
+    path('password-reset/', main.views.reset_password, name='password_reset'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

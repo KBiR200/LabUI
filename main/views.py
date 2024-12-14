@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from reports.models import Report, Tasks
 from django.contrib import messages
+from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
@@ -56,3 +57,22 @@ def dashboard(request):
 def new_requests(request):
     tasks = Tasks.objects.filter(status=0).order_by('-created_at')
     return render(request, 'new_requests.html',{'tasks':tasks})
+
+@login_required(login_url='signin')
+def reset_password(request):
+    if request.method == 'POST':
+        old_password = request.POST.get('old_password')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if not request.user.check_password(old_password):
+            messages.error(request, 'Old password is incorrect.')
+        elif new_password != confirm_password:
+            messages.error(request, 'Passwords do not match.')
+        else:
+            request.user.set_password(new_password)
+            request.user.save()
+            messages.success(request, 'Password has been reset successfully!')
+            return redirect('signin')
+
+    return render(request, 'resetpassword.html')

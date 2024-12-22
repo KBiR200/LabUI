@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from reports.models import Report, Tasks
 from django.contrib import messages
+from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
@@ -11,8 +12,18 @@ from chem.settings import BASE_DIR
 
 
 def home(request):
-    # return render(request, 'index.html')
-    return redirect('control')
+    tasks = Tasks.objects.filter(
+        Q(status=1),
+        Q(assigned=request.user) | Q(creator= request.user)
+        ).order_by('-created_at')
+    tasks_history = Tasks.objects.filter(assigned=request.user).order_by('-created_at')
+    report = Report.objects.filter(author=request.user)
+    context = {
+        'tasks': tasks,
+        'tasks_history': tasks_history,
+        'reports':report
+    }
+    return render(request, 'dahsboard.html', context)
 
 def contact(request):
     return render(request, 'contactus.html')
@@ -43,7 +54,10 @@ def logout_view(request):
 
 @login_required(login_url='signin')
 def dashboard(request):
-    tasks = Tasks.objects.filter(status=1, assigned=request.user).order_by('-created_at')
+    tasks = Tasks.objects.filter(
+        Q(status=1),
+        Q(assigned=request.user) | Q(creator= request.user)
+        ).order_by('-created_at')
     tasks_history = Tasks.objects.filter(assigned=request.user).order_by('-created_at')
     report = Report.objects.filter(author=request.user)
     context = {
@@ -51,7 +65,7 @@ def dashboard(request):
         'tasks_history': tasks_history,
         'reports':report
     }
-    return render(request, 'dahsboard.html', context)
+    return render(request, 'myview.html', context)
 
 @login_required(login_url='signin')
 def new_requests(request):

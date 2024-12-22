@@ -234,14 +234,13 @@
 </head>
 <body>
     {% include "components/navbar8.html" %}
-    <div class="main" >
+    <div class="main">
         <div class="sidebar">
             <a href="#" data-target="tasks">Tasks</a>
             <a href="#" data-target="reports">Reports</a>
             <a href="#" data-target="laboratory">Laboratory</a>
             <a href="#" data-target="machines">Machines</a>
             <a href="#" data-target="tasks_hstry">History</a>
-            
         </div>
         <div class="content">
             <div id="tasks" class="section active">
@@ -263,25 +262,11 @@
             
                     <!-- Reports List -->
                     <ul class="reports-list">
-                        <h5>Reports</h5>
-                        {% for report in task.task_report.all %}
-                        <a href="{% url 'show_report' report.id %}">
-                            <li class="report-item">
-                                {{ report.title }} - <span class="details">Created: {{ report.date_added }}</span>
-                            </li>
-                        </a>
-                        {% endfor %}
+                        <!-- Reports will be listed here -->
                     </ul>
-            
-                    <!-- Action Buttons -->
-                    <a class="create-report-btn" href="{% url "new_report" task.id %}">Review</a>
-                    <form method="POST" style="display: inline;" action="{% url "submit_task" task.id %}">
-                        {% csrf_token %}
-                        <button type="submit" class="complete-task-btn">Mark as done</button>
-                    </form>
-                    <!-- Optionally, other task related actions can be added here -->
                 </div>
                 {% endfor %}
             </div>
         </div>
-    </body>
+    </div>
+</body>

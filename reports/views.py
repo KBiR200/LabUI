@@ -15,7 +15,7 @@ def new_report(request, task_id):
     task = get_object_or_404(Tasks, id=task_id)
     print(task)
     r = Report.objects.create(title=test_name, task=task)
-    r.author.set([request.user])
+    r.author.set([request.user, task.creator])
     print(r.id)
     return redirect("report", pk=r.id)
 

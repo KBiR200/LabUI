@@ -232,7 +232,7 @@
         <div class="task-section">
             <h2>Pending Tasks</h2>
             <ul class="task-list">
-                 {% for task in tasks %}
+                 {% for task in new_tasks %}
                 <li class="task">
                     <span>Title: {{task.title}}</span>
                     <span>Creator: {{ task.creator }}</span>
@@ -260,10 +260,12 @@
             <ul class="task-list">
                 {% for task in tasks %}
                 <li class="task">
-                    <h2 href='{% url "show_task" task.id %}' style="text-decoration:none">
+                    <h2>
+                    <a href='{% url "show_task" task.id %}' style="text-decoration:none">
                         {% comment %} <a href='{% url "show_task" task.id %}' style="text-decoration:none">{{ task.title }}</a> {% endcomment %}
                         {{ task.title }}
-                    </h2>
+                    </a>
+                </h2>
                     <span class="details">Assigned to: {{ task.assigned.all|join:", " }}</span>
                     <p class="details">Requested By: {{ task.creator}}</p>
                     <ul class="reports-list">
@@ -285,7 +287,7 @@
                     {% comment %} <form style="display: inline;" action='{% url "show_task" task.id %}'> {% endcomment %}
                         {% comment %} {% csrf_token %} {% endcomment %}
                             {% comment %} <button type="submit" class="complete">Complete Task</button> {% endcomment %}
-                            <button onclick="location.href='{% url "show_task" task.id %}'" class="complete">View Task</button>
+                            <button onclick="location.href='{% url "submit_task" task.id %}'" class="reject">Submit Task</button>
                         {% comment %} </div> {% endcomment %}
                     </form>
                     <!-- Create Report link styled as a button -->
@@ -296,14 +298,27 @@
 
         <!-- Accepted Tasks Section -->
         <div class="task-section">
-            <h2>Accepted Tasks</h2>
+            <h2>Submited Tasks</h2>
             <ul class="task-list">
+
+
+
+                {% for task in tasks_history %}
                 <li class="task">
-                    <span>Update website design</span>
-                    <div class="task-actions">
-                        <button class="complete">Mark Complete</button>
-                    </div>
-                </li>
+                        <h2>
+                        <a href='{% url "show_task" task.id %}' style="text-decoration:none">
+                            
+                            {{ task.title }}
+                        </a>
+                    </h2>
+                        <span class="details">Assigned to: {{ task.assigned.all|join:", " }}</span>
+                        <p class="details">Requested By: {{ task.creator}}</p>
+
+                    </li>
+                            {% endfor %}
+ 
+
+
                 <li class="task">
                     <span>Review code submissions</span>
                     <div class="task-actions">

@@ -8,6 +8,13 @@ from chem.settings import BASE_DIR
 from django.contrib.auth.decorators import login_required
 import datetime
 
+"""--------------------- Reports ---------------------"""
+
+@login_required(login_url='signin')
+def reports(request):
+
+    return render(request, 'reports15.html')
+
 # report view function
 @login_required(login_url='signin')
 def new_report(request, task_id):
@@ -46,7 +53,7 @@ def show_report(request, pk):
     related_records = rep.reports_records.all().prefetch_related('attachments')
     for i in related_records:
         print(i.data)
-    return render(request, 'show_report.html', {'records':related_records, 'reports':rep})
+    return render(request, 'report_view15.html', {'records':related_records, 'report':rep})
 
 # record view function
 
@@ -81,6 +88,24 @@ def save_record(request, pk):
     else:
         return JsonResponse({'success': False, 'message': 'Invalid request method'})
 
+
+"""--------------------- Tasks ---------------------"""
+
+@login_required(login_url='signin')
+def tasks(request):
+    tasks = Tasks.objects.all().order_by('-created_at')
+    new_tasks = Tasks.objects.filter(status=0).order_by('-created_at')
+    tasks_history = Tasks.objects.filter(assigned=request.user).order_by('-created_at')
+    report = Report.objects.filter(author=request.user)
+    context = {
+        'tasks': tasks,
+        'new_tasks': new_tasks,
+        'tasks_history': tasks_history,
+        'reports':report
+    }
+    
+    return render(request, 'tasks15.html', {'tasks': tasks})
+
 @login_required(login_url='signin')
 def create_task(request):
     
@@ -102,11 +127,65 @@ def create_task(request):
     return render(request, 'task.html', {'users': users})
 
 @login_required(login_url='signin')
+def create_task15(request):
+    
+    users = User.objects.all()
+    if request.method == 'POST':
+        title = request.POST['title']
+        data = request.POST.get('data', '')
+        due_date = request.POST['due_date']
+        form_attachment = request.FILES.getlist('attachment')
+        task = Tasks.objects.create(creator=request.user, data=data, title = title, due_date=due_date)
+        task.save()
+        print(f'task: {title} is created')
+        print(form_attachment)
+        for i in form_attachment:
+            print(i)
+            r= Task_attachment.objects.create(task=task, attachment=i)
+        return redirect('control')
+    
+    return render(request, 'create_task15.html', {'users': users})
+
+@login_required(login_url='signin')
 def show_task(request, pk):
     task = get_object_or_404(Tasks, id=pk)
     print(task.assigned.all().count())
     print(task.title)
-    return render(request, 'task_view15.html', {"task":task})
+    return render(request, 'tasks_view15.html', {"task":task})
+
+
+
+
+"""
+    for history
+qry = order.history.filter(id=pk)
+
+def historical_changes(qry):
+
+    changes = []
+
+    if qry is not None:
+
+        last = qry.first()
+
+    for all_changes in range(qry.count()):
+
+        new_record, old_record = last, last.prev_record
+
+        if old_record is not None:
+
+            delta = new_record.diff_against(old_record)
+
+            changes.append(delta)
+
+    last = old_record
+
+    return changes
+
+    changes = historical_changes(qry)
+
+    context = { 'changes':changes}
+"""
 
 @login_required(login_url='signin')
 def accept_task(request, pk):
@@ -116,7 +195,7 @@ def accept_task(request, pk):
     task.status = 1
     task.save()
     print("u are assigned")
-    return redirect('control')
+    return redirect('tasks')
 
 @login_required(login_url='signin')
 def submit_task(req, pk):
@@ -125,4 +204,13 @@ def submit_task(req, pk):
     task.status = 2
     task.save()
     print('task is handed')
-    return redirect('control')
+    return redirect('tasks')
+
+@login_required(login_url='signin')
+def undo_task(req, pk):
+    print(f"Task ID = {pk}")
+    task = get_object_or_404(Tasks, id=pk)
+    task.status = 1
+    task.save()
+    print('task is undo')
+    return redirect('tasks')

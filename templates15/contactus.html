@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - LabUI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Styles */
+        :root {
+          --primary-color: #4a6cf7;
+          --primary-hover: #3a5ce4;
+          --secondary-color: #6c757d;
+          --success-color: #28a745;
+          --danger-color: #dc3545;
+          --warning-color: #ffc107;
+          --info-color: #17a2b8;
+          --light-color: #f8f9fa;
+          --dark-color: #343a40;
+          --body-bg: #f5f7fb;
+          --card-bg: #ffffff;
+          --text-color: #495057;
+          --text-muted: #6c757d;
+          --border-color: #e9ecef;
+          --sidebar-width: 250px;
+          --header-height: 60px;
+          --shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+          --shadow-lg: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+          --border-radius: 0.375rem;
+        }
+
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        body {
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          font-size: 0.9rem;
+          line-height: 1.5;
+          color: var(--text-color);
+          background-color: var(--body-bg);
+        }
+
+        a {
+          color: var(--primary-color);
+          text-decoration: none;
+        }
+
+        a:hover {
+          text-decoration: underline;
+        }
+
+        ul {
+          list-style: none;
+        }
+
+        /* Layout */
+        .layout {
+          display: flex;
+          min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+          width: var(--sidebar-width);
+          background-color: var(--dark-color);
+          color: white;
+          position: fixed;
+          height: 100vh;
+          overflow-y: auto;
+          z-index: 1000;
+          transition: all 0.3s ease;
+        }
+
+        .sidebar-header {
+          display: flex;
+          align-items: center;
+          padding: 1rem;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header i {
+          font-size: 1.5rem;
+          margin-right: 0.5rem;
+        }
+
+        .sidebar-header h1 {
+          font-size: 1.25rem;
+          font-weight: 600;
+          margin: 0;
+        }
+
+        .sidebar-nav ul {
+          padding: 1rem 0;
+        }
+
+        .sidebar-nav li {
+          margin-bottom: 0.25rem;
+        }
+
+        .sidebar-nav a {
+          display: flex;
+          align-items: center;
+          padding: 0.75rem 1rem;
+          color: rgba(255, 255, 255, 0.7);
+          transition: all 0.3s ease;
+        }
+
+        .sidebar-nav a:hover {
+          color: white;
+          background-color: rgba(255, 255, 255, 0.1);
+          text-decoration: none;
+        }
+
+        .sidebar-nav li.active a {
+          color: white;
+          background-color: var(--primary-color);
+        }
+
+        .sidebar-nav i {
+          margin-right: 0.75rem;
+          font-size: 1rem;
+        }
+
+        /* Main Content */
+        .main-content {
+          flex: 1;
+          margin-left: var(--sidebar-width);
+          position: relative;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+          height: var(--header-height);
+          background-color: var(--card-bg);
+          border-bottom: 1px solid var(--border-color);
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 1.5rem;
+          position: sticky;
+          top: 0;
+          z-index: 900;
+          box-shadow: var(--shadow);
+        }
+
+        .search-container {
+          position: relative;
+          width: 300px;
+        }
+
+        .search-container i {
+          position: absolute;
+          left: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+          color: var(--text-muted);
+        }
+
+        .search-container input {
+          width: 100%;
+          padding: 0.5rem 0.5rem 0.5rem 2rem;
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius);
+          font-size: 0.875rem;
+        }
+
+        .user-menu {
+          display: flex;
+          align-items: center;
+        }
+
+        .notifications {
+          position: relative;
+          margin-right: 1.5rem;
+          cursor: pointer;
+        }
+
+        .notifications i {
+          font-size: 1.25rem;
+          color: var(--text-muted);
+        }
+
+        .badge {
+          position: absolute;
+          top: -8px;
+          right: -8px;
+          background-color: var(--danger-color);
+          color: white;
+          border-radius: 50%;
+          width: 18px;
+          height: 18px;
+          font-size: 0.7rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .user-profile {
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          position: relative;
+        }
+
+        .user-profile img {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          margin-right: 0.5rem;
+        }
+
+        .user-name {
+          font-weight: 500;
+          margin-right: 0.5rem;
+        }
+
+        .dropdown-menu {
+          position: absolute;
+          top: 100%;
+          right: 0;
+          background-color: var(--card-bg);
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius);
+          box-shadow: var(--shadow-lg);
+          min-width: 180px;
+          z-index: 1000;
+          display: none;
+        }
+
+        .dropdown-menu a {
+          display: flex;
+          align-items: center;
+          padding: 0.75rem 1rem;
+          color: var(--text-color);
+          transition: background-color 0.3s ease;
+        }
+
+        .dropdown-menu a:hover {
+          background-color: var(--light-color);
+          text-decoration: none;
+        }
+
+        .dropdown-menu i {
+          margin-right: 0.5rem;
+        }
+
+        /* Content Wrapper */
+        .content-wrapper {
+          padding: 1.5rem;
+        }
+
+        .page-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 1.5rem;
+        }
+
+        .page-header h2 {
+          font-size: 1.5rem;
+          font-weight: 600;
+          margin: 0;
+        }
+
+        /* Cards */
+        .card {
+          background-color: var(--card-bg);
+          border-radius: var(--border-radius);
+          box-shadow: var(--shadow);
+          margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+          padding: 1rem 1.25rem;
+          border-bottom: 1px solid var(--border-color);
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .card-header h3 {
+          font-size: 1.125rem;
+          font-weight: 600;
+          margin: 0;
+        }
+
+        .card-body {
+          padding: 1.25rem;
+        }
+
+        /* Contact Grid */
+        .contact-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1.5rem;
+        }
+
+        /* Contact Form */
+        .contact-form {
+          margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+          margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+          display: block;
+          margin-bottom: 0.5rem;
+          font-weight: 500;
+        }
+
+        .form-control {
+          width: 100%;
+          padding: 0.75rem 1rem;
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius);
+          font-size: 0.9rem;
+          transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-control:focus {
+          outline: none;
+          border-color: var(--primary-color);
+          box-shadow: 0 0 0 0.2rem rgba(74, 108, 247, 0.25);
+        }
+
+        textarea.form-control {
+          min-height: 150px;
+          resize: vertical;
+        }
+
+        /* Contact Info */
+        .contact-info {
+          margin-bottom: 1.5rem;
+        }
+
+        .contact-info-item {
+          display: flex;
+          align-items: flex-start;
+          margin-bottom: 1.25rem;
+        }
+
+        .contact-info-icon {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background-color: rgba(74, 108, 247, 0.1);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-right: 1rem;
+          flex-shrink: 0;
+        }
+
+        .contact-info-icon i {
+          font-size: 1.25rem;
+          color: var(--primary-color);
+        }
+
+        .contact-info-content h4 {
+          font-size: 1rem;
+          font-weight: 600;
+          margin-bottom: 0.25rem;
+        }
+
+        .contact-info-content p {
+          color: var(--text-color);
+          line-height: 1.5;
+          margin-bottom: 0.5rem;
+        }
+
+        .contact-info-content a {
+          color: var(--primary-color);
+        }
+
+        /* FAQ Section */
+        .faq-section {
+          margin-top: 2rem;
+        }
+
+        .faq-item {
+          margin-bottom: 1.25rem;
+          border-bottom: 1px solid var(--border-color);
+          padding-bottom: 1.25rem;
+        }
+
+        .faq-item:last-child {
+          border-bottom: none;
+          padding-bottom: 0;
+          margin-bottom: 0;
+        }
+
+        .faq-question {
+          font-size: 1.125rem;
+          font-weight: 600;
+          margin-bottom: 0.75rem;
+          color: var(--dark-color);
+        }
+
+        .faq-answer {
+          color: var(--text-color);
+          line-height: 1.6;
+        }
+
+        /* Map */
+        .map-container {
+          height: 300px;
+          border-radius: var(--border-radius);
+          overflow: hidden;
+          margin-bottom: 1.5rem;
+        }
+
+        .map-container iframe {
+          width: 100%;
+          height: 100%;
+          border: 0;
+        }
+
+        /* Buttons */
+        .btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.75rem 1.5rem;
+          font-size: 0.9rem;
+          font-weight: 500;
+          border-radius: var(--border-radius);
+          border: none;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+          background-color: var(--primary-color);
+          color: white;
+        }
+
+        .btn-primary:hover {
+          background-color: var(--primary-hover);
+        }
+
+        .btn-block {
+          display: block;
+          width: 100%;
+        }
+
+        /* Social Links */
+        .social-links {
+          display: flex;
+          gap: 0.75rem;
+          margin-top: 1rem;
+        }
+
+        .social-link {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          background-color: var(--light-color);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--text-color);
+          transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+          background-color: var(--primary-color);
+          color: white;
+          text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+          .contact-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .sidebar {
+            width: 0;
+            transform: translateX(-100%);
+          }
+          
+          .sidebar.active {
+            width: var(--sidebar-width);
+            transform: translateX(0);
+          }
+          
+          .main-content {
+            margin-left: 0;
+          }
+        }
+
+        @media (max-width: 576px) {
+          .search-container {
+            width: 200px;
+          }
+          
+          .user-name {
+            display: none;
+          }
+          
+          .page-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+          }
+        }
+
+        /* Menu Toggle for Mobile */
+        .menu-toggle {
+          background: none;
+          border: none;
+          color: var(--text-color);
+          font-size: 1.25rem;
+          cursor: pointer;
+          display: none;
+          margin-right: 1rem;
+        }
+
+        @media (max-width: 768px) {
+          .menu-toggle {
+            display: block;
+          }
+        }
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-flask"></i>
+                <h1>LabUI</h1>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="/"><i class="fas fa-home"></i> Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="/tasks"><i class="fas fa-tasks"></i> Tasks</a>
+                    </li>
+                    <li>
+                        <a href="/reports"><i class="fas fa-chart-bar"></i> Reports</a>
+                    </li>
+                    <li>
+                        <a href="/teams"><i class="fas fa-users"></i> Teams</a>
+                    </li>
+                    <li class="active">
+                        <a href="/contactus"><i class="fas fa-envelope"></i> Contact</a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Navigation -->
+            <header class="top-nav">
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search...">
+                </div>
+                <div class="user-menu">
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </div>
+                    <div class="user-profile">
+                        <img src="/statics/img/avatar-placeholder.png" alt="User Avatar">
+                        <span class="user-name">Team Leader</span>
+                        <i class="fas fa-chevron-down"></i>
+                        <div class="dropdown-menu">
+                            <a href="/profile"><i class="fas fa-user"></i> Profile</a>
+                            <a href="/settings"><i class="fas fa-cog"></i> Settings</a>
+                            <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Contact Content -->
+            <div class="content-wrapper">
+                <div class="page-header">
+                    <h2>Contact Us</h2>
+                </div>
+
+                <div class="contact-grid">
+                    <!-- Contact Form -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Send Us a Message</h3>
+                        </div>
+                        <div class="card-body">
+                            <form class="contact-form" id="contactForm">
+                                <div class="form-group">
+                                    <label for="name">Your Name</label>
+                                    <input type="text" id="name" class="form-control" placeholder="Enter your name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email Address</label>
+                                    <input type="email" id="email" class="form-control" placeholder="Enter your email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="subject">Subject</label>
+                                    <input type="text" id="subject" class="form-control" placeholder="Enter subject" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="message">Message</label>
+                                    <textarea id="message" class="form-control" placeholder="Enter your message" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block">Send Message</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Contact Information -->
+                    <div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Contact Information</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="contact-info">
+                                    <div class="contact-info-item">
+                                        <div class="contact-info-icon">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                        </div>
+                                        <div class="contact-info-content">
+                                            <h4>Our Location</h4>
+                                            <p>123 Lab Street, Science Park<br>San Francisco, CA 94107</p>
+                                        </div>
+                                    </div>
+                                    <div class="contact-info-item">
+                                        <div class="contact-info-icon">
+                                            <i class="fas fa-phone-alt"></i>
+                                        </div>
+                                        <div class="contact-info-content">
+                                            <h4>Phone Number</h4>
+                                            <p><a href="tel:+14155552671">+1 (415) 555-2671</a></p>
+                                        </div>
+                                    </div>
+                                    <div class="contact-info-item">
+                                        <div class="contact-info-icon">
+                                            <i class="fas fa-envelope"></i>
+                                        </div>
+                                        <div class="contact-info-content">
+                                            <h4>Email Address</h4>
+                                            <p><a href="mailto:support@labui.com">support@labui.com</a></p>
+                                        </div>
+                                    </div>
+                                    <div class="contact-info-item">
+                                        <div class="contact-info-icon">
+                                            <i class="fas fa-clock"></i>
+                                        </div>
+                                        <div class="contact-info-content">
+                                            <h4>Working Hours</h4>
+                                            <p>Monday - Friday: 9:00 AM - 5:00 PM<br>Saturday & Sunday: Closed</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="social-links">
+                                    <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                                    <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                                    <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Map -->
+                        <div class="map-container">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.0968143067466!2d-122.4026!3d37.7909!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzfCsDQ3JzI3LjIiTiAxMjLCsDI0JzA5LjQiVw!5e0!3m2!1sen!2sus!4v1623252353520!5m2!1sen!2sus" allowfullscreen="" loading="lazy"></iframe>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ Section -->
+                <div class="card faq-section">
+                    <div class="card-header">
+                        <h3>Frequently Asked Questions</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="faq-item">
+                            <h4 class="faq-question">How do I create a new task?</h4>
+                            <p class="faq-answer">To create a new task, navigate to the Tasks page and click on the "Create Task" button in the top right corner. Fill out the required information in the form that appears and click "Create Task" to save it.</p>
+                        </div>
+                        <div class="faq-item">
+                            <h4 class="faq-question">Can I assign multiple team members to a single task?</h4>
+                            <p class="faq-answer">Currently, each task can only be assigned to one team member at a time. However, you can create subtasks within a main task and assign those to different team members.</p>
+                        </div>
+                        <div class="faq-item">
+                            <h4 class="faq-question">How do I generate reports for my team's performance?</h4>
+                            <p class="faq-answer">You can generate reports by navigating to the Reports page. From there, you can select various filters such as date range, team, and task type to customize your report. Once you've set your filters, click on "Generate Report" to view the results.</p>
+                        </div>
+                        <div class="faq-item">
+                            <h4 class="faq-question">Is there a mobile app available?</h4>
+                            <p class="faq-answer">Yes, we have mobile apps available for both iOS and Android devices. You can download them from the respective app stores by searching for "LabUI". The mobile app provides most of the functionality available in the web version.</p>
+                        </div>
+                        <div class="faq-item">
+                            <h4 class="faq-question">How can I reset my password?</h4>
+                            <p class="faq-answer">If you've forgotten your password, click on the "Forgot password?" link on the sign-in page. Enter your email address, and we'll send you instructions on how to reset your password.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize contact form
+            initContactForm();
+            
+            // Initialize dropdown menus
+            initDropdowns();
+            
+            // Initialize mobile menu
+            initMobileMenu();
+        });
+
+        function initContactForm() {
+            const contactForm = document.getElementById('contactForm');
+            
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    
+                    // Basic form validation
+                    const name = document.getElementById('name').value;
+                    const email = document.getElementById('email').value;
+                    const subject = document.getElementById('subject').value;
+                    const message = document.getElementById('message').value;
+                    
+                    if (!name || !email || !subject || !message) {
+                        alert('Please fill in all required fields');
+                        return;
+                    }
+                    
+                    // In a real app, this would submit the form via AJAX
+                    alert('Your message has been sent successfully! We will get back to you soon.');
+                    
+                    // Reset the form
+                    contactForm.reset();
+                });
+            }
+        }
+
+        function initDropdowns() {
+            const dropdownTriggers = document.querySelectorAll('.user-profile, .actions-dropdown');
+            
+            dropdownTriggers.forEach(trigger => {
+                trigger.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const dropdown = this.querySelector('.dropdown-menu');
+                    
+                    if (dropdown) {
+                        const isVisible = dropdown.style.display === 'block';
+                        
+                        // Close all dropdowns first
+                        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                            menu.style.display = 'none';
+                        });
+                        
+                        // Toggle current dropdown
+                        dropdown.style.display = isVisible ? 'none' : 'block';
+                    }
+                });
+            });
+            
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function() {
+                document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                    menu.style.display = 'none';
+                });
+            });
+        }
+
+        function initMobileMenu() {
+            const menuToggle = document.createElement('button');
+            menuToggle.className = 'menu-toggle';
+            menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+            
+            document.querySelector('.top-nav').prepend(menuToggle);
+            
+            menuToggle.addEventListener('click', function() {
+                document.querySelector('.sidebar').classList.toggle('active');
+            });
+            
+            function checkScreenSize() {
+                if (window.innerWidth < 768) {
+                    menuToggle.style.display = 'block';
+                } else {
+                    menuToggle.style.display = 'none';
+                    document.querySelector('.sidebar').classList.remove('active');
+                }
+            }
+            
+            window.addEventListener('resize', checkScreenSize);
+            checkScreenSize();
+        }
+    </script>
+</body>
+</html>

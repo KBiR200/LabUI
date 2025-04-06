@@ -13,17 +13,21 @@ urlpatterns = [
     path('', main.views.home, name='home'),
     path('signin/', main.views.signin, name='signin'),
     path('logout/', main.views.logout_view, name='logout'),
-    path('contact/', main.views.contact, name='contactus'),
+    path('contactus/', main.views.contact, name='contactus'),
+    path('teams/', main.views.teams, name='contactus'),
 
     # """ tasks """
-    path('task/new/', reports.views.create_task, name='new_task'),
+    path('tasks/', reports.views.tasks, name='tasks'),
+    path('task/new/', reports.views.create_task15, name='new_task'),
     path('task/<int:pk>/', reports.views.show_task, name='show_task'),
     path('task/<int:pk>/accept/', reports.views.accept_task, name='accept_task'),
     path('task/<int:pk>/submit/', reports.views.submit_task, name='submit_task'),
+    path('task/<int:pk>/undosubmit/', reports.views.undo_task, name='undo_task'),
     
     # ''' reports '''
-    path('report/<int:task_id>/new/', reports.views.new_report, name='new_report'),
+    path('reports/', reports.views.reports, name='reports'),
     path('report/<int:pk>/', reports.views.update_report, name='report'),
+    path('report/<int:task_id>/new/', reports.views.new_report, name='new_report'),
     path('report/<int:pk>/save/', reports.views.save_record, name='save_record'),
     path('report/<int:pk>/data/', reports.views.show_report, name='show_report'),
     

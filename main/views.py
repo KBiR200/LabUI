@@ -18,6 +18,8 @@ def home(request):
 def contact(request):
     return render(request, 'contactus.html')
 
+def teams(request):
+    return render(request, 'teams15.html')
 
 def signin(request):
     if request.method == 'POST':

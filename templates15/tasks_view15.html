@@ -731,6 +731,9 @@
                 <div class="page-header">
                     <h2>Task Details</h2>
                     <div class="actions">
+                      <a href='{% url 'show_report' 30 %}'>
+                        <button class="btn btn-outline"><i class="fas fa-glasses"></i>View Report </button>
+                      </a>
                         <button class="btn btn-outline"><i class="fas fa-edit"></i> Edit</button>
                         <button class="btn btn-danger"><i class="fas fa-trash-alt"></i> Delete</button>
                     </div>
@@ -740,14 +743,15 @@
                     <!-- Task Details -->
                     <div class="card">
                         <div class="card-header">
-                            <h3>Sample Analysis - Batch A</h3>
+                          {% comment %} title {% endcomment %}
+                            <h3>{{ task.title }}</h3>
                             <span class="badge badge-success">Completed</span>
                         </div>
                         <div class="card-body">
                             <div class="task-info">
                                 <div class="task-info-item">
                                     <span class="task-info-label">Task ID</span>
-                                    <span class="task-info-value">TASK-1234</span>
+                                    <span class="task-info-value">{{ task.title }}</span>
                                 </div>
                                 <div class="task-info-item">
                                     <span class="task-info-label">Assignee</span>
@@ -759,7 +763,7 @@
                                 </div>
                                 <div class="task-info-item">
                                     <span class="task-info-label">Due Date</span>
-                                    <span class="task-info-value">Jun 10, 2023</span>
+                                    <span class="task-info-value">{{ task.due_date|date:"D, d M Y H:i" }}</span>
                                 </div>
                                 <div class="task-info-item">
                                     <span class="task-info-label">Created By</span>
@@ -770,17 +774,21 @@
                                     <span class="task-info-value">Jun 5, 2023</span>
                                 </div>
                             </div>
-
-                            <div class="task-description">
+                              {% comment %} description {% endcomment %}
+                              <div class="task-description">
                                 <h4>Description</h4>
-                                <p>Analyze the samples from Batch A using the standard protocol. Document all findings and prepare a detailed report. Ensure all safety procedures are followed and equipment is properly calibrated before starting.</p>
-                                <p>Expected outcomes:</p>
-                                <ul style="list-style-type: disc; margin-left: 1.5rem;">
-                                    <li>Complete analysis of all 10 samples</li>
-                                    <li>Detailed documentation of results</li>
-                                    <li>Comparison with previous batch results</li>
-                                    <li>Recommendations for process improvements</li>
-                                </ul>
+                                <p>{{ task.data|linebreaksbr }}</p>
+                              </div>
+                              <div class="task-description">
+                                {% comment %} attachments {% endcomment %}
+                                <h4>Attachments</h4>
+                                {% for atta in task.attachments.all %}
+                                <li>
+                                    <a href="{{ atta.attachment.url }}" download="{{ atta.attachment.name }}">
+                                      {{ atta.attachment.name|slice:"20:" }}
+                                    </a>
+                                </li>
+                                {% endfor %}
                             </div>
 
                             <div class="comments-section">
@@ -788,7 +796,7 @@
                                 <div class="comment-list">
                                     <div class="comment-item">
                                         <div class="comment-avatar">
-                                            <img src="/statics/img/avatar-placeholder.png" alt="User Avatar">
+                                            
                                         </div>
                                         <div class="comment-content">
                                             <div class="comment-header">
@@ -800,7 +808,7 @@
                                     </div>
                                     <div class="comment-item">
                                         <div class="comment-avatar">
-                                            <img src="/statics/img/avatar-placeholder.png" alt="User Avatar">
+                                            
                                         </div>
                                         <div class="comment-content">
                                             <div class="comment-header">
@@ -813,7 +821,7 @@
                                 </div>
 
                                 <div class="comment-form">
-                                    <img src="/statics/img/avatar-placeholder.png" alt="User Avatar">
+                                    
                                     <div class="comment-input-container">
                                         <textarea class="comment-input" placeholder="Add a comment..."></textarea>
                                         <button class="btn btn-primary btn-sm comment-submit">Submit</button>

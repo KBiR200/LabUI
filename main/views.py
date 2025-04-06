@@ -35,7 +35,7 @@ def signin(request):
             messages.error(request, "Invalid username or password.")
     else:
         form = AuthenticationForm()
-    return render(request, 'signin.html', {'form': form})
+    return render(request, 'signin15.html', {'form': form})
 
 @login_required(login_url='signin')
 def logout_view(request):
@@ -54,7 +54,7 @@ def dashboard(request):
         'tasks_history': tasks_history,
         'reports':report
     }
-    return render(request, 'dahsboard.html', context)
+    return render(request, 'dashboard.html', context)
 
 @login_required(login_url='signin')
 def dashboard15(request):

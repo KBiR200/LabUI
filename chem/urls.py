@@ -29,6 +29,6 @@ urlpatterns = [
     
     
     # path('dashboard/', main.views.dashboard, name='control1'),
-    path('dashboard15/', main.views.dashboard15, name='control'),
+    path('dashboard15/', main.views.dashboard, name='control'),
     path('requests/', main.views.new_requests, name='requests'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # for static media 

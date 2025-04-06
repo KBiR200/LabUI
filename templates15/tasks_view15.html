@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Details - LabUI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Styles */
+        :root {
+          --primary-color: #4a6cf7;
+          --primary-hover: #3a5ce4;
+          --secondary-color: #6c757d;
+          --success-color: #28a745;
+          --danger-color: #dc3545;
+          --warning-color: #ffc107;
+          --info-color: #17a2b8;
+          --light-color: #f8f9fa;
+          --dark-color: #343a40;
+          --body-bg: #f5f7fb;
+          --card-bg: #ffffff;
+          --text-color: #495057;
+          --text-muted: #6c757d;
+          --border-color: #e9ecef;
+          --sidebar-width: 250px;
+          --header-height: 60px;
+          --shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+          --shadow-lg: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+          --border-radius: 0.375rem;
+        }
+
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        body {
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          font-size: 0.9rem;
+          line-height: 1.5;
+          color: var(--text-color);
+          background-color: var(--body-bg);
+        }
+
+        a {
+          color: var(--primary-color);
+          text-decoration: none;
+        }
+
+        a:hover {
+          text-decoration: underline;
+        }
+
+        ul {
+          list-style: none;
+        }
+
+        /* Layout */
+        .layout {
+          display: flex;
+          min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+          width: var(--sidebar-width);
+          background-color: var(--dark-color);
+          color: white;
+          position: fixed;
+          height: 100vh;
+          overflow-y: auto;
+          z-index: 1000;
+          transition: all 0.3s ease;
+        }
+
+        .sidebar-header {
+          display: flex;
+          align-items: center;
+          padding: 1rem;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header i {
+          font-size: 1.5rem;
+          margin-right: 0.5rem;
+        }
+
+        .sidebar-header h1 {
+          font-size: 1.25rem;
+          font-weight: 600;
+          margin: 0;
+        }
+
+        .sidebar-nav ul {
+          padding: 1rem 0;
+        }
+
+        .sidebar-nav li {
+          margin-bottom: 0.25rem;
+        }
+
+        .sidebar-nav a {
+          display: flex;
+          align-items: center;
+          padding: 0.75rem 1rem;
+          color: rgba(255, 255, 255, 0.7);
+          transition: all 0.3s ease;
+        }
+
+        .sidebar-nav a:hover {
+          color: white;
+          background-color: rgba(255, 255, 255, 0.1);
+          text-decoration: none;
+        }
+
+        .sidebar-nav li.active a {
+          color: white;
+          background-color: var(--primary-color);
+        }
+
+        .sidebar-nav i {
+          margin-right: 0.75rem;
+          font-size: 1rem;
+        }
+
+        /* Main Content */
+        .main-content {
+          flex: 1;
+          margin-left: var(--sidebar-width);
+          position: relative;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+          height: var(--header-height);
+          background-color: var(--card-bg);
+          border-bottom: 1px solid var(--border-color);
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 1.5rem;
+          position: sticky;
+          top: 0;
+          z-index: 900;
+          box-shadow: var(--shadow);
+        }
+
+        .search-container {
+          position: relative;
+          width: 300px;
+        }
+
+        .search-container i {
+          position: absolute;
+          left: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+          color: var(--text-muted);
+        }
+
+        .search-container input {
+          width: 100%;
+          padding: 0.5rem 0.5rem 0.5rem 2rem;
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius);
+          font-size: 0.875rem;
+        }
+
+        .user-menu {
+          display: flex;
+          align-items: center;
+        }
+
+        .notifications {
+          position: relative;
+          margin-right: 1.5rem;
+          cursor: pointer;
+        }
+
+        .notifications i {
+          font-size: 1.25rem;
+          color: var(--text-muted);
+        }
+
+        .badge {
+          position: absolute;
+          top: -8px;
+          right: -8px;
+          background-color: var(--danger-color);
+          color: white;
+          border-radius: 50%;
+          width: 18px;
+          height: 18px;
+          font-size: 0.7rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .user-profile {
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          position: relative;
+        }
+
+        .user-profile img {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          margin-right: 0.5rem;
+        }
+
+        .user-name {
+          font-weight: 500;
+          margin-right: 0.5rem;
+        }
+
+        .dropdown-menu {
+          position: absolute;
+          top: 100%;
+          right: 0;
+          background-color: var(--card-bg);
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius);
+          box-shadow: var(--shadow-lg);
+          min-width: 180px;
+          z-index: 1000;
+          display: none;
+        }
+
+        .dropdown-menu a {
+          display: flex;
+          align-items: center;
+          padding: 0.75rem 1rem;
+          color: var(--text-color);
+          transition: background-color 0.3s ease;
+        }
+
+        .dropdown-menu a:hover {
+          background-color: var(--light-color);
+          text-decoration: none;
+        }
+
+        .dropdown-menu i {
+          margin-right: 0.5rem;
+        }
+
+        /* Content Wrapper */
+        .content-wrapper {
+          padding: 1.5rem;
+        }
+
+        .page-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 1.5rem;
+        }
+
+        .page-header h2 {
+          font-size: 1.5rem;
+          font-weight: 600;
+          margin: 0;
+        }
+
+        .actions {
+          display: flex;
+          gap: 0.5rem;
+        }
+
+        /* Cards */
+        .card {
+          background-color: var(--card-bg);
+          border-radius: var(--border-radius);
+          box-shadow: var(--shadow);
+          margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+          padding: 1rem 1.25rem;
+          border-bottom: 1px solid var(--border-color);
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .card-header h3 {
+          font-size: 1.125rem;
+          font-weight: 600;
+          margin: 0;
+        }
+
+        .card-body {
+          padding: 1.25rem;
+        }
+
+        .card-body.p-0 {
+          padding: 0;
+        }
+
+        .card-footer {
+          padding: 1rem 1.25rem;
+          border-top: 1px solid var(--border-color);
+          display: flex;
+          justify-content: space-between;
+        }
+
+        /* Task Details */
+        .task-details-grid {
+          display: grid;
+          grid-template-columns: 2fr 1fr;
+          gap: 1.5rem;
+        }
+
+        .task-info {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 1rem;
+          margin-bottom: 1.5rem;
+        }
+
+        .task-info-item {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .task-info-label {
+          font-size: 0.8125rem;
+          color: var(--text-muted);
+          margin-bottom: 0.25rem;
+        }
+
+        .task-info-value {
+          font-weight: 500;
+        }
+
+        .task-description {
+          margin-bottom: 1.5rem;
+        }
+
+        .task-description h4 {
+          font-size: 1rem;
+          font-weight: 600;
+          margin-bottom: 0.5rem;
+        }
+
+        .task-description p {
+          color: var(--text-color);
+          line-height: 1.6;
+        }
+
+        /* Comments */
+        .comments-section h4 {
+          font-size: 1rem;
+          font-weight: 600;
+          margin-bottom: 1rem;
+        }
+
+        .comment-list {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          margin-bottom: 1.5rem;
+        }
+
+        .comment-item {
+          display: flex;
+          gap: 0.75rem;
+        }
+
+        .comment-avatar img {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+        }
+
+        .comment-content {
+          flex: 1;
+        }
+
+        .comment-header {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 0.25rem;
+        }
+
+        .comment-author {
+          font-weight: 500;
+        }
+
+        .comment-time {
+          font-size: 0.75rem;
+          color: var(--text-muted);
+        }
+
+        .comment-text {
+          font-size: 0.875rem;
+          line-height: 1.5;
+        }
+
+        .comment-form {
+          display: flex;
+          gap: 0.75rem;
+        }
+
+        .comment-form img {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+        }
+
+        .comment-input-container {
+          flex: 1;
+          position: relative;
+        }
+
+        .comment-input {
+          width: 100%;
+          padding: 0.75rem;
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius);
+          resize: none;
+          min-height: 80px;
+        }
+
+        .comment-input:focus {
+          outline: none;
+          border-color: var(--primary-color);
+        }
+
+        .comment-submit {
+          position: absolute;
+          bottom: 0.5rem;
+          right: 0.5rem;
+        }
+
+        /* Task Activity */
+        .task-activity h4 {
+          font-size: 1rem;
+          font-weight: 600;
+          margin-bottom: 1rem;
+        }
+
+        .activity-timeline {
+          position: relative;
+          padding-left: 1.5rem;
+        }
+
+        .activity-timeline::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0.5rem;
+          width: 2px;
+          background-color: var(--border-color);
+        }
+
+        .activity-item {
+          position: relative;
+          padding-bottom: 1.5rem;
+        }
+
+        .activity-item:last-child {
+          padding-bottom: 0;
+        }
+
+        .activity-item::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -1.5rem;
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+          background-color: var(--primary-color);
+          border: 2px solid var(--card-bg);
+        }
+
+        .activity-time {
+          font-size: 0.75rem;
+          color: var(--text-muted);
+          margin-bottom: 0.25rem;
+        }
+
+        .activity-text {
+          font-size: 0.875rem;
+          line-height: 1.5;
+        }
+
+        .activity-text strong {
+          font-weight: 600;
+        }
+
+        /* Buttons */
+        .btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.5rem 1rem;
+          font-size: 0.875rem;
+          font-weight: 500;
+          border-radius: var(--border-radius);
+          border: none;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+          background-color: var(--primary-color);
+          color: white;
+        }
+
+        .btn-primary:hover {
+          background-color: var(--primary-hover);
+        }
+
+        .btn-danger {
+          background-color: var(--danger-color);
+          color: white;
+        }
+
+        .btn-danger:hover {
+          background-color: #c82333;
+        }
+
+        .btn-outline {
+          background-color: transparent;
+          border: 1px solid var(--border-color);
+          color: var(--text-color);
+        }
+
+        .btn-outline:hover {
+          background-color: var(--light-color);
+        }
+
+        .btn-icon {
+          width: 32px;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          background-color: transparent;
+          border: none;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+        }
+
+        .btn-icon:hover {
+          background-color: var(--light-color);
+        }
+
+        .btn-block {
+          display: block;
+          width: 100%;
+        }
+
+        .btn-sm {
+          padding: 0.25rem 0.5rem;
+          font-size: 0.75rem;
+        }
+
+        /* Badges */
+        .badge {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.25rem 0.5rem;
+          font-size: 0.75rem;
+          font-weight: 600;
+          border-radius: 0.25rem;
+          text-transform: capitalize;
+        }
+
+        .badge-success {
+          background-color: rgba(40, 167, 69, 0.1);
+          color: var(--success-color);
+        }
+
+        .badge-warning {
+          background-color: rgba(255, 193, 7, 0.1);
+          color: #d39e00;
+        }
+
+        .badge-danger {
+          background-color: rgba(220, 53, 69, 0.1);
+          color: var(--danger-color);
+        }
+
+        .badge-secondary {
+          background-color: rgba(108, 117, 125, 0.1);
+          color: var(--secondary-color);
+        }
+
+        .badge-light {
+          background-color: var(--light-color);
+          color: var(--text-color);
+        }
+
+        .badge-default {
+          background-color: rgba(74, 108, 247, 0.1);
+          color: var(--primary-color);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+          .task-details-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .sidebar {
+            width: 0;
+            transform: translateX(-100%);
+          }
+          
+          .sidebar.active {
+            width: var(--sidebar-width);
+            transform: translateX(0);
+          }
+          
+          .main-content {
+            margin-left: 0;
+          }
+          
+          .task-info {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        @media (max-width: 576px) {
+          .search-container {
+            width: 200px;
+          }
+          
+          .user-name {
+            display: none;
+          }
+          
+          .page-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+          }
+          
+          .actions {
+            width: 100%;
+            justify-content: space-between;
+          }
+        }
+
+        /* Menu Toggle for Mobile */
+        .menu-toggle {
+          background: none;
+          border: none;
+          color: var(--text-color);
+          font-size: 1.25rem;
+          cursor: pointer;
+          display: none;
+          margin-right: 1rem;
+        }
+
+        @media (max-width: 768px) {
+          .menu-toggle {
+            display: block;
+          }
+        }
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-flask"></i>
+                <h1>LabUI</h1>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="/"><i class="fas fa-home"></i> Dashboard</a>
+                    </li>
+                    <li class="active">
+                        <a href="/tasks"><i class="fas fa-tasks"></i> Tasks</a>
+                    </li>
+                    <li>
+                        <a href="/reports"><i class="fas fa-chart-bar"></i> Reports</a>
+                    </li>
+                    <li>
+                        <a href="/teams"><i class="fas fa-users"></i> Teams</a>
+                    </li>
+                    <li>
+                        <a href="/contactus"><i class="fas fa-envelope"></i> Contact</a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Navigation -->
+            <header class="top-nav">
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search...">
+                </div>
+                <div class="user-menu">
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </div>
+                    <div class="user-profile">
+                        <img src="/statics/img/avatar-placeholder.png" alt="User Avatar">
+                        <span class="user-name">Team Leader</span>
+                        <i class="fas fa-chevron-down"></i>
+                        <div class="dropdown-menu">
+                            <a href="/profile"><i class="fas fa-user"></i> Profile</a>
+                            <a href="/settings"><i class="fas fa-cog"></i> Settings</a>
+                            <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Task Details Content -->
+            <div class="content-wrapper">
+                <div class="page-header">
+                    <h2>Task Details</h2>
+                    <div class="actions">
+                        <button class="btn btn-outline"><i class="fas fa-edit"></i> Edit</button>
+                        <button class="btn btn-danger"><i class="fas fa-trash-alt"></i> Delete</button>
+                    </div>
+                </div>
+
+                <div class="task-details-grid">
+                    <!-- Task Details -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Sample Analysis - Batch A</h3>
+                            <span class="badge badge-success">Completed</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="task-info">
+                                <div class="task-info-item">
+                                    <span class="task-info-label">Task ID</span>
+                                    <span class="task-info-value">TASK-1234</span>
+                                </div>
+                                <div class="task-info-item">
+                                    <span class="task-info-label">Assignee</span>
+                                    <span class="task-info-value">Alex Johnson</span>
+                                </div>
+                                <div class="task-info-item">
+                                    <span class="task-info-label">Priority</span>
+                                    <span class="task-info-value"><span class="badge badge-danger">High</span></span>
+                                </div>
+                                <div class="task-info-item">
+                                    <span class="task-info-label">Due Date</span>
+                                    <span class="task-info-value">Jun 10, 2023</span>
+                                </div>
+                                <div class="task-info-item">
+                                    <span class="task-info-label">Created By</span>
+                                    <span class="task-info-value">Team Leader</span>
+                                </div>
+                                <div class="task-info-item">
+                                    <span class="task-info-label">Created On</span>
+                                    <span class="task-info-value">Jun 5, 2023</span>
+                                </div>
+                            </div>
+
+                            <div class="task-description">
+                                <h4>Description</h4>
+                                <p>Analyze the samples from Batch A using the standard protocol. Document all findings and prepare a detailed report. Ensure all safety procedures are followed and equipment is properly calibrated before starting.</p>
+                                <p>Expected outcomes:</p>
+                                <ul style="list-style-type: disc; margin-left: 1.5rem;">
+                                    <li>Complete analysis of all 10 samples</li>
+                                    <li>Detailed documentation of results</li>
+                                    <li>Comparison with previous batch results</li>
+                                    <li>Recommendations for process improvements</li>
+                                </ul>
+                            </div>
+
+                            <div class="comments-section">
+                                <h4>Comments</h4>
+                                <div class="comment-list">
+                                    <div class="comment-item">
+                                        <div class="comment-avatar">
+                                            <img src="/statics/img/avatar-placeholder.png" alt="User Avatar">
+                                        </div>
+                                        <div class="comment-content">
+                                            <div class="comment-header">
+                                                <span class="comment-author">Team Leader</span>
+                                                <span class="comment-time">Jun 5, 2023 at 10:30 AM</span>
+                                            </div>
+                                            <p class="comment-text">Please make sure to follow the updated protocol for this batch. The changes are highlighted in the documentation.</p>
+                                        </div>
+                                    </div>
+                                    <div class="comment-item">
+                                        <div class="comment-avatar">
+                                            <img src="/statics/img/avatar-placeholder.png" alt="User Avatar">
+                                        </div>
+                                        <div class="comment-content">
+                                            <div class="comment-header">
+                                                <span class="comment-author">Alex Johnson</span>
+                                                <span class="comment-time">Jun 8, 2023 at 2:15 PM</span>
+                                            </div>
+                                            <p class="comment-text">Analysis completed. All samples processed according to protocol. Found some interesting variations in samples #3 and #7, documented in the report.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="comment-form">
+                                    <img src="/statics/img/avatar-placeholder.png" alt="User Avatar">
+                                    <div class="comment-input-container">
+                                        <textarea class="comment-input" placeholder="Add a comment..."></textarea>
+                                        <button class="btn btn-primary btn-sm comment-submit">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Task Activity -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Activity</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="task-activity">
+                                <div class="activity-timeline">
+                                    <div class="activity-item">
+                                        <div class="activity-time">Jun 10, 2023 at 11:45 AM</div>
+                                        <div class="activity-text"><strong>Alex Johnson</strong> marked this task as <strong>Completed</strong></div>
+                                    </div>
+                                    <div class="activity-item">
+                                        <div class="activity-time">Jun 8, 2023 at 2:15 PM</div>
+                                        <div class="activity-text"><strong>Alex Johnson</strong> added a comment</div>
+                                    </div>
+                                    <div class="activity-item">
+                                        <div class="activity-time">Jun 6, 2023 at 9:30 AM</div>
+                                        <div class="activity-text"><strong>Alex Johnson</strong> changed status from <strong>Pending</strong> to <strong>In Progress</strong></div>
+                                    </div>
+                                    <div class="activity-item">
+                                        <div class="activity-time">Jun 5, 2023 at 10:30 AM</div>
+                                        <div class="activity-text"><strong>Team Leader</strong> added a comment</div>
+                                    </div>
+                                    <div class="activity-item">
+                                        <div class="activity-time">Jun 5, 2023 at 10:15 AM</div>
+                                        <div class="activity-text"><strong>Team Leader</strong> assigned this task to <strong>Alex Johnson</strong></div>
+                                    </div>
+                                    <div class="activity-item">
+                                        <div class="activity-time">Jun 5, 2023 at 10:00 AM</div>
+                                        <div class="activity-text"><strong>Team Leader</strong> created this task</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize dropdown menus
+            initDropdowns();
+            
+            // Initialize mobile menu
+            initMobileMenu();
+            
+            // Initialize comment form
+            initCommentForm();
+        });
+
+        function initDropdowns() {
+            const dropdownTriggers = document.querySelectorAll('.user-profile, .actions-dropdown');
+
+            dropdownTriggers.forEach(trigger => {
+                trigger.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const dropdown = this.querySelector('.dropdown-menu');
+                    
+                    if (dropdown) {
+                        const isVisible = dropdown.style.display === 'block';
+                        
+                        // Close all dropdowns first
+                        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                            menu.style.display = 'none';
+                        });
+                        
+                        // Toggle current dropdown
+                        dropdown.style.display = isVisible ? 'none' : 'block';
+                    }
+                });
+            });
+
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function() {
+                document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                    menu.style.display = 'none';
+                });
+            });
+        }
+
+        function initMobileMenu() {
+            const menuToggle = document.createElement('button');
+            menuToggle.className = 'menu-toggle';
+            menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+            
+            document.querySelector('.top-nav').prepend(menuToggle);
+            
+            menuToggle.addEventListener('click', function() {
+                document.querySelector('.sidebar').classList.toggle('active');
+            });
+            
+            function checkScreenSize() {
+                if (window.innerWidth < 768) {
+                    menuToggle.style.display = 'block';
+                } else {
+                    menuToggle.style.display = 'none';
+                    document.querySelector('.sidebar').classList.remove('active');
+                }
+            }
+            
+            window.addEventListener('resize', checkScreenSize);
+            checkScreenSize();
+        }
+
+        function initCommentForm() {
+            const commentForm = document.querySelector('.comment-form');
+            const commentInput = document.querySelector('.comment-input');
+            const commentSubmit = document.querySelector('.comment-submit');
+            
+            if (commentForm && commentInput && commentSubmit) {
+                commentSubmit.addEventListener('click', function() {
+                    const commentText = commentInput.value.trim();
+                    
+                    if (commentText) {
+                        // In a real app, this would submit the comment via AJAX
+                        alert('Comment submitted: ' + commentText);
+                        commentInput.value = '';
+                    }
+                });
+                
+                // Allow submitting with Enter + Ctrl
+                commentInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' && e.ctrlKey) {
+                        commentSubmit.click();
+                        e.preventDefault();
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

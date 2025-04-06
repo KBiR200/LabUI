@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - LabUI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Styles */
+        :root {
+          --primary-color: #4a6cf7;
+          --primary-hover: #3a5ce4;
+          --secondary-color: #6c757d;
+          --success-color: #28a745;
+          --danger-color: #dc3545;
+          --warning-color: #ffc107;
+          --info-color: #17a2b8;
+          --light-color: #f8f9fa;
+          --dark-color: #343a40;
+          --body-bg: #f5f7fb;
+          --card-bg: #ffffff;
+          --text-color: #495057;
+          --text-muted: #6c757d;
+          --border-color: #e9ecef;
+          --shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+          --shadow-lg: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+          --border-radius: 0.375rem;
+        }
+
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        body {
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          font-size: 0.9rem;
+          line-height: 1.5;
+          color: var(--text-color);
+          background-color: var(--body-bg);
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        a {
+          color: var(--primary-color);
+          text-decoration: none;
+        }
+
+        a:hover {
+          text-decoration: underline;
+        }
+
+        /* Sign In Container */
+        .signin-container {
+          width: 100%;
+          max-width: 400px;
+          padding: 1.5rem;
+        }
+
+        .signin-logo {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 2rem;
+        }
+
+        .signin-logo i {
+          font-size: 2rem;
+          color: var(--primary-color);
+          margin-right: 0.75rem;
+        }
+
+        .signin-logo h1 {
+          font-size: 1.75rem;
+          font-weight: 600;
+          color: var(--dark-color);
+        }
+
+        /* Sign In Card */
+        .signin-card {
+          background-color: var(--card-bg);
+          border-radius: var(--border-radius);
+          box-shadow: var(--shadow-lg);
+          padding: 2rem;
+        }
+
+        .signin-header {
+          text-align: center;
+          margin-bottom: 1.5rem;
+        }
+
+        .signin-header h2 {
+          font-size: 1.5rem;
+          font-weight: 600;
+          color: var(--dark-color);
+          margin-bottom: 0.5rem;
+        }
+
+        .signin-header p {
+          color: var(--text-muted);
+        }
+
+        /* Form Controls */
+        .form-group {
+          margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+          display: block;
+          margin-bottom: 0.5rem;
+          font-weight: 500;
+        }
+
+        .form-control {
+          width: 100%;
+          padding: 0.75rem 1rem;
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius);
+          font-size: 0.9rem;
+          transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-control:focus {
+          outline: none;
+          border-color: var(--primary-color);
+          box-shadow: 0 0 0 0.2rem rgba(74, 108, 247, 0.25);
+        }
+
+        .password-field {
+          position: relative;
+        }
+
+        .password-toggle {
+          position: absolute;
+          top: 50%;
+          right: 1rem;
+          transform: translateY(-50%);
+          background: none;
+          border: none;
+          color: var(--text-muted);
+          cursor: pointer;
+        }
+
+        .form-check {
+          display: flex;
+          align-items: center;
+          margin-bottom: 1.25rem;
+        }
+
+        .form-check-input {
+          margin-right: 0.5rem;
+          width: 16px;
+          height: 16px;
+        }
+
+        .form-check-label {
+          font-size: 0.875rem;
+        }
+
+        .forgot-password {
+          font-size: 0.875rem;
+          text-align: right;
+          margin-bottom: 1.25rem;
+        }
+
+        /* Buttons */
+        .btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.75rem 1rem;
+          font-size: 0.9rem;
+          font-weight: 500;
+          border-radius: var(--border-radius);
+          border: none;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+          background-color: var(--primary-color);
+          color: white;
+        }
+
+        .btn-primary:hover {
+          background-color: var(--primary-hover);
+        }
+
+        .btn-block {
+          display: block;
+          width: 100%;
+        }
+
+        /* Divider */
+        .divider {
+          display: flex;
+          align-items: center;
+          margin: 1.5rem 0;
+          color: var(--text-muted);
+          font-size: 0.875rem;
+        }
+
+        .divider::before, .divider::after {
+          content: '';
+          flex: 1;
+          height: 1px;
+          background-color: var(--border-color);
+        }
+
+        .divider::before {
+          margin-right: 1rem;
+        }
+
+        .divider::after {
+          margin-left: 1rem;
+        }
+
+        /* Social Sign In */
+        .social-signin {
+          display: flex;
+          gap: 1rem;
+          margin-bottom: 1.5rem;
+        }
+
+        .social-btn {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.75rem;
+          border-radius: var(--border-radius);
+          border: 1px solid var(--border-color);
+          background-color: var(--card-bg);
+          color: var(--text-color);
+          transition: all 0.3s ease;
+        }
+
+        .social-btn:hover {
+          background-color: var(--light-color);
+          text-decoration: none;
+        }
+
+        .social-btn i {
+          font-size: 1.25rem;
+        }
+
+        /* Sign Up Link */
+        .signup-link {
+          text-align: center;
+          margin-top: 1.5rem;
+          font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 576px) {
+          .signin-container {
+            padding: 1rem;
+          }
+          
+          .signin-card {
+            padding: 1.5rem;
+          }
+        }
+    </style>
+</head>
+<body>
+    <div class="signin-container">
+        <div class="signin-logo">
+            <i class="fas fa-flask"></i>
+            <h1>LabUI</h1>
+        </div>
+        
+        <div class="signin-card">
+            <div class="signin-header">
+                <h2>Welcome Back</h2>
+                <p>Sign in to your account</p>
+            </div>
+            
+            <form id="signinForm">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" class="form-control" placeholder="Enter your email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="password-field">
+                        <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+                        <button type="button" id="passwordToggle" class="password-toggle">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-check">
+                    <input type="checkbox" id="rememberMe" class="form-check-input">
+                    <label for="rememberMe" class="form-check-label">Remember me</label>
+                </div>
+                
+                <div class="forgot-password">
+                    <a href="/forgot-password">Forgot password?</a>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+            </form>
+            
+            <div class="divider">or continue with</div>
+            
+            <div class="social-signin">
+                <a href="#" class="social-btn">
+                    <i class="fab fa-google"></i>
+                </a>
+                <a href="#" class="social-btn">
+                    <i class="fab fa-microsoft"></i>
+                </a>
+                <a href="#" class="social-btn">
+                    <i class="fab fa-apple"></i>
+                </a>
+            </div>
+            
+            <div class="signup-link">
+                Don't have an account? <a href="/signup">Sign up</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize password toggle
+            initPasswordToggle();
+
+            // Initialize form validation
+            initFormValidation();
+        });
+
+        function initPasswordToggle() {
+            const passwordToggle = document.getElementById('passwordToggle');
+            const passwordField = document.getElementById('password');
+
+            if (passwordToggle && passwordField) {
+                passwordToggle.addEventListener('click', function() {
+                    const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordField.setAttribute('type', type);
+                    
+                    // Toggle icon
+                    const icon = this.querySelector('i');
+                    if (type === 'text') {
+                        icon.classList.remove('fa-eye');
+                        icon.classList.add('fa-eye-slash');
+                    } else {
+                        icon.classList.remove('fa-eye-slash');
+                        icon.classList.add('fa-eye');
+                    }
+                });
+            }
+        }
+
+        function initFormValidation() {
+            const signinForm = document.getElementById('signinForm');
+
+            if (signinForm) {
+                signinForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    
+                    const email = document.getElementById('email').value;
+                    const password = document.getElementById('password').value;
+                    
+                    if (!email || !password) {
+                        alert('Please enter both email and password');
+                        return;
+                    }
+                    
+                    // In a real app, this would submit the form via AJAX
+                    // For demo purposes, we'll just redirect to the dashboard
+                    window.location.href = '/';
+                });
+            }
+        }
+    </script>
+</body>
+</html>

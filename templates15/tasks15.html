@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasks - LabUI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Styles */
+        :root {
+          --primary-color: #4a6cf7;
+          --primary-hover: #3a5ce4;
+          --secondary-color: #6c757d;
+          --success-color: #28a745;
+          --danger-color: #dc3545;
+          --warning-color: #ffc107;
+          --info-color: #17a2b8;
+          --light-color: #f8f9fa;
+          --dark-color: #343a40;
+          --body-bg: #f5f7fb;
+          --card-bg: #ffffff;
+          --text-color: #495057;
+          --text-muted: #6c757d;
+          --border-color: #e9ecef;
+          --sidebar-width: 250px;
+          --header-height: 60px;
+          --shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+          --shadow-lg: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+          --border-radius: 0.375rem;
+        }
+
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        body {
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          font-size: 0.9rem;
+          line-height: 1.5;
+          color: var(--text-color);
+          background-color: var(--body-bg);
+        }
+
+        a {
+          color: var(--primary-color);
+          text-decoration: none;
+        }
+
+        a:hover {
+          text-decoration: underline;
+        }
+
+        ul {
+          list-style: none;
+        }
+
+        /* Layout */
+        .layout {
+          display: flex;
+          min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+          width: var(--sidebar-width);
+          background-color: var(--dark-color);
+          color: white;
+          position: fixed;
+          height: 100vh;
+          overflow-y: auto;
+          z-index: 1000;
+          transition: all 0.3s ease;
+        }
+
+        .sidebar-header {
+          display: flex;
+          align-items: center;
+          padding: 1rem;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header i {
+          font-size: 1.5rem;
+          margin-right: 0.5rem;
+        }
+
+        .sidebar-header h1 {
+          font-size: 1.25rem;
+          font-weight: 600;
+          margin: 0;
+        }
+
+        .sidebar-nav ul {
+          padding: 1rem 0;
+        }
+
+        .sidebar-nav li {
+          margin-bottom: 0.25rem;
+        }
+
+        .sidebar-nav a {
+          display: flex;
+          align-items: center;
+          padding: 0.75rem 1rem;
+          color: rgba(255, 255, 255, 0.7);
+          transition: all 0.3s ease;
+        }
+
+        .sidebar-nav a:hover {
+          color: white;
+          background-color: rgba(255, 255, 255, 0.1);
+          text-decoration: none;
+        }
+
+        .sidebar-nav li.active a {
+          color: white;
+          background-color: var(--primary-color);
+        }
+
+        .sidebar-nav i {
+          margin-right: 0.75rem;
+          font-size: 1rem;
+        }
+
+        /* Main Content */
+        .main-content {
+          flex: 1;
+          margin-left: var(--sidebar-width);
+          position: relative;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+          height: var(--header-height);
+          background-color: var(--card-bg);
+          border-bottom: 1px solid var(--border-color);
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 1.5rem;
+          position: sticky;
+          top: 0;
+          z-index: 900;
+          box-shadow: var(--shadow);
+        }
+
+        .search-container {
+          position: relative;
+          width: 300px;
+        }
+
+        .search-container i {
+          position: absolute;
+          left: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+          color: var(--text-muted);
+        }
+
+        .search-container input {
+          width: 100%;
+          padding: 0.5rem 0.5rem 0.5rem 2rem;
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius);
+          font-size: 0.875rem;
+        }
+
+        .user-menu {
+          display: flex;
+          align-items: center;
+        }
+
+        .notifications {
+          position: relative;
+          margin-right: 1.5rem;
+          cursor: pointer;
+        }
+
+        .notifications i {
+          font-size: 1.25rem;
+          color: var(--text-muted);
+        }
+
+        .badge {
+          position: absolute;
+          top: -8px;
+          right: -8px;
+          background-color: var(--danger-color);
+          color: white;
+          border-radius: 50%;
+          width: 18px;
+          height: 18px;
+          font-size: 0.7rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .user-profile {
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          position: relative;
+        }
+
+        .user-profile img {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          margin-right: 0.5rem;
+        }
+
+        .user-name {
+          font-weight: 500;
+          margin-right: 0.5rem;
+        }
+
+        .dropdown-menu {
+          position: absolute;
+          top: 100%;
+          right: 0;
+          background-color: var(--card-bg);
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius);
+          box-shadow: var(--shadow-lg);
+          min-width: 180px;
+          z-index: 1000;
+          display: none;
+        }
+
+        .dropdown-menu a {
+          display: flex;
+          align-items: center;
+          padding: 0.75rem 1rem;
+          color: var(--text-color);
+          transition: background-color 0.3s ease;
+        }
+
+        .dropdown-menu a:hover {
+          background-color: var(--light-color);
+          text-decoration: none;
+        }
+
+        .dropdown-menu i {
+          margin-right: 0.5rem;
+        }
+
+        /* Content Wrapper */
+        .content-wrapper {
+          padding: 1.5rem;
+        }
+
+        .page-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 1.5rem;
+        }
+
+        .page-header h2 {
+          font-size: 1.5rem;
+          font-weight: 600;
+          margin: 0;
+        }
+
+        .actions {
+          display: flex;
+          gap: 0.5rem;
+        }
+
+        /* Cards */
+        .card {
+          background-color: var(--card-bg);
+          border-radius: var(--border-radius);
+          box-shadow: var(--shadow);
+          margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+          padding: 1rem 1.25rem;
+          border-bottom: 1px solid var(--border-color);
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .card-header h3 {
+          font-size: 1.125rem;
+          font-weight: 600;
+          margin: 0;
+        }
+
+        .card-body {
+          padding: 1.25rem;
+        }
+
+        .card-body.p-0 {
+          padding: 0;
+        }
+
+        .card-footer {
+          padding: 1rem 1.25rem;
+          border-top: 1px solid var(--border-color);
+          display: flex;
+          justify-content: space-between;
+        }
+
+        /* Task Filters */
+        .task-filters {
+          display: flex;
+          gap: 0.5rem;
+          margin-bottom: 1.5rem;
+          overflow-x: auto;
+          padding-bottom: 0.5rem;
+        }
+
+        .filter-tab {
+          padding: 0.5rem 1rem;
+          border-radius: var(--border-radius);
+          background-color: var(--light-color);
+          color: var(--text-color);
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          white-space: nowrap;
+        }
+
+        .filter-tab:hover {
+          background-color: var(--border-color);
+        }
+
+        .filter-tab.active {
+          background-color: var(--primary-color);
+          color: white;
+        }
+
+        /* Task Table */
+        .task-table {
+          width: 100%;
+          border-collapse: collapse;
+        }
+
+        .task-table th, .task-table td {
+          padding: 0.75rem 1rem;
+          text-align: left;
+          border-bottom: 1px solid var(--border-color);
+        }
+
+        .task-table th {
+          font-weight: 600;
+          color: var(--text-muted);
+          background-color: var(--light-color);
+        }
+
+        .task-table tr:last-child td {
+          border-bottom: none;
+        }
+
+        .task-table tr:hover {
+          background-color: rgba(0, 0, 0, 0.02);
+        }
+
+        .task-table .task-title {
+          font-weight: 500;
+        }
+
+        .task-table .task-id {
+          color: var(--text-muted);
+          font-size: 0.8125rem;
+        }
+
+        .task-table .task-assignee {
+          display: flex;
+          align-items: center;
+        }
+
+        .task-table .task-assignee img {
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          margin-right: 0.5rem;
+        }
+
+        .task-table .actions-dropdown {
+          position: relative;
+        }
+
+        /* Task Modal */
+        .modal {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+          display: none;
+          align-items: center;
+          justify-content: center;
+          z-index: 1100;
+        }
+
+        .modal-content {
+          background-color: var(--card-bg);
+          border-radius: var(--border-radius);
+          box-shadow: var(--shadow-lg);
+          width: 100%;
+          max-width: 600px;
+          max-height: 90vh;
+          overflow-y: auto;
+        }
+
+        .modal-header {
+          padding: 1rem 1.25rem;
+          border-bottom: 1px solid var(--border-color);
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .modal-header h3 {
+          font-size: 1.25rem;
+          font-weight: 600;
+          margin: 0;
+        }
+
+        .close-modal {
+          background: none;
+          border: none;
+          font-size: 1.25rem;
+          cursor: pointer;
+          color: var(--text-muted);
+        }
+
+        .modal-body {
+          padding: 1.25rem;
+        }
+
+        .modal-footer {
+          padding: 1rem 1.25rem;
+          border-top: 1px solid var(--border-color);
+          display: flex;
+          justify-content: flex-end;
+          gap: 0.5rem;
+        }
+
+        /* Form Controls */
+        .form-group {
+          margin-bottom: 1rem;
+        }
+
+        .form-group label {
+          display: block;
+          margin-bottom: 0.5rem;
+          font-weight: 500;
+        }
+
+        .form-control {
+          width: 100%;
+          padding: 0.5rem 0.75rem;
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius);
+          font-size: 0.9rem;
+        }
+
+        .form-control:focus {
+          outline: none;
+          border-color: var(--primary-color);
+          box-shadow: 0 0 0 0.2rem rgba(74, 108, 247, 0.25);
+        }
+
+        select.form-control {
+          appearance: none;
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236c757d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+          background-repeat: no-repeat;
+          background-position: right 0.75rem center;
+          background-size: 16px;
+          padding-right: 2.5rem;
+        }
+
+        textarea.form-control {
+          min-height: 100px;
+          resize: vertical;
+        }
+
+        /* Buttons */
+        .btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.5rem 1rem;
+          font-size: 0.875rem;
+          font-weight: 500;
+          border-radius: var(--border-radius);
+          border: none;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+          background-color: var(--primary-color);
+          color: white;
+        }
+
+        .btn-primary:hover {
+          background-color: var(--primary-hover);
+        }
+
+        .btn-danger {
+          background-color: var(--danger-color);
+          color: white;
+        }
+
+        .btn-danger:hover {
+          background-color: #c82333;
+        }
+
+        .btn-outline {
+          background-color: transparent;
+          border: 1px solid var(--border-color);
+          color: var(--text-color);
+        }
+
+        .btn-outline:hover {
+          background-color: var(--light-color);
+        }
+
+        .btn-icon {
+          width: 32px;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          background-color: transparent;
+          border: none;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+        }
+
+        .btn-icon:hover {
+          background-color: var(--light-color);
+        }
+
+        .btn-block {
+          display: block;
+          width: 100%;
+        }
+
+        .btn-sm {
+          padding: 0.25rem 0.5rem;
+          font-size: 0.75rem;
+        }
+
+        /* Badges */
+        .badge {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.25rem 0.5rem;
+          font-size: 0.75rem;
+          font-weight: 600;
+          border-radius: 0.25rem;
+          text-transform: capitalize;
+        }
+
+        .badge-success {
+          background-color: rgba(40, 167, 69, 0.1);
+          color: var(--success-color);
+        }
+
+        .badge-warning {
+          background-color: rgba(255, 193, 7, 0.1);
+          color: #d39e00;
+        }
+
+        .badge-danger {
+          background-color: rgba(220, 53, 69, 0.1);
+          color: var(--danger-color);
+        }
+
+        .badge-secondary {
+          background-color: rgba(108, 117, 125, 0.1);
+          color: var(--secondary-color);
+        }
+
+        .badge-light {
+          background-color: var(--light-color);
+          color: var(--text-color);
+        }
+
+        .badge-default {
+          background-color: rgba(74, 108, 247, 0.1);
+          color: var(--primary-color);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+          .task-table {
+            min-width: 800px;
+          }
+          
+          .card-body {
+            overflow-x: auto;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .sidebar {
+            width: 0;
+            transform: translateX(-100%);
+          }
+          
+          .sidebar.active {
+            width: var(--sidebar-width);
+            transform: translateX(0);
+          }
+          
+          .main-content {
+            margin-left: 0;
+          }
+        }
+
+        @media (max-width: 576px) {
+          .search-container {
+            width: 200px;
+          }
+          
+          .user-name {
+            display: none;
+          }
+          
+          .page-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+          }
+          
+          .actions {
+            width: 100%;
+          }
+          
+          .actions .btn {
+            flex: 1;
+          }
+        }
+
+        /* Menu Toggle for Mobile */
+        .menu-toggle {
+          background: none;
+          border: none;
+          color: var(--text-color);
+          font-size: 1.25rem;
+          cursor: pointer;
+          display: none;
+          margin-right: 1rem;
+        }
+
+        @media (max-width: 768px) {
+          .menu-toggle {
+            display: block;
+          }
+        }
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-flask"></i>
+                <h1>LabUI</h1>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="/"><i class="fas fa-home"></i> Dashboard</a>
+                    </li>
+                    <li class="active">
+                        <a href="/tasks"><i class="fas fa-tasks"></i> Tasks</a>
+                    </li>
+                    <li>
+                        <a href="/reports"><i class="fas fa-chart-bar"></i> Reports</a>
+                    </li>
+                    <li>
+                        <a href="/teams"><i class="fas fa-users"></i> Teams</a>
+                    </li>
+                    <li>
+                        <a href="/contactus"><i class="fas fa-envelope"></i> Contact</a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Navigation -->
+            <header class="top-nav">
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search tasks...">
+                </div>
+                <div class="user-menu">
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </div>
+                    <div class="user-profile">
+                        <img src="/statics/img/avatar-placeholder.png" alt="User Avatar">
+                        <span class="user-name">Team Leader</span>
+                        <i class="fas fa-chevron-down"></i>
+                        <div class="dropdown-menu">
+                            <a href="/profile"><i class="fas fa-user"></i> Profile</a>
+                            <a href="/settings"><i class="fas fa-cog"></i> Settings</a>
+                            <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Tasks Content -->
+            <div class="content-wrapper">
+                <div class="page-header">
+                    <h2>Tasks</h2>
+                    <div class="actions">
+                        <button class="btn btn-primary" id="createTaskBtn"><i class="fas fa-plus"></i> Create Task</button>
+                    </div>
+                </div>
+
+                <!-- Task Filters -->
+                <div class="task-filters">
+                    <div class="filter-tab active" data-filter="all">All Tasks</div>
+                    <div class="filter-tab" data-filter="pending">Pending</div>
+                    <div class="filter-tab" data-filter="progress">In Progress</div>
+                    <div class="filter-tab" data-filter="completed">Completed</div>
+                    <div class="filter-tab" data-filter="overdue">Overdue</div>
+                </div>
+
+                <!-- Tasks Table -->
+                <div class="card">
+                    <div class="card-body p-0">
+                        <table class="task-table">
+                            <thead>
+                                <tr>
+                                    <th>Task</th>
+                                    <th>Assignee</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th>Due Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="task-title">Sample Analysis - Batch A</div>
+                                        <div class="task-id">TASK-1234</div>
+                                    </td>
+                                    <td>
+                                        <div class="task-assignee">
+                                            <img src="/statics/img/avatar-placeholder.png" alt="User Avatar">
+                                            <span>Alex Johnson</span>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge badge-danger">High</span></td>
+                                    <td><span class="badge badge-success">Completed</span></td>
+                                    <td>Jun 10, 2023</td>
+                                    <td>
+                                        <div class="actions-dropdown">
+                                            <button class="btn-icon"><i class="fas fa-ellipsis-v"></i></button>
+                                            <div class="dropdown-menu">
+                                                <a href="/task/1234"><i class="fas fa-eye"></i> View</a>
+                                                <a href="#"><i class="fas fa-edit"></i> Edit</a>
+                                                <a href="#"><i class="fas fa-trash-alt"></i> Delete</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="task-title">Equipment Calibration</div>
+                                        <div class="task-id">TASK-1235</div>
+                                    </td>
+                                    <td>
+                                        <div class="task-assignee">
+                                            <img src="/statics/img/avatar-placeholder.png" alt="User Avatar">
+                                            <span>Sam Taylor</span>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge badge-warning">Medium</span></td>
+                                    <td><span class="badge badge-warning">In Progress</span></td>
+                                    <td>Jun 15, 2023</td>
+                                    <td>
+                                        <div class="actions-dropdown">
+                                            <button class="btn-icon"><i class="fas fa-ellipsis-v"></i></button>
+                                            <div class="dropdown-menu">
+                                                <a href="/task/1235"><i class="fas fa-eye"></i> View</a>
+                                                <a href="#"><i class="fas fa-edit"></i> Edit</a>
+                                                <a href="#"><i class="fas fa-trash-alt"></i> Delete</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="task-title">Data Analysis - Project X</div>
+                                        <div class="task-id">TASK-1236</div>
+                                    </td>
+                                    <td>
+                                        <div class="task-assignee">
+                                            <img src="/statics/img/avatar-placeholder.png" alt="User Avatar">
+                                            <span>Jamie Lee</span>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge badge-secondary">Low</span></td>
+                                    <td><span class="badge badge-secondary">Pending</span></td>
+                                    <td>Jun 20, 2023</td>
+                                    <td>
+                                        <div class="actions-dropdown">
+                                            <button class="btn-icon"><i class="fas fa-ellipsis-v"></i></button>
+                                            <div class="dropdown-menu">
+                                                <a href="/task/1236"><i class="fas fa-eye"></i> View</a>
+                                                <a href="#"><i class="fas fa-edit"></i> Edit</a>
+                                                <a href="#"><i class="fas fa-trash-alt"></i> Delete</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="task-title">Quality Control Check</div>
+                                        <div class="task-id">TASK-1237</div>
+                                    </td>
+                                    <td>
+                                        <div class="task-assignee">
+                                            <img src="/statics/img/avatar-placeholder.png" alt="User Avatar">
+                                            <span>Morgan Chen</span>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge badge-danger">High</span></td>
+                                    <td><span class="badge badge-danger">Overdue</span></td>
+                                    <td>Jun 5, 2023</td>
+                                    <td>
+                                        <div class="actions-dropdown">
+                                            <button class="btn-icon"><i class="fas fa-ellipsis-v"></i></button>
+                                            <div class="dropdown-menu">
+                                                <a href="/task/1237"><i class="fas fa-eye"></i> View</a>
+                                                <a href="#"><i class="fas fa-edit"></i> Edit</a>
+                                                <a href="#"><i class="fas fa-trash-alt"></i> Delete</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="task-title">Lab Maintenance</div>
+                                        <div class="task-id">TASK-1238</div>
+                                    </td>
+                                    <td>
+                                        <div class="task-assignee">
+                                            <img src="/statics/img/avatar-placeholder.png" alt="User Avatar">
+                                            <span>Alex Johnson</span>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge badge-warning">Medium</span></td>
+                                    <td><span class="badge badge-secondary">Pending</span></td>
+                                    <td>Jun 25, 2023</td>
+                                    <td>
+                                        <div class="actions-dropdown">
+                                            <button class="btn-icon"><i class="fas fa-ellipsis-v"></i></button>
+                                            <div class="dropdown-menu">
+                                                <a href="/task/1238"><i class="fas fa-eye"></i> View</a>
+                                                <a href="#"><i class="fas fa-edit"></i> Edit</a>
+                                                <a href="#"><i class="fas fa-trash-alt"></i> Delete</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Create Task Modal -->
+    <div class="modal" id="createTaskModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create New Task</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="createTaskForm">
+                    <div class="form-group">
+                        <label for="taskTitle">Task Title</label>
+                        <input type="text" id="taskTitle" class="form-control" required>
+                    </div>
+                      id="taskTitle" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskDescription">Description</label>
+                        <textarea id="taskDescription" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskAssignee">Assignee</label>
+                        <select id="taskAssignee" class="form-control" required>
+                            <option value="">Select Assignee</option>
+                            <option value="1">Alex Johnson</option>
+                            <option value="2">Sam Taylor</option>
+                            <option value="3">Jamie Lee</option>
+                            <option value="4">Morgan Chen</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskPriority">Priority</label>
+                        <select id="taskPriority" class="form-control" required>
+                            <option value="">Select Priority</option>
+                            <option value="high">High</option>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskDueDate">Due Date</label>
+                        <input type="date" id="taskDueDate" class="form-control" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancelTaskBtn">Cancel</button>
+                <button class="btn btn-primary" id="submitTaskBtn">Create Task</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize task filters
+            initTaskFilters();
+
+            // Initialize task modal
+            initTaskModal();
+
+            // Initialize dropdown menus
+            initDropdowns();
+            
+            // Initialize mobile menu
+            initMobileMenu();
+        });
+
+        function initTaskFilters() {
+            const filterTabs = document.querySelectorAll('.filter-tab');
+
+            filterTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    filterTabs.forEach(t => t.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Get filter value
+                    const filter = this.getAttribute('data-filter');
+                    
+                    // Filter tasks (in a real app, this would likely be an AJAX call)
+                    filterTasksByStatus(filter);
+                });
+            });
+        }
+
+        function filterTasksByStatus(status) {
+            const rows = document.querySelectorAll('tbody tr');
+
+            if (status === 'all') {
+                rows.forEach(row => {
+                    row.style.display = '';
+                });
+                return;
+            }
+
+            rows.forEach(row => {
+                const statusCell = row.querySelector('td:nth-child(4)');
+                if (statusCell) {
+                    const statusText = statusCell.textContent.trim().toLowerCase();
+                    
+                    if (statusText.includes(status)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                }
+            });
+        }
+
+        function initTaskModal() {
+            const createTaskBtn = document.getElementById('createTaskBtn');
+            const cancelTaskBtn = document.getElementById('cancelTaskBtn');
+            const submitTaskBtn = document.getElementById('submitTaskBtn');
+            const createTaskModal = document.getElementById('createTaskModal');
+            const closeModalBtn = document.querySelector('.close-modal');
+
+            if (createTaskBtn && createTaskModal) {
+                createTaskBtn.addEventListener('click', function() {
+                    createTaskModal.style.display = 'flex';
+                });
+            }
+
+            if (cancelTaskBtn) {
+                cancelTaskBtn.addEventListener('click', function() {
+                    createTaskModal.style.display = 'none';
+                });
+            }
+
+            if (closeModalBtn) {
+                closeModalBtn.addEventListener('click', function() {
+                    createTaskModal.style.display = 'none';
+                });
+            }
+
+            if (submitTaskBtn) {
+                submitTaskBtn.addEventListener('click', function() {
+                    const form = document.getElementById('createTaskForm');
+                    
+                    // Basic form validation
+                    const title = document.getElementById('taskTitle').value;
+                    const assignee = document.getElementById('taskAssignee').value;
+                    const priority = document.getElementById('taskPriority').value;
+                    const dueDate = document.getElementById('taskDueDate').value;
+                    
+                    if (!title || !assignee || !priority || !dueDate) {
+                        alert('Please fill in all required fields');
+                        return;
+                    }
+                    
+                    // In a real app, this would submit the form via AJAX
+                    alert('Task created successfully!');
+                    createTaskModal.style.display = 'none';
+                    
+                    // Optionally reset the form
+                    form.reset();
+                });
+            }
+
+            // Close modal when clicking outside
+            window.addEventListener('click', function(event) {
+                if (event.target === createTaskModal) {
+                    createTaskModal.style.display = 'none';
+                }
+            });
+        }
+
+        function initDropdowns() {
+            const dropdownTriggers = document.querySelectorAll('.user-profile, .actions-dropdown');
+
+            dropdownTriggers.forEach(trigger => {
+                trigger.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const dropdown = this.querySelector('.dropdown-menu');
+                    
+                    if (dropdown) {
+                        const isVisible = dropdown.style.display === 'block';
+                        
+                        // Close all dropdowns first
+                        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                            menu.style.display = 'none';
+                        });
+                        
+                        // Toggle current dropdown
+                        dropdown.style.display = isVisible ? 'none' : 'block';
+                    }
+                });
+            });
+
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function() {
+                document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                    menu.style.display = 'none';
+                });
+            });
+        }
+
+        function initMobileMenu() {
+            const menuToggle = document.createElement('button');
+            menuToggle.className = 'menu-toggle';
+            menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+            
+            document.querySelector('.top-nav').prepend(menuToggle);
+            
+            menuToggle.addEventListener('click', function() {
+                document.querySelector('.sidebar').classList.toggle('active');
+            });
+            
+            function checkScreenSize() {
+                if (window.innerWidth < 768) {
+                    menuToggle.style.display = 'block';
+                } else {
+                    menuToggle.style.display = 'none';
+                    document.querySelector('.sidebar').classList.remove('active');
+                }
+            }
+            
+            window.addEventListener('resize', checkScreenSize);
+            checkScreenSize();
+        }
+    </script>
+</body>
+</html>

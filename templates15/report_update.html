@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Update Report {{pk}}- LabUI</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Base Styles */
+    :root {
+      --primary-color: #4a6cf7;
+      --primary-hover: #3a5ce4;
+      --secondary-color: #6c757d;
+      --success-color: #28a745;
+      --danger-color: #dc3545;
+      --warning-color: #ffc107;
+      --info-color: #17a2b8;
+      --light-color: #f8f9fa;
+      --dark-color: #343a40;
+      --body-bg: #ffc5c5;
+      --card-bg: #ffffff;
+      --text-color: #495057;
+      --text-muted: #6c757d;
+      --border-color: #e9ecef;
+      --sidebar-width: 250px;
+      --header-height: 60px;
+      --shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+      --shadow-lg: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+      --border-radius: 0.375rem;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: var(--text-color);
+      background-color: var(--body-bg);
+    }
+
+    a {
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    /* Layout */
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: var(--sidebar-width);
+      background-color: var(--dark-color);
+      color: white;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .sidebar-header i {
+      font-size: 1.5rem;
+      margin-right: 0.5rem;
+    }
+
+    .sidebar-header h1 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .sidebar-nav ul {
+      padding: 1rem 0;
+    }
+
+    .sidebar-nav li {
+      margin-bottom: 0.25rem;
+    }
+
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      color: rgba(255, 255, 255, 0.7);
+      transition: all 0.3s ease;
+    }
+
+    .sidebar-nav a:hover {
+      color: white;
+      background-color: rgba(255, 255, 255, 0.1);
+      text-decoration: none;
+    }
+
+    .sidebar-nav li.active a {
+      color: white;
+      background-color: var(--primary-color);
+    }
+
+    .sidebar-nav i {
+      margin-right: 0.75rem;
+      font-size: 1rem;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      margin-left: var(--sidebar-width);
+      position: relative;
+    }
+
+    /* Top Navigation */
+    .top-nav {
+      height: var(--header-height);
+      background-color: var(--card-bg);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 900;
+      box-shadow: var(--shadow);
+    }
+
+    .search-container {
+      position: relative;
+      width: 300px;
+    }
+
+    .search-container i {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+    }
+
+    .search-container input {
+      width: 100%;
+      padding: 0.5rem 0.5rem 0.5rem 2rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      font-size: 0.875rem;
+    }
+
+    .user-menu {
+      display: flex;
+      align-items: center;
+    }
+
+    .notifications {
+      position: relative;
+      margin-right: 1.5rem;
+      cursor: pointer;
+    }
+
+    .notifications i {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+    }
+
+    .badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background-color: var(--danger-color);
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .user-profile img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+
+    .user-name {
+      font-weight: 500;
+      margin-right: 0.5rem;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-lg);
+      min-width: 180px;
+      z-index: 1000;
+      display: none;
+    }
+
+    .dropdown-menu a {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      color: var(--text-color);
+      transition: background-color 0.3s ease;
+    }
+
+    .dropdown-menu a:hover {
+      background-color: var(--light-color);
+      text-decoration: none;
+    }
+
+    .dropdown-menu i {
+      margin-right: 0.5rem;
+    }
+
+    /* Content Wrapper */
+    .content-wrapper {
+      padding: 1.5rem;
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .page-header h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    /* Cards */
+    .card {
+      background-color: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+    }
+
+    .card-header {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-header h3 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .card-body {
+      padding: 1.25rem;
+    }
+
+    /* Form Controls */
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      font-size: 0.9rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.2rem rgba(74, 108, 247, 0.25);
+    }
+
+    select.form-control {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236c757d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      background-size: 16px;
+      padding-right: 2.5rem;
+    }
+
+    textarea.form-control {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      margin-right: -0.5rem;
+      margin-left: -0.5rem;
+    }
+
+    .form-col {
+      flex: 1;
+      padding: 0 0.5rem;
+      min-width: 0;
+    }
+
+    /* Form Helpers */
+    .form-text {
+      display: block;
+      margin-top: 0.25rem;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    /* File Upload */
+    .file-upload {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .file-upload-input {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .file-upload-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      border: 2px dashed var(--border-color);
+      border-radius: var(--border-radius);
+      background-color: var(--light-color);
+      transition: all 0.3s ease;
+    }
+
+    .file-upload-label:hover {
+      background-color: rgba(74, 108, 247, 0.05);
+      border-color: var(--primary-color);
+    }
+
+    .file-upload-icon {
+      font-size: 2rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .file-upload-text {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .file-upload-text strong {
+      color: var(--primary-color);
+    }
+
+    .file-list {
+      margin-top: 1rem;
+    }
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem;
+      background-color: var(--light-color);
+      border-radius: var(--border-radius);
+      margin-bottom: 0.5rem;
+    }
+
+    .file-item-icon {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      margin-right: 0.5rem;
+    }
+
+    .file-item-name {
+      flex: 1;
+      font-size: 0.875rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .file-item-size {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin: 0 0.5rem;
+    }
+
+    .file-item-remove {
+      background: none;
+      border: none;
+      color: var(--danger-color);
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    /* Dynamic Fields */
+    .dynamic-fields {
+      margin-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+      padding-top: 1.5rem;
+    }
+
+    .dynamic-field {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .dynamic-field-input {
+      flex: 1;
+      margin-right: 0.5rem;
+    }
+
+    .dynamic-field-remove {
+      background: none;
+      border: none;
+      color: var(--danger-color);
+      cursor: pointer;
+      font-size: 1.25rem;
+      padding: 0.25rem;
+    }
+
+    .add-field-btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.5rem 1rem;
+      background-color: var(--light-color);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-color);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .add-field-btn:hover {
+      background-color: var(--border-color);
+    }
+
+    .add-field-btn i {
+      margin-right: 0.5rem;
+    }
+
+    /* Records List */
+    .records-list {
+      margin-top: 1.5rem;
+    }
+
+    .record-item {
+      background-color: var(--light-color);
+      border-radius: var(--border-radius);
+      padding: 1rem;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    .record-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .record-title {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .record-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .record-action {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 0.25rem;
+      transition: color 0.3s ease;
+    }
+
+    .record-action:hover {
+      color: var(--primary-color);
+    }
+
+    .record-action.delete:hover {
+      color: var(--danger-color);
+    }
+
+    .record-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .record-field {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .record-field-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .record-field-value {
+      font-size: 0.875rem;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      border-radius: var(--border-radius);
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+    }
+
+    .btn-outline:hover {
+      background-color: var(--light-color);
+    }
+
+    .btn-success {
+      background-color: var(--success-color);
+      color: white;
+    }
+
+    .btn-success:hover {
+      background-color: #218838;
+    }
+
+    .btn-danger {
+      background-color: var(--danger-color);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background-color: #c82333;
+    }
+
+    .btn-icon {
+      margin-right: 0.5rem;
+    }
+
+    /* Form Actions */
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      .form-row {
+        flex-direction: column;
+      }
+      
+      .form-col {
+        margin-bottom: 1rem;
+      }
+      
+      .form-col:last-child {
+        margin-bottom: 0;
+      }
+      
+      .record-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 0;
+        transform: translateX(-100%);
+      }
+      
+      .sidebar.active {
+        width: var(--sidebar-width);
+        transform: translateX(0);
+      }
+      
+      .main-content {
+        margin-left: 0;
+      }
+      
+      .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .search-container {
+        width: 200px;
+      }
+      
+      .user-name {
+        display: none;
+      }
+      
+      .form-actions {
+        flex-direction: column;
+      }
+      
+      .form-actions .btn {
+        width: 100%;
+      }
+    }
+
+    /* Menu Toggle for Mobile */
+    .menu-toggle {
+      background: none;
+      border: none;
+      color: var(--text-color);
+      font-size: 1.25rem;
+      cursor: pointer;
+      display: none;
+      margin-right: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+    }
+
+    /* Machine Parameters Form */
+    .machine-parameters {
+      display: none;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .machine-parameters.active {
+      display: block;
+    }
+
+    .parameter-list {
+      margin-top: 1rem;
+    }
+
+    .parameter-item {
+      display: flex;
+      margin-bottom: 1rem;
+      align-items: center;
+    }
+
+    .parameter-name {
+      width: 40%;
+      padding-right: 1rem;
+    }
+
+    .parameter-value {
+      width: 60%;
+    }
+
+    /* Alert */
+    .alert {
+      padding: 0.75rem 1.25rem;
+      margin-bottom: 1rem;
+      border: 1px solid transparent;
+      border-radius: var(--border-radius);
+    }
+
+    .alert-success {
+      color: #155724;
+      background-color: #d4edda;
+      border-color: #c3e6cb;
+    }
+
+    .alert-danger {
+      color: #721c24;
+      background-color: #f8d7da;
+      border-color: #f5c6cb;
+    }
+
+    .alert-warning {
+      color: #856404;
+      background-color: #fff3cd;
+      border-color: #ffeeba;
+    }
+
+    .alert-info {
+      color: #0c5460;
+      background-color: #d1ecf1;
+      border-color: #bee5eb;
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <i class="fas fa-flask"></i>
+        <h1>LabUI</h1>
+      </div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li>
+            <a href="/"><i class="fas fa-home"></i> Dashboard</a>
+          </li>
+          <li class="active">
+            <a href="/tasks"><i class="fas fa-tasks"></i> Tasks</a>
+          </li>
+          <li>
+            <a href="/reports"><i class="fas fa-chart-bar"></i> Reports</a>
+          </li>
+          <li>
+            <a href="/teams"><i class="fas fa-users"></i> Teams</a>
+          </li>
+          <li>
+            <a href="/contactus"><i class="fas fa-envelope"></i> Contact</a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Top Navigation -->
+      <header class="top-nav">
+        <div class="search-container">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Search...">
+        </div>
+        <div class="user-menu">
+          <div class="notifications">
+            <i class="fas fa-bell"></i>
+            <span class="badge">3</span>
+          </div>
+          <div class="user-profile">
+            <span class="user-name">Team Leader</span>
+            <i class="fas fa-chevron-down"></i>
+            <div class="dropdown-menu">
+              <a href="/profile"><i class="fas fa-user"></i> Profile</a>
+              <a href="/settings"><i class="fas fa-cog"></i> Settings</a>
+              <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Create Report Content -->
+      <div class="content-wrapper">
+        <div class="page-header">
+          <h2>Update Report {{report.title}} with ID : {{report.id}}</h2>
+        </div>
+
+        <!-- Report Information Card -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Edit the Report Info</h3>
+          </div>
+          <div class="card-body">
+            <form id="reportForm" action="{% url 'update_report' pk %}" method="post">
+              {% csrf_token %}
+              <!-- Basic Report Information -->
+              <div class="form-group">
+                <label for="reportTitle">Report Title <span class="text-danger">*</span></label>
+                <input
+                  type="text"
+                  name="title"
+                  id="reportTitle"
+                  class="form-control"
+                  placeholder="{{report.title}}"
+                  required
+                >
+              </div>
+
+              <div class="form-row">
+                <!-- If you had a Task selector, etc., it might go here -->
+                <div class="form-col">
+                  <div class="form-group">
+                    <label for="reportDate">Report Date <span class="text-danger">*</span></label>
+                    <input type="date" id="reportDate" name="report_date" class="form-control" required>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="reportDescription">Description</label>
+                <textarea
+                  id="reportDescription"
+                  name="report_description"
+                  class="form-control"
+                  placeholder="{{report.data}}"
+                ></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-check btn-icon"></i>
+                Update Report Info
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Add Record Card -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Add Record</h3>
+          </div>
+          <div class="card-body">
+            <!-- 
+              This second form is where we will add a hidden input for our JSON.
+              Its action is presumably your 'save_record' endpoint.
+            -->
+            <form id="recordForm" action="{% url 'save_record' pk %}" method="post">
+              {% csrf_token %}
+
+              <!-- Hidden field for JSON -->
+              <input type="hidden" name="records_json" id="recordsJson">
+
+              <div class="form-group">
+                <label for="machineSelect">Select Machine <span class="text-danger">*</span></label>
+                <select id="machineSelect" class="form-control" required>
+                  <option value="">Select Machine</option>
+                  <option value="microscope">Olympus BX53 Microscope</option>
+                  <option value="centrifuge">Thermo Scientific Centrifuge</option>
+                  <option value="spectrophotometer">Shimadzu UV-1800 Spectrophotometer</option>
+                  <option value="pcr">Bio-Rad T100 PCR Thermal Cycler</option>
+                  <option value="hplc">Agilent 1260 Infinity II HPLC</option>
+                </select>
+              </div>
+
+              <!-- Machine Parameters (Microscope) -->
+              <div id="microscopeParameters" class="machine-parameters">
+                <h4>Microscope Parameters</h4>
+                <div class="parameter-list">
+                  <div class="parameter-item">
+                    <div class="parameter-name">
+                      <label for="opticalAlignment">Optical Alignment</label>
+                    </div>
+                    <div class="parameter-value">
+                      <select id="opticalAlignment" class="form-control">
+                        <option value="passed">Passed</option>
+                        <option value="failed">Failed</option>
+                        <option value="adjusted">Adjusted</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="parameter-item">
+                    <div class="parameter-name">
+                      <label for="lightIntensity">Light Source Intensity (%)</label>
+                    </div>
+                    <div class="parameter-value">
+                      <input type="number" id="lightIntensity" class="form-control" min="0" max="100" value="100">
+                    </div>
+                  </div>
+                  <!-- more parameter items ... -->
+                </div>
+              </div>
+
+              <!-- Machine Parameters (Centrifuge) -->
+              <div id="centrifugeParameters" class="machine-parameters">
+                <h4>Centrifuge Parameters</h4>
+                <div class="parameter-list">
+                  <!-- parameter items ... -->
+                </div>
+              </div>
+
+              <!-- Machine Parameters (Spectrophotometer) -->
+              <div id="spectrophotometerParameters" class="machine-parameters">
+                <h4>Spectrophotometer Parameters</h4>
+                <div class="parameter-list">
+                  <!-- parameter items ... -->
+                </div>
+              </div>
+
+              <!-- Machine Parameters (PCR) -->
+              <div id="pcrParameters" class="machine-parameters">
+                <h4>PCR Thermal Cycler Parameters</h4>
+                <div class="parameter-list">
+                  <!-- parameter items ... -->
+                </div>
+              </div>
+
+              <!-- Machine Parameters (HPLC) -->
+              <div id="hplcParameters" class="machine-parameters">
+                <h4>HPLC Parameters</h4>
+                <div class="parameter-list">
+                  <!-- parameter items ... -->
+                </div>
+              </div>
+
+              <!-- Custom Parameters -->
+              <div class="dynamic-fields" id="customParameters">
+                <h4>Custom Parameters</h4>
+                <p class="form-text">Add any additional parameters that are not listed above.</p>
+                <div id="customParametersList"></div>
+                <button type="button" class="add-field-btn" id="addCustomParameter">
+                  <i class="fas fa-plus"></i> Add Parameter
+                </button>
+              </div>
+
+              <!-- Attachments -->
+              <div class="form-group">
+                <label>Attachments</label>
+                <div class="file-upload">
+                  <input type="file" id="recordAttachments" class="file-upload-input" multiple>
+                  <label for="recordAttachments" class="file-upload-label">
+                    <i class="fas fa-cloud-upload-alt file-upload-icon"></i>
+                    <span class="file-upload-text">
+                      Drag and drop files here or <strong>click to browse</strong>
+                    </span>
+                  </label>
+                </div>
+                <div class="file-list" id="fileList"></div>
+              </div>
+
+              <!-- Notes -->
+              <div class="form-group">
+                <label for="recordNotes">Notes</label>
+                <textarea
+                  id="recordNotes"
+                  class="form-control"
+                  placeholder="Enter any additional notes or observations"
+                ></textarea>
+              </div>
+
+              <div class="form-actions">
+                <button type="button" class="btn btn-outline" id="resetRecordBtn">Reset</button>
+                <button type="button" class="btn btn-primary" id="addRecordBtn">
+                  <i class="fas fa-plus btn-icon"></i> Add Record
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Records List Card -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Records</h3>
+          </div>
+          <div class="card-body">
+            <div id="recordsContainer">
+              <div class="alert alert-info">
+                No records added yet. Use the form above to add records.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Actions (Final Submit) -->
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline" id="cancelBtn">Cancel</button>
+          <button type="button" class="btn btn-outline" id="saveAsDraftBtn">Save as Draft</button>
+          <button type="button" class="btn btn-primary" id="submitReportBtn">
+            <i class="fas fa-check btn-icon"></i> Submit Records
+          </button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize machine selection
+      initMachineSelection();
+      // Initialize custom parameters
+      initCustomParameters();
+      // Initialize file upload
+      initFileUpload();
+      // Initialize record management
+      initRecordManagement();
+      // Initialize final form submission with JSON
+      initFormSubmission();
+      // Initialize dropdown menus
+      initDropdowns();
+      // Initialize mobile menu
+      initMobileMenu();
+    });
+
+    /* --------------------------------------------
+       1) Show/Hide Parameter Sections by Machine
+       -------------------------------------------- */
+    function initMachineSelection() {
+      const machineSelect = document.getElementById('machineSelect');
+      const machineParameters = document.querySelectorAll('.machine-parameters');
+      
+      if (machineSelect) {
+        machineSelect.addEventListener('change', function() {
+          const selectedMachine = this.value;
+          
+          // Hide all parameter forms
+          machineParameters.forEach(form => form.classList.remove('active'));
+          
+          // Show selected machine parameters
+          if (selectedMachine) {
+            const selectedForm = document.getElementById(selectedMachine + 'Parameters');
+            if (selectedForm) {
+              selectedForm.classList.add('active');
+            }
+          }
+        });
+      }
+    }
+
+    /* --------------------------------------------
+       2) Add/Remove Custom Parameters
+       -------------------------------------------- */
+    function initCustomParameters() {
+      const addCustomParameterBtn = document.getElementById('addCustomParameter');
+      const customParametersList = document.getElementById('customParametersList');
+      
+      if (addCustomParameterBtn && customParametersList) {
+        addCustomParameterBtn.addEventListener('click', function() {
+          const parameterItem = document.createElement('div');
+          parameterItem.className = 'dynamic-field';
+          parameterItem.innerHTML = `
+            <div class="dynamic-field-input">
+              <div class="form-row">
+                <div class="form-col">
+                  <input type="text" class="form-control" placeholder="Parameter Name" required>
+                </div>
+                <div class="form-col">
+                  <input type="text" class="form-control" placeholder="Parameter Value" required>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="dynamic-field-remove">
+              <i class="fas fa-times"></i>
+            </button>
+          `;
+          
+          customParametersList.appendChild(parameterItem);
+          
+          // Add event listener to remove button
+          parameterItem
+            .querySelector('.dynamic-field-remove')
+            .addEventListener('click', function() {
+              parameterItem.remove();
+            });
+        });
+      }
+    }
+
+    /* --------------------------------------------
+       3) File Upload Handling (Drag & Drop)
+       -------------------------------------------- */
+    function initFileUpload() {
+      const fileInput = document.getElementById('recordAttachments');
+      const fileList = document.getElementById('fileList');
+      
+      if (fileInput && fileList) {
+        fileInput.addEventListener('change', function() {
+          fileList.innerHTML = '';
+          for (const file of fileInput.files) {
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+            
+            // Determine icon
+            let fileIcon = 'fa-file';
+            if (file.type.startsWith('image/')) {
+              fileIcon = 'fa-file-image';
+            } else if (file.type.startsWith('application/pdf')) {
+              fileIcon = 'fa-file-pdf';
+            } else if (file.type.includes('document')) {
+              fileIcon = 'fa-file-word';
+            } else if (file.type.includes('spreadsheet')) {
+              fileIcon = 'fa-file-excel';
+            }
+            
+            // Format size
+            let size = file.size;
+            let sizeStr = size + ' B';
+            if (size > 1024) {
+              sizeStr = (size / 1024).toFixed(1) + ' KB';
+            }
+            if (size > 1024 * 1024) {
+              sizeStr = (size / (1024 * 1024)).toFixed(1) + ' MB';
+            }
+            
+            fileItem.innerHTML = `
+              <i class="fas ${fileIcon} file-item-icon"></i>
+              <span class="file-item-name">${file.name}</span>
+              <span class="file-item-size">${sizeStr}</span>
+              <button type="button" class="file-item-remove">&times;</button>
+            `;
+            fileList.appendChild(fileItem);
+
+            // Remove file event
+            fileItem.querySelector('.file-item-remove').addEventListener('click', function() {
+              fileItem.remove();
+              // Note: This removes it from the UI, but not from `fileInput.files`.
+            });
+          }
+        });
+        
+        // Drag/Drop
+        const fileUploadLabel = document.querySelector('.file-upload-label');
+        if (fileUploadLabel) {
+          ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            fileUploadLabel.addEventListener(eventName, preventDefaults, false);
+          });
+          function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+          ['dragenter', 'dragover'].forEach(eventName => {
+            fileUploadLabel.addEventListener(eventName, () => fileUploadLabel.classList.add('highlight'), false);
+          });
+          ['dragleave', 'drop'].forEach(eventName => {
+            fileUploadLabel.addEventListener(eventName, () => fileUploadLabel.classList.remove('highlight'), false);
+          });
+          fileUploadLabel.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            fileInput.files = files;
+            // Trigger "change" so it updates the list
+            fileInput.dispatchEvent(new Event('change'));
+          }, false);
+        }
+      }
+    }
+
+    /* --------------------------------------------
+       4) Record Management (Add to List)
+       -------------------------------------------- */
+    function initRecordManagement() {
+      const addRecordBtn = document.getElementById('addRecordBtn');
+      const resetRecordBtn = document.getElementById('resetRecordBtn');
+      const recordsContainer = document.getElementById('recordsContainer');
+      const machineSelect = document.getElementById('machineSelect');
+      
+      if (addRecordBtn && recordsContainer && machineSelect) {
+        let recordCount = 0;
+        
+        addRecordBtn.addEventListener('click', function() {
+          const selectedMachine = machineSelect.value;
+          if (!selectedMachine) {
+            alert('Please select a machine');
+            return;
+          }
+          
+          // Name for display
+          const selectedMachineName = machineSelect.options[machineSelect.selectedIndex].text;
+          
+          // Gather all parameters
+          const parameters = getParametersForMachine(selectedMachine);
+          if (parameters.length === 0) {
+            alert('Please fill in at least one parameter');
+            return;
+          }
+          
+          recordCount++;
+          
+          // Clear "no records" message
+          const alertBox = recordsContainer.querySelector('.alert');
+          if (alertBox) {
+            recordsContainer.innerHTML = '';
+          }
+          
+          // Create new record item
+          const recordItem = document.createElement('div');
+          recordItem.className = 'record-item';
+          recordItem.dataset.recordId = `record-${recordCount}`;
+          
+          // Header
+          const recordHeader = document.createElement('div');
+          recordHeader.className = 'record-header';
+          
+          const recordTitle = document.createElement('div');
+          recordTitle.className = 'record-title';
+          recordTitle.textContent = selectedMachineName;
+          
+          const recordActions = document.createElement('div');
+          recordActions.className = 'record-actions';
+          recordActions.innerHTML = `
+            <button type="button" class="record-action edit" title="Edit Record">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button type="button" class="record-action delete" title="Delete Record">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          `;
+          
+          recordHeader.appendChild(recordTitle);
+          recordHeader.appendChild(recordActions);
+          
+          // Content
+          const recordContent = document.createElement('div');
+          recordContent.className = 'record-content';
+          
+          // Add parameters
+          parameters.forEach(param => {
+            const recordField = document.createElement('div');
+            recordField.className = 'record-field';
+            
+            const labelDiv = document.createElement('div');
+            labelDiv.className = 'record-field-label';
+            labelDiv.textContent = param.name;
+            
+            const valueDiv = document.createElement('div');
+            valueDiv.className = 'record-field-value';
+            valueDiv.textContent = param.value;
+            
+            recordField.appendChild(labelDiv);
+            recordField.appendChild(valueDiv);
+            recordContent.appendChild(recordField);
+          });
+          
+          // Add notes if any
+          const notes = document.getElementById('recordNotes').value;
+          if (notes) {
+            const notesField = document.createElement('div');
+            notesField.className = 'record-field';
+            notesField.style.gridColumn = '1 / -1';
+            
+            const notesLabel = document.createElement('div');
+            notesLabel.className = 'record-field-label';
+            notesLabel.textContent = 'Notes';
+            
+            const notesValue = document.createElement('div');
+            notesValue.className = 'record-field-value';
+            notesValue.textContent = notes;
+            
+            notesField.appendChild(notesLabel);
+            notesField.appendChild(notesValue);
+            recordContent.appendChild(notesField);
+          }
+          
+          recordItem.appendChild(recordHeader);
+          recordItem.appendChild(recordContent);
+          recordsContainer.appendChild(recordItem);
+          
+          // Delete action
+          recordItem.querySelector('.record-action.delete').addEventListener('click', function() {
+            if (confirm('Are you sure you want to delete this record?')) {
+              recordItem.remove();
+              if (!recordsContainer.querySelector('.record-item')) {
+                recordsContainer.innerHTML = `
+                  <div class="alert alert-info">
+                    No records added yet. Use the form above to add records.
+                  </div>
+                `;
+              }
+            }
+          });
+
+          // (Optionally implement edit action if needed)
+
+          // Finally, reset record form
+          resetRecordForm();
+        });
+        
+        if (resetRecordBtn) {
+          resetRecordBtn.addEventListener('click', resetRecordForm);
+        }
+      }
+      
+      function getParametersForMachine(machineType) {
+        const parameters = [];
+        // Find the matching machine parameters container
+        const parameterForm = document.getElementById(machineType + 'Parameters');
+        if (parameterForm) {
+          const parameterItems = parameterForm.querySelectorAll('.parameter-item');
+          
+          parameterItems.forEach(item => {
+            const label = item.querySelector('label');
+            const input = item.querySelector('input, select');
+            if (!label || !input) return;
+            
+            // For <select>, get the selected text
+            let value = input.value;
+            if (input.tagName === 'SELECT') {
+              value = input.options[input.selectedIndex].text;
+            }
+            parameters.push({
+              name: label.textContent.trim(),
+              value: value.trim()
+            });
+          });
+        }
+        
+        // Gather any custom parameters
+        const customParametersList = document.getElementById('customParametersList');
+        if (customParametersList) {
+          const customFields = customParametersList.querySelectorAll('.dynamic-field');
+          customFields.forEach(field => {
+            const inputs = field.querySelectorAll('input');
+            if (inputs.length === 2 && inputs[0].value && inputs[1].value) {
+              parameters.push({
+                name: inputs[0].value.trim(),
+                value: inputs[1].value.trim()
+              });
+            }
+          });
+        }
+        
+        return parameters;
+      }
+      
+      function resetRecordForm() {
+        const machineSelect = document.getElementById('machineSelect');
+        machineSelect.value = '';
+        // Hide all parameter forms
+        document.querySelectorAll('.machine-parameters').forEach(form => {
+          form.classList.remove('active');
+        });
+        
+        // Clear custom parameters
+        const customParametersList = document.getElementById('customParametersList');
+        if (customParametersList) {
+          customParametersList.innerHTML = '';
+        }
+        
+        // Clear attachments UI
+        const fileList = document.getElementById('fileList');
+        if (fileList) fileList.innerHTML = '';
+        const fileInput = document.getElementById('recordAttachments');
+        if (fileInput) fileInput.value = '';
+        
+        // Clear notes
+        const recordNotes = document.getElementById('recordNotes');
+        if (recordNotes) recordNotes.value = '';
+      }
+    }
+
+    /* --------------------------------------------
+       5) Final Submission: Gather Records + Submit
+       -------------------------------------------- */
+    function initFormSubmission() {
+      const submitReportBtn = document.getElementById('submitReportBtn');
+      const saveAsDraftBtn = document.getElementById('saveAsDraftBtn');
+      const cancelBtn = document.getElementById('cancelBtn');
+      
+      // We’ll submit the second form (recordForm) that has the hidden JSON field:
+      const recordForm = document.getElementById('recordForm');
+      const recordsContainer = document.getElementById('recordsContainer');
+
+      if (submitReportBtn && recordForm && recordsContainer) {
+        submitReportBtn.addEventListener('click', function(e) {
+          e.preventDefault(); // Stop normal button behavior
+
+          // Basic validation: ensure there's at least one record
+          if (!recordsContainer.querySelector('.record-item')) {
+            alert('Please add at least one record before submitting.');
+            return;
+          }
+
+          // Gather all records into JSON
+          const recordsData = gatherRecordsData(recordsContainer);
+          const jsonString = JSON.stringify(recordsData);
+
+          // Put JSON into hidden field
+          document.getElementById('recordsJson').value = jsonString;
+
+          // Now submit the form
+          recordForm.submit();
+        });
+      }
+
+      if (saveAsDraftBtn) {
+        saveAsDraftBtn.addEventListener('click', function() {
+          alert('Report saved as draft! (Example placeholder)');
+        });
+      }
+
+      if (cancelBtn) {
+        cancelBtn.addEventListener('click', function() {
+          if (confirm('Are you sure you want to cancel? Unsaved changes will be lost.')) {
+            window.location.href = '/reports'; // or wherever
+          }
+        });
+      }
+    }
+
+    // Helper to gather records from #recordsContainer
+    function gatherRecordsData(container) {
+      const recordsArray = [];
+      const recordItems = container.querySelectorAll('.record-item');
+
+      recordItems.forEach(item => {
+        const recordObj = {};
+
+        // Machine name from .record-title
+        const titleEl = item.querySelector('.record-title');
+        recordObj.machine = titleEl ? titleEl.textContent.trim() : '';
+
+        // We'll store parameter data in recordObj.parameters = {}
+        const paramsObj = {};
+        // Each .record-field except "Notes"
+        const fieldEls = item.querySelectorAll('.record-field');
+        fieldEls.forEach(field => {
+          const labelEl = field.querySelector('.record-field-label');
+          const valueEl = field.querySelector('.record-field-value');
+          if (!labelEl || !valueEl) return;
+
+          const labelText = labelEl.textContent.trim();
+          const valueText = valueEl.textContent.trim();
+
+          if (labelText.toLowerCase() === 'notes') {
+            // It's a note, store separately
+            recordObj.notes = valueText;
+          } else {
+            // It's a parameter
+            paramsObj[labelText] = valueText;
+          }
+        });
+
+        recordObj.parameters = paramsObj;
+        recordsArray.push(recordObj);
+      });
+
+      return recordsArray;
+    }
+
+    /* --------------------------------------------
+       6) Dropdown Menus
+       -------------------------------------------- */
+    function initDropdowns() {
+      const dropdownTriggers = document.querySelectorAll('.user-profile, .actions-dropdown');
+      
+      dropdownTriggers.forEach(trigger => {
+        trigger.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const dropdown = this.querySelector('.dropdown-menu');
+          if (dropdown) {
+            const isVisible = dropdown.style.display === 'block';
+            // Close all first
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+              menu.style.display = 'none';
+            });
+            dropdown.style.display = isVisible ? 'none' : 'block';
+          }
+        });
+      });
+      
+      document.addEventListener('click', function() {
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+          menu.style.display = 'none';
+        });
+      });
+    }
+
+    /* --------------------------------------------
+       7) Mobile Menu Toggle
+       -------------------------------------------- */
+    function initMobileMenu() {
+      const menuToggle = document.createElement('button');
+      menuToggle.className = 'menu-toggle';
+      menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+      document.querySelector('.top-nav').prepend(menuToggle);
+      
+      menuToggle.addEventListener('click', function() {
+        document.querySelector('.sidebar').classList.toggle('active');
+      });
+      
+      function checkScreenSize() {
+        if (window.innerWidth < 768) {
+          menuToggle.style.display = 'block';
+        } else {
+          menuToggle.style.display = 'none';
+          document.querySelector('.sidebar').classList.remove('active');
+        }
+      }
+      
+      window.addEventListener('resize', checkScreenSize);
+      checkScreenSize();
+    }
+  </script>
+</body>
+</html>

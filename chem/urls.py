@@ -25,12 +25,15 @@ urlpatterns = [
     path('task/<int:pk>/undosubmit/', reports.views.undo_task, name='undo_task'),
     
     # ''' reports '''
-    path('reports/', reports.views.reports, name='reports'),
-    path('report/<int:pk>/', reports.views.update_report, name='report'),
     path('report/<int:task_id>/new/', reports.views.new_report, name='new_report'),
-    path('report/<int:pk>/save/', reports.views.save_record, name='save_record'),
     path('report/<int:pk>/data/', reports.views.show_report, name='show_report'),
+    path('report/<int:report_id>/update', reports.views.update_report, name='update_report'),
+    path('report/<int:pk>/submit/', reports.views.submit_report, name='submit_report'),
     
+
+    # ''' records '''
+    path('reports/', reports.views.reports, name='reports'),
+    path('report/<int:pk>/save/', reports.views.save_record, name='save_record'),
     
     # path('dashboard/', main.views.dashboard, name='control1'),
     path('dashboard15/', main.views.dashboard, name='control'),

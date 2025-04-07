@@ -24,7 +24,7 @@ class Report(models.Model):
     date_added = models.DateTimeField(auto_now=True)
     task = models.ForeignKey(Tasks, on_delete=models.CASCADE,
                               related_name='task_report', blank=True, null=True)
-    status = models.IntegerField(name='status', default=0)
+    status = models.IntegerField(name='status', default=1)
     def __str__(self) -> str:
         return f"# {self.title}"
     class Meta:

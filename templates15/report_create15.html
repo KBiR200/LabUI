@@ -807,7 +807,7 @@
                         <span class="badge">3</span>
                     </div>
                     <div class="user-profile">
-                        <img src="/statics/img/avatar-placeholder.png" alt="User Avatar">
+                         
                         <span class="user-name">Team Leader</span>
                         <i class="fas fa-chevron-down"></i>
                         <div class="dropdown-menu">
@@ -822,7 +822,7 @@
             <!-- Create Report Content -->
             <div class="content-wrapper">
                 <div class="page-header">
-                    <h2>Create Task Report</h2>
+                    <h2>Create Report</h2>
                 </div>
 
                 <!-- Report Information Card -->
@@ -831,16 +831,20 @@
                         <h3>Report Information</h3>
                     </div>
                     <div class="card-body">
-                        <form id="reportForm">
+                        
+                        <form id="reportForm" action="{% url 'new_report' pk %}" method="post">
+                            {% csrf_token %}
                             <!-- Basic Report Information -->
                             <div class="form-group">
                                 <label for="reportTitle">Report Title <span class="text-danger">*</span></label>
-                                <input type="text" id="reportTitle" class="form-control" placeholder="Enter report title" required>
+                                <input type="text" 
+                                name="title"
+                                id="reportTitle" class="form-control" placeholder="Enter report title" required>
                             </div>
 
                             <div class="form-row">
-                                <div class="form-col">
-                                    <div class="form-group">
+                                {% comment %} <div class="form-col"> {% endcomment %}
+                                    {% comment %} <div class="form-group">
                                         <label for="taskId">Task <span class="text-danger">*</span></label>
                                         <select id="taskId" class="form-control" required>
                                             <option value="">Select Task</option>
@@ -849,9 +853,9 @@
                                             <option value="task-003">TASK-003: Equipment Maintenance</option>
                                             <option value="task-004">TASK-004: Lab Safety Inspection</option>
                                             <option value="task-005">TASK-005: Research Protocol Testing</option>
-                                        </select>
-                                    </div>
-                                </div>
+                                            </select>
+                                            </div>
+                                            </div> {% endcomment %}
                                 <div class="form-col">
                                     <div class="form-group">
                                         <label for="reportDate">Report Date <span class="text-danger">*</span></label>
@@ -859,17 +863,20 @@
                                     </div>
                                 </div>
                             </div>
-
+                            
                             <div class="form-group">
                                 <label for="reportDescription">Description</label>
                                 <textarea id="reportDescription" class="form-control" placeholder="Enter report description"></textarea>
                             </div>
+                            <button type="submit" class="btn btn-primary" >
+                                <i class="fas fa-check btn-icon"></i> Add records
+                            </button>
                         </form>
                     </div>
                 </div>
 
                 <!-- Add Record Card -->
-                <div class="card">
+                {% comment %} <div class="card">
                     <div class="card-header">
                         <h3>Add Record</h3>
                     </div>
@@ -1263,16 +1270,16 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> {% endcomment %}
 
                 <!-- Form Actions -->
-                <div class="form-actions">
+                {% comment %} <div class="form-actions">
                     <button type="button" class="btn btn-outline" id="cancelBtn">Cancel</button>
                     <button type="button" class="btn btn-outline" id="saveAsDraftBtn">Save as Draft</button>
                     <button type="button" class="btn btn-primary" id="submitReportBtn">
                         <i class="fas fa-check btn-icon"></i> Submit Report
                     </button>
-                </div>
+                </div> {% endcomment %}
             </div>
         </main>
     </div>

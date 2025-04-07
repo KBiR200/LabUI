@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Task Report - LabUI</title>
+<title>Report View - LabUI</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
     /* Base Styles */
@@ -17,7 +17,7 @@
       --info-color: #17a2b8;
       --light-color: #f8f9fa;
       --dark-color: #343a40;
-      --body-bg: #f5f7fb;
+      --body-bg:rgb(220, 231, 255);
       --card-bg: #ffffff;
       --text-color: #495057;
       --text-muted: #6c757d;
@@ -814,7 +814,7 @@
                     <span class="badge">3</span>
                 </div>
                 <div class="user-profile">
-                    <img src="/statics/img/avatar-placeholder.png" alt="User Avatar">
+                     
                     <span class="user-name">Team Leader</span>
                     <i class="fas fa-chevron-down"></i>
                     <div class="dropdown-menu">
@@ -829,7 +829,7 @@
         <!-- Task Report Content -->
         <div class="content-wrapper">
             <div class="page-header">
-                <h2>Task Report: {{ report.task.title }}</h2>
+                <h2> Task: {{ report.task.title }} || Report: {{ report.title }} </h2>
                 <div class="page-actions">
                     <button class="btn btn-outline">
                         <i class="fas fa-print btn-icon"></i> Print
@@ -847,31 +847,38 @@
             <div class="card">
                 <div class="card-header">
                     <h3>Task Information</h3>
-                    <span class="status-badge status-completed">Completed</span>
+                    {% if report.task.status == 0 %}
+                    <span class="priority-badge status-pending">Pending</span>
+                    {% elif report.task.status == 1 %}
+                    <span class="priority-badge priority-high">In Progress</span>
+                    {% elif report.task.status == 2 %}
+                    <span class="priority-badge status-completed">Completed</span>
+                    {% endif %}
+                    
                 </div>
                 <div class="card-body">
                     <div class="task-info">
-                        <div class="info-item">
+                      <div class="info-item">
                             <span class="info-label">Task ID</span>
                             <span class="info-value">{{ report.task.id }}</span>
+                          </div>
+                        <div class="info-item">
+                          <span class="info-label">Assigned To</span>
+                          <span class="info-value">{{ report.task.assigned.all|join:", " }}</span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label">Assigned To</span>
-                            <span class="info-value">{{ report.task.assigned.all|join:", " }}</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">Team</span>
+                          <span class="info-label">Team</span>
                             <span class="info-value">Team B</span>
-                        </div>
+                          </div>
                         <div class="info-item">
-                            <span class="info-label">Priority</span>
-                                {% if report.task.status == 0 %}
-                                <span class="priority-badge priority-high">Pending</span>
-                                {% elif report.task.status == 1 %}
-                                <span class="priority-badge priority-high">In Progress</span>
-                                {% elif report.task.status == 2 %}
-                                <span class="priority-badge priority-high">Completed</span>
-                                {% endif %}
+                          <span class="info-label">Report Status</span>
+                            {% if report.status == 0 %}
+                              <span class="priority-badge status-pending">Pending</span>
+                            {% elif report.status == 1 %}
+                              <span class="priority-badge priority-high">In Progress</span>
+                            {% elif report.status == 2 %}
+                              <span class="priority-badge status-completed">Completed</span>
+                            {% endif %}
                             {% comment %} <span class="priority-badge priority-high">{{ task.assigned.all|join:", " }}</span> {% endcomment %}
                         </div>
                         <div class="info-item">
@@ -904,7 +911,7 @@
                 </div>
                 <div class="card-body">
                     <!-- Machine 1: Olympus BX53 Microscope -->
-                    <div class="machine-dropdown active" data-machine="microscope">
+                    {% comment %} <div class="machine-dropdown active" data-machine="microscope">
                         <div class="machine-header">
                             <div class="machine-title">
                                 <i class="fas fa-microscope"></i>
@@ -966,10 +973,68 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
+                    </div> {% endcomment %}
 
                     <!-- Machine 2: Calibration Measurements -->
-                    <div class="machine-dropdown" data-machine="calibration">
+
+
+{% comment %} 
+                    {% for record in records %}
+                    <div class="card">
+                      <div class="card-header">
+                        <h3>Report Data</h3>
+                      </div>
+                      <div class="card-body">
+                        <div class="machine-dropdown active" data-machine="{{ record.data.machine|lower }}">
+                          <div class="machine-header">
+                            <div class="machine-title">
+                              {# Display an icon based on the machine name if needed #}
+                              {% if record.data.machine|lower == "microscope" %}
+                                <i class="fas fa-microscope"></i>
+                              {% else %}
+                                <i class="fas fa-cogs"></i>
+                              {% endif %}
+                              {{ record.data.machine }}
+                            </div>
+                            <div class="machine-toggle">
+                              <i class="fas fa-chevron-down"></i>
+                            </div>
+                          </div>
+                          <div class="machine-content">
+                            <table class="report-table">
+                              <thead>
+                                <tr>
+                                  <th>Parameter</th>
+                                  <th>Value</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {# Iterate over the parameters dictionary #}
+                                {% for param, value in record.data.parameters.items %}
+                                  <tr>
+                                    <td>{{ param }}</td>
+                                    <td>{{ value }}</td>
+                                  </tr>
+                                {% endfor %}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  {% empty %}
+                    <p>No records available.</p>
+                  {% endfor %}
+
+
+
+
+ {% endcomment %}
+
+
+
+                  {% for record in records %}
+                    <div class="machine-dropdown" data-machine="{{ record.data.machine|lower }}">
                         <div class="machine-header">
                             <div class="machine-title">
                                 <i class="fas fa-ruler"></i>
@@ -984,54 +1049,26 @@
                                 <thead>
                                     <tr>
                                         <th>Measurement</th>
-                                        <th>Expected Value</th>
-                                        <th>Actual Value</th>
-                                        <th>Status</th>
+                                        <th>Value</th>
+                                        
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Stage Micrometer 10μm</td>
-                                        <td>10.0 μm</td>
-                                        <td>10.2 μm</td>
-                                        <td>Within tolerance</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Stage Micrometer 50μm</td>
-                                        <td>50.0 μm</td>
-                                        <td>50.1 μm</td>
-                                        <td>Within tolerance</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Stage Micrometer 100μm</td>
-                                        <td>100.0 μm</td>
-                                        <td>99.8 μm</td>
-                                        <td>Within tolerance</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Light Intensity at 25%</td>
-                                        <td>250 ± 25 lux</td>
-                                        <td>262 lux</td>
-                                        <td>Within tolerance</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Light Intensity at 50%</td>
-                                        <td>500 ± 50 lux</td>
-                                        <td>515 lux</td>
-                                        <td>Within tolerance</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Light Intensity at 100%</td>
-                                        <td>1000 ± 100 lux</td>
-                                        <td>1025 lux</td>
-                                        <td>Within tolerance</td>
-                                    </tr>
+                                  {% for param, value in record.data.parameters.items %}
+                                  <tr>
+                                    <td>{{ param }}</td>
+                                    <td>{{ value }}</td>
+                                  </tr>
+                                {% endfor %}
+                                   
                                 </tbody>
                             </table>
                         </div>
                     </div>
-
-                    <!-- Machine 3: Spectrophotometer -->
+                    {% empty %}
+                    <p>No records available.</p>
+                  {% endfor %}
+                    {% comment %} <!-- Machine 3: Spectrophotometer -->
                     <div class="machine-dropdown" data-machine="spectrophotometer">
                         <div class="machine-header">
                             <div class="machine-title">
@@ -1077,7 +1114,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> {% endcomment %}
 
             <!-- Attachments Card -->
             <div class="card">
@@ -1150,7 +1187,7 @@
                 <div class="card-body">
                     <div class="comments-section">
                         <div class="comment">
-                            <img src="/statics/img/avatar-placeholder.png" alt="User Avatar" class="comment-avatar">
+                            <img src=" " alt="User Avatar" class="comment-avatar">
                             <div class="comment-content">
                                 <div class="comment-header">
                                     <span class="comment-author">Morgan Chen</span>
@@ -1166,7 +1203,7 @@
                             </div>
                         </div>
                         <div class="comment">
-                            <img src="/statics/img/avatar-placeholder.png" alt="User Avatar" class="comment-avatar">
+                            <img src=" " alt="User Avatar" class="comment-avatar">
                             <div class="comment-content">
                                 <div class="comment-header">
                                     <span class="comment-author">Jamie Lee</span>
@@ -1182,7 +1219,7 @@
                             </div>
                         </div>
                         <div class="add-comment">
-                            <img src="/statics/img/avatar-placeholder.png" alt="User Avatar" class="add-comment-avatar">
+                            <img src=" " alt="User Avatar" class="add-comment-avatar">
                             <div class="add-comment-form">
                                 <textarea class="add-comment-input" placeholder="Add a comment..."></textarea>
                                 <div class="add-comment-actions">
@@ -1199,9 +1236,11 @@
                 <button class="btn btn-outline" onclick="window.location.href='/tasks'">
                     <i class="fas fa-arrow-left btn-icon"></i> Back to Tasks
                 </button>
+                <a href="{% url "submit_report" report.id %}"> 
                 <button class="btn btn-success">
                     <i class="fas fa-check btn-icon"></i> Approve Report
                 </button>
+                </a>
                 <button class="btn btn-primary">
                     <i class="fas fa-plus btn-icon"></i> Add New Record
                 </button>

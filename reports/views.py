@@ -14,7 +14,7 @@ import datetime, json
 @login_required(login_url='signin')
 def reports(request):
 
-    return render(request, 'reports15.html')
+    return render(request, 'reports/reports15.html')
 
 # report view function
 @login_required(login_url='signin')
@@ -37,14 +37,16 @@ def new_report(request, task_id):
         #     tt= Task_attachment.objects.create(task=task, attachment=i)
         return redirect('update_report', report_id=r.id)
 
-    return render(request,"report_create15.html", {"pk":task.id})
+    return render(request,"reports/report_create15.html", {"pk":task.id})
 
 
 @login_required(login_url='signin')
 def update_report(request,report_id):
     test_name= f'Created: {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}'
     report = get_object_or_404(Report, id=report_id)
+    related_records = report.reports_records.all().prefetch_related('attachments')
     print(report)
+    print(related_records)
     if request.method == 'POST':
         title = request.POST['title']
         # data = request.POST.get('data', '')
@@ -60,7 +62,7 @@ def update_report(request,report_id):
         #     tt= Task_attachment.objects.create(task=task, attachment=i)
         return redirect('show_report', pk=report.id)
 
-    return render(request,"report_update.html", {"pk":report.id, "report":report})
+    return render(request,"reports/report_update.html", {"pk":report.id, "report":report, 'records':related_records})
 
 
 @login_required(login_url='signin')
@@ -71,7 +73,7 @@ def show_report(request, pk):
     related_records = rep.reports_records.all().prefetch_related('attachments')
     for i in related_records:
         print(i.data)
-    return render(request, 'report_view15.html', {'records':related_records, 'report':rep})
+    return render(request, 'reports/report_view15.html', {'records':related_records, 'report':rep})
 
 @login_required(login_url='signin')
 def submit_report(req, pk):
@@ -194,7 +196,7 @@ def tasks(request):
         'reports':report
     }
     
-    return render(request, 'tasks15.html', {'tasks': tasks})
+    return render(request, 'tasks/tasks15.html', {'tasks': tasks})
 
 
 
@@ -216,7 +218,7 @@ def create_task15(request):
             r= Task_attachment.objects.create(task=task, attachment=i)
         return redirect('control')
     
-    return render(request, 'create_task15.html', {'users': users})
+    return render(request, 'tasks/task_create15.html', {'users': users})
 
 
 
@@ -230,7 +232,7 @@ def show_task(request, pk):
     print(task.assigned.all().count())
     print(task.title)
     # print(reo.author.all())
-    return render(request, 'tasks_view15.html', {"task":task, "report":reo})
+    return render(request, 'tasks/tasks_view15.html', {"task":task, "report":reo})
 
 
 

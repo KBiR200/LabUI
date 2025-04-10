@@ -58,19 +58,7 @@ def dashboard(request):
     }
     return render(request, 'dashboard.html', context)
 
-@login_required(login_url='signin')
-def dashboard15(request):
-    tasks = Tasks.objects.filter(status=1, assigned=request.user).order_by('-created_at')
-    new_tasks = Tasks.objects.filter(status=0).order_by('-created_at')
-    tasks_history = Tasks.objects.filter(assigned=request.user).order_by('-created_at')
-    report = Report.objects.filter(author=request.user)
-    context = {
-        'tasks': tasks,
-        'new_tasks': new_tasks,
-        'tasks_history': tasks_history,
-        'reports':report
-    }
-    return render(request, 'dashboard15.html', context)
+
 
 @login_required(login_url='signin')
 def new_requests(request):

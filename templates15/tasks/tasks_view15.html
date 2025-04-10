@@ -911,7 +911,10 @@
                               {% elif rep.status == 1 %}
                                 <span class="status-badge status-in-progress" >In Progress</span>
                               {% elif rep.status == 2 %}
-                                <span class="status-badge status-completed">Completed</span>
+                                <span class="status-badge status-completed">Waiting for Approval</span>
+                
+                              {% elif rep.status == 3 %}
+                                <span class="status-badge status-completed">Approved</span>
                               {% endif %}
                               </td>
                               {% comment %} <td><span class="status-badge status-completed">Completed</span></td> {% endcomment %}

@@ -119,6 +119,19 @@ def submit_report(req, pk):
 #         return JsonResponse({'success': False, 'message': 'Invalid request method'})
 
 @csrf_exempt
+def delete_record(request, pk, record_id):
+
+    record = get_object_or_404(Records, id=record_id)
+
+    print(record)
+
+    record.delete()
+
+
+    return redirect('update_report', report_id=pk)
+
+
+@csrf_exempt
 def save_record(request, pk):
     if request.method == 'POST':
         try:
@@ -180,7 +193,6 @@ def save_record(request, pk):
             return JsonResponse({'success': False, 'message': str(e)})
     
     return JsonResponse({'success': False, 'message': 'Invalid request method'})
-
 """--------------------- Tasks ---------------------"""
 
 @login_required(login_url='signin')

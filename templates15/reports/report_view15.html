@@ -880,6 +880,8 @@
                             {% elif report.status == 1 %}
                               <span class="priority-badge priority-high">In Progress</span>
                             {% elif report.status == 2 %}
+                              <span class="priority-badge status-completed">Waiting for Aprroval</span>
+                            {% elif report.status == 3 %}
                               <span class="priority-badge status-completed">Completed</span>
                             {% endif %}
                             {% comment %} <span class="priority-badge priority-high">{{ task.assigned.all|join:", " }}</span> {% endcomment %}
@@ -1037,11 +1039,11 @@
 
 
                   {% for record in records %}
-                    <div class="machine-dropdown" data-machine="{{ record.data.machine|lower }}">
+                    <div class="machine-dropdown" data-machine="{{ record.data.machine }}">
                         <div class="machine-header">
                             <div class="machine-title">
                                 <i class="fas fa-ruler"></i>
-                                Calibration Measurements
+                                {{ record.data.machine|lower }}
                             </div>
                             <div class="machine-toggle">
                                 <i class="fas fa-chevron-down"></i>

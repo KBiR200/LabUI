@@ -1077,8 +1077,9 @@
                 {% for record in records %}
                 <div class="record-item">
                   <div class="record-header">
-                    <div class="record-title">Olympus BX53 Microscope</div>
+                    <div class="record-title">{{ record.data.machine }}</div>
                     <div class="record-actions">
+                      {% comment %}
                       <button
                         type="button"
                         class="record-action edit"
@@ -1086,7 +1087,9 @@
                       >
                         <i class="fas fa-edit"></i>
                       </button>
+                      {% endcomment %}
                       <button
+                        onclick="window.location.href='{% url 'delete_record' report.id record.id  %}';"
                         type="button"
                         class="record-action delete"
                         title="Delete Record"

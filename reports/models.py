@@ -53,7 +53,27 @@ def task_custom_upload_to(instance, filename):
     new_filename = f"{base}_{now():%Y%m%dT%H%M%S}{extension}"
     print(new_filename)  # Appends timestamp
     return os.path.join("task_attachments/", new_filename)
+    
 class Task_attachment(models.Model):
+    created = models.DateTimeField(auto_now_add=True) 
     task = models.ForeignKey(Tasks,related_name="attachments", on_delete=models.CASCADE)
     attachment= models.FileField(upload_to=task_custom_upload_to, blank=True, null=True)
-    
+    class Meta: 
+        ordering = ('created',) 
+
+class Task_comment(models.Model): 
+    Task = models.ForeignKey(Tasks,
+                             on_delete=models.CASCADE,
+                             related_name='comments')
+    name = models.CharField(max_length=80) 
+    email = models.EmailField(blank=True) 
+    body = models.TextField() 
+    created = models.DateTimeField(auto_now_add=True) 
+    updated = models.DateTimeField(auto_now=True) 
+    active = models.BooleanField(default=True) 
+
+    class Meta: 
+        ordering = ('created',) 
+
+    def __str__(self): 
+        return 'Comment by {} on {}'.format(self.name, self.Task) 

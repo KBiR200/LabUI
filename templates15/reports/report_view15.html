@@ -829,7 +829,7 @@
         <!-- Task Report Content -->
         <div class="content-wrapper">
             <div class="page-header">
-                <h2> Task: {{ report.task.title }} || Report: {{ report.title }} </h2>
+                <h2> Report: {{ report.title }}</h2>
                 <div class="page-actions">
                     <button class="btn btn-outline">
                         <i class="fas fa-print btn-icon"></i> Print
@@ -862,8 +862,8 @@
                 <div class="card-body">
                     <div class="task-info">
                       <div class="info-item">
-                            <span class="info-label">Task ID</span>
-                            <span class="info-value">{{ report.task.id }}</span>
+                            <span class="info-label">Task ID || Task Name </span>
+                            <span class="info-value">{{ report.task.id }} || {{ report.task.title }}</span>
                           </div>
                         <div class="info-item">
                           <span class="info-label">Assigned To</span>
@@ -1147,7 +1147,7 @@
             </div>
 
             <!-- Comments Card -->
-            <div class="card">
+            {% comment %} <div class="card">
                 <div class="card-header">
                     <h3>Comments</h3>
                 </div>
@@ -1196,12 +1196,12 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> {% endcomment %}
 
             <!-- Action Buttons -->
             <div class="form-actions">
-                <button class="btn btn-outline" onclick="window.location.href='/tasks'">
-                    <i class="fas fa-arrow-left btn-icon"></i> Back to Tasks
+                <button class="btn btn-outline" onclick="window.location.href='{% url 'show_task' report.task.id %}'">
+                    <i class="fas fa-arrow-left btn-icon"></i> Back to Task
                 </button>
                 <a href="{% url "submit_report" report.id %}"> 
                 <button class="btn btn-success">

@@ -220,8 +220,9 @@ def create_task15(request):
         title = request.POST['title']
         data = request.POST.get('data', '')
         due_date = request.POST['due_date']
+        workers_count = request.POST.get('workers_count', 1)
         form_attachment = request.FILES.getlist('attachment')
-        task = Tasks.objects.create(creator=request.user, data=data, title = title, due_date=due_date)
+        task = Tasks.objects.create(creator=request.user, data=data, title = title, due_date=due_date, workers_count=workers_count)
         task.save()
         print(f'task: {title} is created')
         print(form_attachment)
@@ -284,10 +285,16 @@ def historical_changes(qry):
 def accept_task(request, pk):
     print(f"Task ID = {pk}")
     task = get_object_or_404(Tasks, id=pk)
+    print(task.workers_count)
     task.assigned.add(request.user)
-    task.status = 1
+    if task.assigned.all().count() == task.workers_count:
+        task.status = 1
+        
+    else:
+        task.status = 0
     task.save()
-    print("u are assigned")
+    print(task.assigned.all())
+
     return redirect('tasks')
 
 @login_required(login_url='signin')

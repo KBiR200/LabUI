@@ -807,18 +807,16 @@
                                     </div>
                                 </div> {% endcomment %}
                                 <div class="form-col">
-                                    <div class="form-group">
-                                        <label for="taskAssignee">Assignee <span class="text-danger">*</span></label>
-                                        <select id="taskAssignee" class="form-control">
-                                            
-                                            <option value="1">Alex Johnson (Team A)</option>
-                                            <option value="2">Sam Taylor (Team A)</option>
-                                            <option value="3">Jamie Lee (Team B)</option>
-                                            <option value="4">Morgan Chen (Team B)</option>
-                                            <option value="5">Taylor Smith (Team C)</option>
-                                            <option value="6">Jordan Rivera (Team C)</option>
-                                        </select>
-                                    </div>
+                                  <div class="form-group">
+                                    <label for="workersCount">Number of Assignees <span class="text-danger">*</span></label>
+                                    <input type="number"
+                                           id="workersCount"
+                                           name="workers_count"
+                                           class="form-control"
+                                           value="1"
+                                           min="1"
+                                           required>
+                                </div>
                                 </div>
                             </div>
 

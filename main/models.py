@@ -24,6 +24,17 @@ class Machine(models.Model):
     def __str__(self) -> str:
         return self.name
 
+class Team(models.Model):
+    name = models.CharField(max_length=50)
+    supervisor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='supervisor_team', blank=True, null=True)
+    members = models.ManyToManyField(User, related_name='team_members', blank=True)
+    machine = models.ManyToManyField(Machine, related_name='machine_team', blank=True)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project_team', blank=True, null=True)
+    lab = models.ForeignKey(Laberatory, on_delete=models.CASCADE, related_name='lab_team', blank=True, null=True)
+
+    def __str__(self) -> str:
+        return self.name
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

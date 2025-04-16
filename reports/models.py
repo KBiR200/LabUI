@@ -1,5 +1,5 @@
 from django.db import models
-from main.models import Project , Machine
+from main.models import Project , Machine, Team
 from django.contrib.auth.models import User
 import os
 from django.utils.timezone import now
@@ -10,6 +10,9 @@ class Tasks(models.Model):
                                  related_name='created_task')
     assigned = models.ManyToManyField(User, default=None, blank=True,
                                        related_name='assigned_task')
+    team = models.ForeignKey(Team, on_delete=models.CASCADE,
+                             related_name='team_task', blank=True, null=True)
+    workers_count = models.IntegerField( default=1)
     data = models.JSONField(blank=True)
     status = models.IntegerField(name='status', default=0)
     created_at = models.DateTimeField(auto_now=True)

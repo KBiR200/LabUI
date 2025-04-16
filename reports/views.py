@@ -245,8 +245,20 @@ def show_task(request, pk):
     print(task.assigned.all().count())
     print(task.title)
     # print(reo.author.all())
-    return render(request, 'tasks/tasks_view15.html', {"task":task, "report":reo})
+    return render(request, 'tasks/task_update15.html', {"task":task, "report":reo})
 
+
+# @login_required(login_url='signin')
+# def show_task(request, pk):
+#     task = get_object_or_404(Tasks, id=pk)
+#     reo = Report.objects.filter(task=task)
+#     for r in reo:
+#         auth= r.author.all()
+#         print(auth)
+#     print(task.assigned.all().count())
+#     print(task.title)
+#     # print(reo.author.all())
+#     return render(request, 'tasks/tasks_view15.html', {"task":task, "report":reo})
 
 
 

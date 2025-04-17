@@ -16,6 +16,7 @@ class Tasks(models.Model):
     data = models.JSONField(blank=True)
     status = models.IntegerField(name='status', default=0)
     created_at = models.DateTimeField(auto_now=True)
+    start_date = models.DateTimeField(default=True)
     due_date = models.DateTimeField()
     def __str__(self) -> str:
         return self.title

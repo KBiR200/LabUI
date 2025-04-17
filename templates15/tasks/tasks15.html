@@ -794,7 +794,7 @@
                                                 {% elif task.status == 2 %}
                                                     <a href='{% url 'undo_task' task.id %}'><i class="fas fa-eye"></i> Undo Submition</a>
                                                 {% endif %}
-                                                <a href="#"><i class="fas fa-edit"></i> Edit</a>
+                                                <a href="{% url "update_task" task.id %}"><i class="fas fa-edit"></i> Edit</a>
                                                 <a href="#"><i class="fas fa-trash-alt"></i> Delete</a>
                                             </div>
                                         </div>

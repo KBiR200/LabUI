@@ -87,36 +87,6 @@ def submit_report(req, pk):
 # record view function
 """--------------------- Records ---------------------"""
 
-# @login_required(login_url='signin')
-# def old(request, pk):
-#     if request.method == 'POST':
-#         try:
-#             print('Processing POST request')
-#             form_data = {}
-#             for key, value in request.POST.items():
-#                 print(key, value)
-#                 if key != 'csrfmiddlewaretoken' and key != 'machine_id' and key!= "attachment":  # Ignore the CSRF token field and machine ID 
-#                     print(key)
-#                     form_data[key] = value
-#             form_attachment = request.FILES.getlist('attachment')
-#             print(form_attachment)
-#             final_data = {"values": form_data}
-#             machine_id = request.POST.get('machine_id')
-#             report = Report.objects.get(id=pk)
-#             machine = Machine.objects.get(id=machine_id)
-#             record = Records.objects.create(data=final_data)
-#             record.report.add(report)
-#             record.machine.add(machine)
-#             record.save()
-#             for i in form_attachment:
-#                 print(i)
-#                 r= Records_attachment.objects.create(record=record, attachment=i)
-#                 print(r.id)
-#             return JsonResponse({'success': True, 'data': form_data})
-#         except Exception as e:
-#             return JsonResponse({'success': False, 'message': str(e)})
-#     else:
-#         return JsonResponse({'success': False, 'message': 'Invalid request method'})
 
 @csrf_exempt
 def delete_record(request, pk, record_id):
@@ -193,6 +163,8 @@ def save_record(request, pk):
             return JsonResponse({'success': False, 'message': str(e)})
     
     return JsonResponse({'success': False, 'message': 'Invalid request method'})
+
+
 """--------------------- Tasks ---------------------"""
 
 @login_required(login_url='signin')
@@ -220,19 +192,42 @@ def create_task15(request):
         title = request.POST['title']
         data = request.POST.get('data', '')
         due_date = request.POST['due_date']
+        start_date = request.POST['start_date']
         workers_count = request.POST.get('workers_count', 1)
         form_attachment = request.FILES.getlist('attachment')
-        task = Tasks.objects.create(creator=request.user, data=data, title = title, due_date=due_date, workers_count=workers_count)
+        task = Tasks.objects.create(creator=request.user, data=data, title = title, due_date=due_date,start_date=start_date, workers_count=workers_count)
         task.save()
         print(f'task: {title} is created')
         print(form_attachment)
         for i in form_attachment:
             print(i)
             r= Task_attachment.objects.create(task=task, attachment=i)
-        return redirect('control')
+        return redirect('show_task', pk=task.id)
     
     return render(request, 'tasks/task_create15.html', {'users': users})
 
+
+
+@login_required(login_url='signin')
+def update_task(request, pk):
+    task = get_object_or_404(Tasks, id=pk)
+
+    if request.method == 'POST':
+        title     = request.POST['title']
+        desc      = request.POST['description']
+        stat      = request.POST['status_number']           # matches name="stot"
+        due_dt    = request.POST['due_date']
+        print(f"Task ID = {stat}")
+        # now update and save:
+        task.title      = title
+        task.data       = desc
+        task.status     = stat
+        # task.created_at = start_dt   # or however you use start
+        task.due_date   = due_dt
+        task.save()
+        return redirect('show_task', pk=task.id)
+
+    return render(request, 'tasks/task_update15.html', {"task": task})
 
 
 @login_required(login_url='signin')
@@ -245,53 +240,7 @@ def show_task(request, pk):
     print(task.assigned.all().count())
     print(task.title)
     # print(reo.author.all())
-    return render(request, 'tasks/task_update15.html', {"task":task, "report":reo})
-
-
-# @login_required(login_url='signin')
-# def show_task(request, pk):
-#     task = get_object_or_404(Tasks, id=pk)
-#     reo = Report.objects.filter(task=task)
-#     for r in reo:
-#         auth= r.author.all()
-#         print(auth)
-#     print(task.assigned.all().count())
-#     print(task.title)
-#     # print(reo.author.all())
-#     return render(request, 'tasks/tasks_view15.html', {"task":task, "report":reo})
-
-
-
-"""
-    for history
-qry = order.history.filter(id=pk)
-
-def historical_changes(qry):
-
-    changes = []
-
-    if qry is not None:
-
-        last = qry.first()
-
-    for all_changes in range(qry.count()):
-
-        new_record, old_record = last, last.prev_record
-
-        if old_record is not None:
-
-            delta = new_record.diff_against(old_record)
-
-            changes.append(delta)
-
-    last = old_record
-
-    return changes
-
-    changes = historical_changes(qry)
-
-    context = { 'changes':changes}
-"""
+    return render(request, 'tasks/tasks_view15.html', {"task":task, "report":reo})
 
 @login_required(login_url='signin')
 def accept_task(request, pk):

@@ -826,7 +826,14 @@
                                     <div class="form-group">
                                         <label for="taskStartDate">Start Date <span class="text-danger">*</span></label>
                                         <div class="date-picker-wrapper">
-                                            <input type="date" id="taskStartDate" class="form-control">
+                                          <input
+                                            type="datetime-local"
+                                            name="start_date"
+                                            id="taskDueDate"
+                                            class="form-control"
+                                            value="{% now 'Y-m-d' %}T{% now 'H:i' %}"
+                                            required
+                                              />
                                             <div class="date-picker-icon">
                                                 <i class="fas fa-calendar-alt"></i>
                                             </div>
@@ -837,7 +844,7 @@
                                     <div class="form-group">
                                         <label for="taskDueDate">Due Date <span class="text-danger">*</span></label>
                                         <div class="date-picker-wrapper">
-                                            <input type="date" 
+                                            <input type="datetime-local" 
                                             name="due_date"
                                             id="taskDueDate" class="form-control" required>
                                             <div class="date-picker-icon">

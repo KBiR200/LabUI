@@ -20,6 +20,7 @@ urlpatterns = [
     path('tasks/', reports.views.tasks, name='tasks'),
     path('task/new/', reports.views.create_task15, name='new_task'),
     path('task/<int:pk>/', reports.views.show_task, name='show_task'),
+    path('task/<int:pk>/update', reports.views.update_task, name='update_task'),
     path('task/<int:pk>/accept/', reports.views.accept_task, name='accept_task'),
     path('task/<int:pk>/submit/', reports.views.submit_task, name='submit_task'),
     path('task/<int:pk>/undosubmit/', reports.views.undo_task, name='undo_task'),

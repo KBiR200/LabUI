@@ -801,7 +801,7 @@
                     <button class="btn btn-outline">
                         <i class="fas fa-download btn-icon"></i> Export
                     </button>
-                    <button class="btn btn-primary">
+                    <button class="btn btn-primary" onclick="window.location.href='{% url "update_task" task.id %}'">
                         <i class="fas fa-edit btn-icon"></i> Edit Task
                     </button>
                 </div>
@@ -837,20 +837,20 @@
                         <div class="info-item">
                             <span class="info-label">Priority</span>
                             {% if task.status == 0 %}
-                                <span class="priority-badge priority-high">Pending</span>
+                                <span class="priority-badge priority-medium">Pending</span>
                                 {% elif task.status == 1 %}
                                 <span class="priority-badge priority-high">In Progress</span>
                                 {% elif task.status == 2 %}
-                                <span class="priority-badge priority-high">Completed</span>
+                                <span class="priority-badge priority-low">Completed</span>
                                 {% endif %}
                         </div>
                         <div class="info-item">
                             <span class="info-label">Start Date</span>
-                            <span class="info-value">Oct 15, 2023</span>
+                            <span class="info-value">{{task.start_date}}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Due Date</span>
-                            <span class="info-value">Oct 18, 2023</span>
+                            <span class="info-value">{{task.due_date}}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Created By</span>

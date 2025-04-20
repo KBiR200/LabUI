@@ -16,6 +16,7 @@ urlpatterns = [
     path('logout/', main.views.logout_view, name='logout'),
     path('contactus/', main.views.contact, name='contactus'),
     path('teams/', main.views.teams, name='contactus'),
+    path('profile/', main.views.userprofile, name='profile'),
 
     # """ tasks """
     path('tasks/', reports.views.tasks, name='tasks'),

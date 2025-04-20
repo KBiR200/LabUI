@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Profile - LabUI</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  /* Base Styles */
+  :root {
+    --primary-color: #4a6cf7;
+    --primary-hover: #3a5ce4;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+    --body-bg: #f5f7fb;
+    --card-bg: #ffffff;
+    --text-color: #495057;
+    --text-muted: #6c757d;
+    --border-color: #e9ecef;
+    --sidebar-width: 250px;
+    --header-height: 60px;
+    --shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    --shadow-lg: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    --border-radius: 0.375rem;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--text-color);
+    background-color: var(--body-bg);
+  }
+
+  a {
+    color: var(--primary-color);
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  ul {
+    list-style: none;
+  }
+
+  /* Layout */
+  .layout {
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: var(--sidebar-width);
+    background-color: var(--dark-color);
+    color: white;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 1000;
+    transition: all 0.3s ease;
+  }
+
+  .sidebar-header {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .sidebar-header i {
+    font-size: 1.5rem;
+    margin-right: 0.5rem;
+  }
+
+  .sidebar-header h1 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .sidebar-nav ul {
+    padding: 1rem 0;
+  }
+
+  .sidebar-nav li {
+    margin-bottom: 0.25rem;
+  }
+
+  .sidebar-nav a {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    color: rgba(255, 255, 255, 0.7);
+    transition: all 0.3s ease;
+  }
+
+  .sidebar-nav a:hover {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
+    text-decoration: none;
+  }
+
+  .sidebar-nav li.active a {
+    color: white;
+    background-color: var(--primary-color);
+  }
+
+  .sidebar-nav i {
+    margin-right: 0.75rem;
+    font-size: 1rem;
+  }
+
+  /* Main Content */
+  .main-content {
+    flex: 1;
+    margin-left: var(--sidebar-width);
+    position: relative;
+  }
+
+  /* Top Navigation */
+  .top-nav {
+    height: var(--header-height);
+    background-color: var(--card-bg);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 900;
+    box-shadow: var(--shadow);
+  }
+
+  .search-container {
+    position: relative;
+    width: 300px;
+  }
+
+  .search-container i {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+  }
+
+  .search-container input {
+    width: 100%;
+    padding: 0.5rem 0.5rem 0.5rem 2rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: 0.875rem;
+  }
+
+  .user-menu {
+    display: flex;
+    align-items: center;
+  }
+
+  .notifications {
+    position: relative;
+    margin-right: 1.5rem;
+    cursor: pointer;
+  }
+
+  .notifications i {
+    font-size: 1.25rem;
+    color: var(--text-muted);
+  }
+
+  .badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: var(--danger-color);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .user-profile {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .user-profile img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+  }
+
+  .user-name {
+    font-weight: 500;
+    margin-right: 0.5rem;
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-lg);
+    min-width: 180px;
+    z-index: 1000;
+    display: none;
+  }
+
+  .dropdown-menu a {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    color: var(--text-color);
+    transition: background-color 0.3s ease;
+  }
+
+  .dropdown-menu a:hover {
+    background-color: var(--light-color);
+    text-decoration: none;
+  }
+
+  .dropdown-menu i {
+    margin-right: 0.5rem;
+  }
+
+  /* Content Wrapper */
+  .content-wrapper {
+    padding: 1.5rem;
+  }
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .page-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  /* Cards */
+  .card {
+    background-color: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 1.5rem;
+  }
+
+  .card-header {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .card-header h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .card-body {
+    padding: 1.25rem;
+  }
+
+  /* Profile Specific Styles */
+  .profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--card-bg);
+    box-shadow: var(--shadow);
+  }
+
+  .profile-info {
+    margin-left: 1.5rem;
+  }
+
+  .profile-name {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  .profile-role {
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .profile-stats {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .stat-item {
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--primary-color);
+  }
+
+  .stat-label {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+  }
+
+  .profile-actions {
+    margin-left: auto;
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .info-item {
+    margin-bottom: 1rem;
+  }
+
+  .info-label {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+  }
+
+  .info-value {
+    font-weight: 500;
+  }
+
+  .badge-role {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    background-color: rgba(74, 108, 247, 0.1);
+    color: var(--primary-color);
+  }
+
+  .badge-team-leader {
+    background-color: rgba(220, 53, 69, 0.1);
+    color: var(--danger-color);
+  }
+
+  .badge-lab-technician {
+    background-color: rgba(40, 167, 69, 0.1);
+    color: var(--success-color);
+  }
+
+  .badge-researcher {
+    background-color: rgba(255, 193, 7, 0.1);
+    color: #d39e00;
+  }
+
+  .badge-admin {
+    background-color: rgba(108, 117, 125, 0.1);
+    color: var(--secondary-color);
+  }
+
+  .team-members {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .team-member {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    background-color: var(--light-color);
+    border-radius: var(--border-radius);
+  }
+
+  .team-member-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+  }
+
+  .activity-list {
+    margin-top: 0.5rem;
+  }
+
+  .activity-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .activity-item:last-child {
+    border-bottom: none;
+  }
+
+  .activity-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: rgba(74, 108, 247, 0.1);
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  .activity-content {
+    flex: 1;
+  }
+
+  .activity-title {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+  }
+
+  .activity-time {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: var(--border-radius);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--primary-hover);
+  }
+
+  .btn-outline {
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+  }
+
+  .btn-outline:hover {
+    background-color: var(--light-color);
+  }
+
+  .btn-icon {
+    margin-right: 0.5rem;
+  }
+
+  /* Responsive */
+  @media (max-width: 992px) {
+    .info-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .sidebar {
+      width: 0;
+      transform: translateX(-100%);
+    }
+    
+    .sidebar.active {
+      width: var(--sidebar-width);
+      transform: translateX(0);
+    }
+    
+    .main-content {
+      margin-left: 0;
+    }
+    
+    .profile-header {
+      flex-direction: column;
+      text-align: center;
+    }
+    
+    .profile-info {
+      margin-left: 0;
+      margin-top: 1rem;
+    }
+    
+    .profile-stats {
+      justify-content: center;
+    }
+    
+    .profile-actions {
+      margin-left: 0;
+      margin-top: 1rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .search-container {
+      width: 200px;
+    }
+    
+    .user-name {
+      display: none;
+    }
+  }
+
+  /* Menu Toggle for Mobile */
+  .menu-toggle {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 1.25rem;
+    cursor: pointer;
+    display: none;
+    margin-right: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .menu-toggle {
+      display: block;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+      <div class="sidebar-header">
+          <i class="fas fa-flask"></i>
+          <h1>LabUI</h1>
+      </div>
+      <nav class="sidebar-nav">
+          <ul>
+              <li>
+                  <a href="/"><i class="fas fa-home"></i> Dashboard</a>
+              </li>
+              <li>
+                  <a href="/tasks"><i class="fas fa-tasks"></i> Tasks</a>
+              </li>
+              <li>
+                  <a href="/reports"><i class="fas fa-chart-bar"></i> Reports</a>
+              </li>
+              <li>
+                  <a href="/teams"><i class="fas fa-users"></i> Teams</a>
+              </li>
+              <li>
+                  <a href="/contactus"><i class="fas fa-envelope"></i> Contact</a>
+              </li>
+          </ul>
+      </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+      <!-- Top Navigation -->
+      <header class="top-nav">
+          <div class="search-container">
+              <i class="fas fa-search"></i>
+              <input type="text" placeholder="Search..." id="searchInput">
+          </div>
+          <div class="user-menu">
+              <div class="notifications">
+                  <i class="fas fa-bell"></i>
+                  <span class="badge">3</span>
+              </div>
+              <div class="user-profile">
+                  <img src="/statics/img/avatar-placeholder.png" alt="User Avatar">
+                  <span class="user-name">{{ user.get_full_name }}</span>
+                  <i class="fas fa-chevron-down"></i>
+                  <div class="dropdown-menu">
+                      <a href="{% url 'profile' %}" class="active"><i class="fas fa-user"></i> Profile</a>
+                      <a href="{% url 'password_change' %}"><i class="fas fa-cog"></i> Settings</a>
+                      <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                  </div>
+              </div>
+          </div>
+      </header>
+
+      <!-- Profile Content -->
+      <div class="content-wrapper">
+          <div class="page-header">
+              <h2>My Profile</h2>
+          </div>
+
+          <!-- Profile Overview Card -->
+          <div class="card">
+              <div class="card-body">
+                  <div class="profile-header">
+                      <img src="{{ user.profile.avatar.url|default:'/statics/img/avatar-placeholder.png' }}" alt="{{ user.get_full_name }}" class="profile-avatar">
+                      <div class="profile-info">
+                          <h1 class="profile-name">{{ user.get_full_name }}</h1>
+                          <div class="profile-role">
+                              <span class="badge-role {% if user.profile.role == 'Team Leader' %}badge-team-leader{% elif user.profile.role == 'Lab Technician' %}badge-lab-technician{% elif user.profile.role == 'Researcher' %}badge-researcher{% elif user.profile.role == 'Admin' %}badge-admin{% endif %}">
+                                  {{ user.profile.role|default:"Team Member" }}
+                              </span>
+                          </div>
+                          <div class="profile-stats">
+                              <div class="stat-item">
+                                  <div class="stat-value">{{ user.tasks_assigned.count }}</div>
+                                  <div class="stat-label">Tasks Assigned</div>
+                              </div>
+                              <div class="stat-item">
+                                  <div class="stat-value">{{ user.tasks_completed.count }}</div>
+                                  <div class="stat-label">Tasks Completed</div>
+                              </div>
+                              <div class="stat-item">
+                                  <div class="stat-value">{{ user.profile.team_set.count }}</div>
+                                  <div class="stat-label">Teams</div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="profile-actions">
+                          <a href="{% url 'home' %}" class="btn btn-primary">
+                              <i class="fas fa-edit btn-icon"></i> Edit Profile
+                          </a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <!-- Personal Information Card -->
+          <div class="card">
+              <div class="card-header">
+                  <h3>Personal Information</h3>
+              </div>
+              <div class="card-body">
+                  <div class="info-grid">
+                      <div class="info-item">
+                          <div class="info-label">Full Name</div>
+                          <div class="info-value">{{ user.get_full_name }}</div>
+                      </div>
+                      <div class="info-item">
+                          <div class="info-label">Username</div>
+                          <div class="info-value">{{ user.username }}</div>
+                      </div>
+                      <div class="info-item">
+                          <div class="info-label">Email</div>
+                          <div class="info-value">{{ user.email }}</div>
+                      </div>
+                      <div class="info-item">
+                          <div class="info-label">Phone</div>
+                          <div class="info-value">{{ user.profile.phone|default:"Not provided" }}</div>
+                      </div>
+                      <div class="info-item">
+                          <div class="info-label">Department</div>
+                          <div class="info-value">{{ user.profile.department|default:"Not assigned" }}</div>
+                      </div>
+                      <div class="info-item">
+                          <div class="info-label">Position</div>
+                          <div class="info-value">{{ user.profile.position|default:"Not specified" }}</div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <!-- Account Information Card -->
+          <div class="card">
+              <div class="card-header">
+                  <h3>Account Information</h3>
+              </div>
+              <div class="card-body">
+                  <div class="info-grid">
+                      <div class="info-item">
+                          <div class="info-label">Account Created</div>
+                          <div class="info-value">{{ user.date_joined|date:"F j, Y" }}</div>
+                      </div>
+                      <div class="info-item">
+                          <div class="info-label">Last Login</div>
+                          <div class="info-value">{{ user.last_login|date:"F j, Y, g:i a" }}</div>
+                      </div>
+                      <div class="info-item">
+                          <div class="info-label">Account Status</div>
+                          <div class="info-value">
+                              {% if user.is_active %}
+                                  <span style="color: var(--success-color);">Active</span>
+                              {% else %}
+                                  <span style="color: var(--danger-color);">Inactive</span>
+                              {% endif %}
+                          </div>
+                      </div>
+                      <div class="info-item">
+                          <div class="info-label">Password</div>
+                          <div class="info-value">
+                              ••••••••
+                              <a href="{% url 'password_change' %}" style="margin-left: 0.5rem; font-size: 0.8125rem;">Change Password</a>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <!-- Team Information Card -->
+          <div class="card">
+              <div class="card-header">
+                  <h3>Team Information</h3>
+              </div>
+              <div class="card-body">
+                  <div class="info-item">
+                      <div class="info-label">Primary Team</div>
+                      <div class="info-value">{{ user.profile.primary_team.name|default:"Not assigned" }}</div>
+                  </div>
+                  
+                  <div class="info-item">
+                      <div class="info-label">Team Members</div>
+                      <div class="team-members">
+                          {% for member in user.profile.primary_team.members.all %}
+                              {% if member != user %}
+                                  <div class="team-member">
+                                      <img src="{{ member.profile.avatar.url|default:'/statics/img/avatar-placeholder.png' }}" alt="{{ member.get_full_name }}" class="team-member-avatar">
+                                      <span>{{ member.get_full_name }}</span>
+                                  </div>
+                              {% endif %}
+                          {% empty %}
+                              <div>No team members found</div>
+                          {% endfor %}
+                      </div>
+                  </div>
+                  
+                  <div class="info-item">
+                      <div class="info-label">Other Teams</div>
+                      <div class="info-value">
+                          {% for team in user.profile.teams.all %}
+                              {% if team != user.profile.primary_team %}
+                                  <span style="margin-right: 0.5rem;">{{ team.name }}</span>
+                              {% endif %}
+                          {% empty %}
+                              Not a member of other teams
+                          {% endfor %}
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <!-- Recent Activity Card -->
+          <div class="card">
+              <div class="card-header">
+                  <h3>Recent Activity</h3>
+              </div>
+              <div class="card-body">
+                  <div class="activity-list">
+                      {% for activity in user.activities.all|slice:":5" %}
+                          <div class="activity-item">
+                              <div class="activity-icon">
+                                  {% if activity.type == 'task_completed' %}
+                                      <i class="fas fa-check"></i>
+                                  {% elif activity.type == 'task_assigned' %}
+                                      <i class="fas fa-tasks"></i>
+                                  {% elif activity.type == 'report_submitted' %}
+                                      <i class="fas fa-file-alt"></i>
+                                  {% elif activity.type == 'comment_added' %}
+                                      <i class="fas fa-comment"></i>
+                                  {% else %}
+                                      <i class="fas fa-bell"></i>
+                                  {% endif %}
+                              </div>
+                              <div class="activity-content">
+                                  <div class="activity-title">{{ activity.description }}</div>
+                                  <div class="activity-time">{{ activity.created_at|date:"F j, Y, g:i a" }}</div>
+                              </div>
+                          </div>
+                      {% empty %}
+                          <div>No recent activity found</div>
+                      {% endfor %}
+                  </div>
+              </div>
+          </div>
+      </div>
+  </main>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      // Initialize dropdown menus
+      initDropdowns();
+      
+      // Initialize mobile menu
+      initMobileMenu();
+  });
+
+  function initDropdowns() {
+      const dropdownTriggers = document.querySelectorAll('.user-profile, .actions-dropdown');
+      
+      dropdownTriggers.forEach(trigger => {
+          trigger.addEventListener('click', function(e) {
+              e.stopPropagation();
+              const dropdown = this.querySelector('.dropdown-menu');
+              
+              if (dropdown) {
+                  const isVisible = dropdown.style.display === 'block';
+                  
+                  // Close all dropdowns first
+                  document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                      menu.style.display = 'none';
+                  });
+                  
+                  // Toggle current dropdown
+                  dropdown.style.display = isVisible ? 'none' : 'block';
+              }
+          });
+      });
+      
+      // Close dropdowns when clicking outside
+      document.addEventListener('click', function() {
+          document.querySelectorAll('.dropdown-menu').forEach(menu => {
+              menu.style.display = 'none';
+          });
+      });
+  }
+
+  function initMobileMenu() {
+      const menuToggle = document.createElement('button');
+      menuToggle.className = 'menu-toggle';
+      menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+      
+      document.querySelector('.top-nav').prepend(menuToggle);
+      
+      menuToggle.addEventListener('click', function() {
+          document.querySelector('.sidebar').classList.toggle('active');
+      });
+      
+      function checkScreenSize() {
+          if (window.innerWidth < 768) {
+              menuToggle.style.display = 'block';
+          } else {
+              menuToggle.style.display = 'none';
+              document.querySelector('.sidebar').classList.remove('active');
+          }
+      }
+      
+      window.addEventListener('resize', checkScreenSize);
+      checkScreenSize();
+  }
+</script>
+</body>
+</html>

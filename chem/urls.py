@@ -12,6 +12,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', main.views.home, name='home'),
     path('signin/', main.views.signin, name='signin'),
+    path('passchange/', main.views.password_change, name='password_change'),
     path('logout/', main.views.logout_view, name='logout'),
     path('contactus/', main.views.contact, name='contactus'),
     path('teams/', main.views.teams, name='contactus'),

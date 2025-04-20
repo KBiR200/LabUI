@@ -814,7 +814,7 @@
               <i class="fas fa-chevron-down"></i>
               <div class="dropdown-menu">
                 <a href="/profile"><i class="fas fa-user"></i> Profile</a>
-                <a href="/settings"><i class="fas fa-cog"></i> Settings</a>
+                <a  href='{% url 'password_change'  %}'><i class="fas fa-cog"></i> Settings</a>
                 <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
               </div>
             </div>
@@ -916,6 +916,14 @@
                   >
                   <select id="machineSelect" class="form-control" required>
                     <option value="">Select Machine</option>
+                    {% for machine in machines %}
+                    {% with key=machine.name|slugify %}
+                    <option value="{{ key }}">{{ machine.name|upper }}</option>
+                      {% endwith %}
+                    {% endfor %}
+
+
+                    <option value="new">new Olympus BX53 Microscope</option>
                     <option value="microscope">Olympus BX53 Microscope</option>
                     <option value="centrifuge">
                       Thermo Scientific Centrifuge
@@ -928,6 +936,16 @@
                   </select>
                 </div>
 
+               
+                {% for machine in machines %}
+                {% with key=machine.name|slugify %}
+                <!-- List bew  -->
+                <div id="{{ key }}Parameters" class="machine-parameters">
+                  {{ machine.form_template|safe }}
+                </div>
+                <!-- List low  -->
+                {% endwith %}
+              {% endfor %}
                 <!-- Machine Parameters (Microscope) -->
                 <div id="microscopeParameters" class="machine-parameters">
                   <h4>Microscope Parameters</h4>
@@ -938,12 +956,49 @@
                       </div>
                       <div class="parameter-value">
                         <select id="opticalAlignment" class="form-control">
-                          <option value="passed">Passed</option>
+                          <option value="passed">peeeed</option>
                           <option value="failed">Failed</option>
                           <option value="adjusted">Adjusted</option>
                         </select>
                       </div>
                     </div>
+
+                    <div class="parameter-item">
+                      <div class="parameter-name">
+                        <label for="lightIntensity"
+                          >Light Source Intensity (%)</label
+                        >
+                      </div>
+                      <div class="parameter-value">
+                        <input
+                          type="number"
+                          id="lightIntensity"
+                          class="form-control"
+                          min="0"
+                          max="100"
+                          value="100"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="parameter-item">
+                      <div class="parameter-name">
+                        <label for="lightIntensity"
+                          >Light Source Intensity (%)</label
+                        >
+                      </div>
+                      <div class="parameter-value">
+                        <input
+                          type="number"
+                          id="lightIntensity"
+                          class="form-control"
+                          min="0"
+                          max="100"
+                          value="100"
+                        />
+                      </div>
+                    </div>
+
                     <div class="parameter-item">
                       <div class="parameter-name">
                         <label for="lightIntensity"
@@ -989,6 +1044,23 @@
                   <h4>PCR Thermal Cycler Parameters</h4>
                   <div class="parameter-list">
                     <!-- parameter items ... -->
+                    <div class="parameter-item">
+                      <div class="parameter-name">
+                        <label for="lightIntensity"
+                          >Light Source Intensity (%)</label
+                        >
+                      </div>
+                      <div class="parameter-value">
+                        <input
+                          type="number"
+                          id="lightIntensity"
+                          class="form-control"
+                          min="0"
+                          max="100"
+                          value="100"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
 

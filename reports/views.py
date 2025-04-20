@@ -43,6 +43,7 @@ def new_report(request, task_id):
 @login_required(login_url='signin')
 def update_report(request,report_id):
     test_name= f'Created: {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}'
+    machines = Machine.objects.all()
     report = get_object_or_404(Report, id=report_id)
     related_records = report.reports_records.all().prefetch_related('attachments')
     print(report)
@@ -62,7 +63,8 @@ def update_report(request,report_id):
         #     tt= Task_attachment.objects.create(task=task, attachment=i)
         return redirect('show_report', pk=report.id)
 
-    return render(request,"reports/report_update.html", {"pk":report.id, "report":report, 'records':related_records})
+    return render(request,"reports/report_update.html", {"pk":report.id, "report":report,
+                                                          'records':related_records, 'machines':machines})
 
 
 @login_required(login_url='signin')

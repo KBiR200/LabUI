@@ -69,3 +69,29 @@ def new_requests(request):
         ).order_by('-created_at')
     print(len(supervisors))
     return render(request, 'new_requests.html',{'tasks':tasks})
+
+
+login_required(login_url='signin')
+def password_change(request):
+    if request.method == 'POST':
+        user = request.user
+        old_password = request.POST.get('old_password')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if not user.check_password(old_password):
+            messages.error(request, "Old password is incorrect.")
+            return redirect('password_change')
+
+        if new_password != confirm_password:
+            messages.error(request, "New passwords do not match.")
+            return redirect('password_change')
+        print(f"""
+        Old password: {old_password}    
+        New password: {new_password}""")
+        # user.set_password(new_password)
+        # user.save()
+        messages.success(request, "Password changed successfully.")
+        return redirect('signin')
+
+    return render(request, 'passchange.html')

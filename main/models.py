@@ -16,12 +16,34 @@ class Laberatory(models.Model):
         return self.name
 
 
+class Machine_Category(models.Model):
+    slug = models.SlugField(unique=True)        # e.g. "research", "analysis"
+    name = models.CharField(max_length=50)      # e.g. "Research", "Analysis"
+    description = models.TextField(blank=True)  # optional
+
+    def __str__(self):
+        return self.name
+
+
 class Machine(models.Model):
-    name = models.CharField(max_length=20)
-    form_template = models.TextField(default='add template')
-    lab = models.ForeignKey(Laberatory, on_delete=models.CASCADE, related_name='lab_machine',
-                             blank=True, null=True)
-    def __str__(self) -> str:
+    name          = models.CharField(max_length=50)
+    form_template = models.TextField(default='…')
+    category      = models.ForeignKey(
+                        Machine_Category,
+                        on_delete=models.PROTECT,
+                        default=None,
+                        null=True,
+                        related_name='machines'
+                    )
+    lab           = models.ForeignKey(
+                        Laberatory,
+                        on_delete=models.CASCADE,
+                        related_name='lab_machine',
+                        blank=True,
+                        null=True
+                    )
+
+    def __str__(self):
         return self.name
 
 class Team(models.Model):

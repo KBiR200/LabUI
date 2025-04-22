@@ -765,74 +765,6 @@
         background-color: #d1ecf1;
         border-color: #bee5eb;
       }
-
-      /* ——— machine‑selector styles ——— */
-.machine-categories {
-  display:flex;
-  margin-bottom:15px;
-  border-bottom:1px solid #e9ecef;
-  overflow-x:auto;
-}
-.category-tab {
-  padding:8px 16px;
-  cursor:pointer;
-  white-space:nowrap;
-  transition:all .3s;
-}
-.category-tab.active {
-  color:var(--primary-color);
-  border-bottom:2px solid var(--primary-color);
-  font-weight:500;
-}
-.machine-grid {
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
-  gap:15px;
-  max-height:400px;
-  overflow-y:auto;
-  padding:10px 0;
-}
-.machine-card {
-  border:1px solid #e9ecef;
-  border-radius:8px;
-  padding:15px;
-  text-align:center;
-  cursor:pointer;
-  transition:all .3s;
-}
-.machine-card:hover,
-.machine-card.selected {
-  border-color:var(--primary-color);
-  background-color:rgba(74,108,247,.05);
-}
-.machine-card.selected {
-  box-shadow:0 0 0 2px rgba(74,108,247,.25);
-}
-.machine-icon {
-  font-size:24px;
-  margin-bottom:10px;
-  color:#6c757d;
-}
-.machine-card.selected .machine-icon {
-  color:var(--primary-color);
-}
-.machine-name {
-  font-size:14px;
-  font-weight:500;
-  line-height:1.3;
-}
-.selected-machine {
-  margin-top:15px;
-  padding:10px;
-  background:#f8f9fa;
-  border-radius:4px;
-}
-@media(max-width:768px){
-  .machine-grid {
-    grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
-  }
-}
-
     </style>
   </head>
   <body>
@@ -882,7 +814,7 @@
               <i class="fas fa-chevron-down"></i>
               <div class="dropdown-menu">
                 <a href="/profile"><i class="fas fa-user"></i> Profile</a>
-                <a  href='{% url 'password_change'  %}'><i class="fas fa-cog"></i> Change Password</a>
+                <a  href='{% url 'profile'  %}'><i class="fas fa-cog"></i> Change Password</a>
                 <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
               </div>
             </div>
@@ -979,41 +911,29 @@
                 <input type="hidden" name="records_json" id="recordsJson" />
 
                 <div class="form-group">
-                  <label for="machineSelect">Select Machine <span class="text-danger">*</span></label>
-                
-                  <div class="machine-selector">
-                    <input type="text" id="machineSearch" class="form-control" placeholder="Search machines…" style="margin-bottom:15px;">
-                
-                    <div class="machine-categories">
-                      <div class="category-tab active" data-category="all">All</div>
-                      {% for category in machine_category %}
-                      <div class="category-tab" data-category="{{category}}">{{category}}</div>
-                      {% endfor %}
-                      <div class="category-tab" data-category="analysis">Analysis</div>
-                      <div class="category-tab" data-category="testing">Testing</div>
-                      <div class="category-tab" data-category="imaging">Imaging</div>
-                    </div>
-                
-                    <div class="machine-grid">
-                      {% for machine in machines %}
-                      {% with key=machine.name|slugify %}
-                      <div class="machine-card"
-                           data-value="{{ key }}"
-                           data-category="{{ machine.category|default:'analysis' }}">
-                        <div class="machine-icon"><i class="fas fa-cogs"></i></div>
-                        <div class="machine-name">{{ machine.name|upper }}</div>
-                      </div>
+                  <label for="machineSelect"
+                    >Select Machine <span class="text-danger">*</span></label
+                  >
+                  <select id="machineSelect" class="form-control" required>
+                    <option value="">Select Machine</option>
+                    {% for machine in machines %}
+                    {% with key=machine.name|slugify %}
+                    <option value="{{ key }}">{{ machine.name|upper }}</option>
                       {% endwith %}
-                      {% endfor %}
-                
-                      <!-- any hard‑coded extras… -->
-                    </div>
-                
-                    <div class="selected-machine">
-                      <span>Selected: </span><strong id="selectedMachineName">None</strong>
-                      <input type="hidden" id="machineSelect" name="machine" value="">
-                    </div>
-                  </div>
+                    {% endfor %}
+
+
+                    <option value="new">new Olympus BX53 Microscope</option>
+                    <option value="microscope">Olympus BX53 Microscope</option>
+                    <option value="centrifuge">
+                      Thermo Scientific Centrifuge
+                    </option>
+                    <option value="spectrophotometer">
+                      Shimadzu UV-1800 Spectrophotometer
+                    </option>
+                    <option value="pcr">Bio-Rad T100 PCR Thermal Cycler</option>
+                    <option value="hplc">Agilent 1260 Infinity II HPLC</option>
+                  </select>
                 </div>
 
                
@@ -1025,7 +945,132 @@
                 </div>
                 <!-- List low  -->
                 {% endwith %}
-              {% endfor %}               
+              {% endfor %}
+                <!-- Machine Parameters (Microscope) -->
+                <div id="microscopeParameters" class="machine-parameters">
+                  <h4>Microscope Parameters</h4>
+                  <div class="parameter-list">
+                    <div class="parameter-item">
+                      <div class="parameter-name">
+                        <label for="opticalAlignment">Optical Alignment</label>
+                      </div>
+                      <div class="parameter-value">
+                        <select id="opticalAlignment" class="form-control">
+                          <option value="passed">peeeed</option>
+                          <option value="failed">Failed</option>
+                          <option value="adjusted">Adjusted</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="parameter-item">
+                      <div class="parameter-name">
+                        <label for="lightIntensity"
+                          >Light Source Intensity (%)</label
+                        >
+                      </div>
+                      <div class="parameter-value">
+                        <input
+                          type="number"
+                          id="lightIntensity"
+                          class="form-control"
+                          min="0"
+                          max="100"
+                          value="100"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="parameter-item">
+                      <div class="parameter-name">
+                        <label for="lightIntensity"
+                          >Light Source Intensity (%)</label
+                        >
+                      </div>
+                      <div class="parameter-value">
+                        <input
+                          type="number"
+                          id="lightIntensity"
+                          class="form-control"
+                          min="0"
+                          max="100"
+                          value="100"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="parameter-item">
+                      <div class="parameter-name">
+                        <label for="lightIntensity"
+                          >Light Source Intensity (%)</label
+                        >
+                      </div>
+                      <div class="parameter-value">
+                        <input
+                          type="number"
+                          id="lightIntensity"
+                          class="form-control"
+                          min="0"
+                          max="100"
+                          value="100"
+                        />
+                      </div>
+                    </div>
+                    <!-- more parameter items ... -->
+                  </div>
+                </div>
+
+                <!-- Machine Parameters (Centrifuge) -->
+                <div id="centrifugeParameters" class="machine-parameters">
+                  <h4>Centrifuge Parameters</h4>
+                  <div class="parameter-list">
+                    <!-- parameter items ... -->
+                  </div>
+                </div>
+
+                <!-- Machine Parameters (Spectrophotometer) -->
+                <div
+                  id="spectrophotometerParameters"
+                  class="machine-parameters"
+                >
+                  <h4>Spectrophotometer Parameters</h4>
+                  <div class="parameter-list">
+                    <!-- parameter items ... -->
+                  </div>
+                </div>
+
+                <!-- Machine Parameters (PCR) -->
+                <div id="pcrParameters" class="machine-parameters">
+                  <h4>PCR Thermal Cycler Parameters</h4>
+                  <div class="parameter-list">
+                    <!-- parameter items ... -->
+                    <div class="parameter-item">
+                      <div class="parameter-name">
+                        <label for="lightIntensity"
+                          >Light Source Intensity (%)</label
+                        >
+                      </div>
+                      <div class="parameter-value">
+                        <input
+                          type="number"
+                          id="lightIntensity"
+                          class="form-control"
+                          min="0"
+                          max="100"
+                          value="100"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Machine Parameters (HPLC) -->
+                <div id="hplcParameters" class="machine-parameters">
+                  <h4>HPLC Parameters</h4>
+                  <div class="parameter-list">
+                    <!-- parameter items ... -->
+                  </div>
+                </div>
 
                 <!-- Custom Parameters -->
                 <div class="dynamic-fields" id="customParameters">
@@ -1190,67 +1235,6 @@
         initMobileMenu();
       });
 
-        document.addEventListener('DOMContentLoaded',function(){
-          // only if this page has our widget…
-          if(!document.querySelector('.machine-selector'))return;
-        
-          const cards   = document.querySelectorAll('.machine-card'),
-                input   = document.getElementById('machineSelect'),
-                display = document.getElementById('selectedMachineName'),
-                search  = document.getElementById('machineSearch'),
-                tabs    = document.querySelectorAll('.category-tab'),
-                grid    = document.querySelector('.machine-grid');
-        
-          // hide any parameter sections up‑front
-          document.querySelectorAll('.machine-parameters')
-                  .forEach(s=>s.style.display='none');
-        
-          // click a card → select
-          cards.forEach(card=>{
-            card.addEventListener('click',function(){
-              cards.forEach(c=>c.classList.remove('selected'));
-              this.classList.add('selected');
-              let val  = this.dataset.value,
-                  name = this.querySelector('.machine-name').textContent;
-              input.value = val;
-              display.textContent = name;
-        
-              // show its parameter section
-              document.querySelectorAll('.machine-parameters')
-                      .forEach(s=>s.style.display='none');
-              let panel = document.getElementById(val+'Parameters');
-              if(panel) panel.style.display = 'block';
-            });
-          });
-        
-          // live search
-          search.addEventListener('input',function(){
-            let term = this.value.toLowerCase();
-            cards.forEach(c=>{
-              c.style.display = c.querySelector('.machine-name')
-                                 .textContent
-                                 .toLowerCase()
-                                 .includes(term)
-                                 ? 'block' : 'none';
-            });
-          });
-        
-          // filter by category
-          tabs.forEach(tab=>{
-            tab.addEventListener('click',function(){
-              tabs.forEach(t=>t.classList.remove('active'));
-              this.classList.add('active');
-              let cat = this.dataset.category;
-              cards.forEach(c=>{
-                c.style.display = 
-                  cat==='all' || c.dataset.category===cat
-                  ? 'block' : 'none';
-              });
-            });
-          });
-        });
-
-        
       /* --------------------------------------------
        1) Show/Hide Parameter Sections by Machine
        -------------------------------------------- */
@@ -1425,218 +1409,218 @@
 
       /* --------------------------------------------
        4) Record Management (Add to List)
-   -------------------------------------------- */
-   function initRecordManagement() {
-    const addRecordBtn = document.getElementById("addRecordBtn");
-    const resetRecordBtn = document.getElementById("resetRecordBtn");
-    const recordsContainer = document.getElementById("recordsContainer");
-    const machineSelect = document.getElementById("machineSelect"); // This is now a hidden input
+       -------------------------------------------- */
+      function initRecordManagement() {
+        const addRecordBtn = document.getElementById("addRecordBtn");
+        const resetRecordBtn = document.getElementById("resetRecordBtn");
+        const recordsContainer = document.getElementById("recordsContainer");
+        const machineSelect = document.getElementById("machineSelect");
 
-    if (addRecordBtn && recordsContainer) {
-      let recordCount = 0;
+        if (addRecordBtn && recordsContainer && machineSelect) {
+          let recordCount = 0;
 
-      addRecordBtn.addEventListener("click", function () {
-        const selectedMachine = machineSelect.value;
-        if (!selectedMachine) {
-          alert("Please select a machine");
-          return;
-        }
-
-        // Get the machine name from the selected card
-        const selectedMachineName = document.getElementById("selectedMachineName").textContent;
-
-        // Gather all parameters
-        const parameters = getParametersForMachine(selectedMachine);
-        if (parameters.length === 0) {
-          alert("Please fill in at least one parameter");
-          return;
-        }
-
-        recordCount++;
-
-        // Clear "no records" message
-        const alertBox = recordsContainer.querySelector(".alert");
-        if (alertBox) {
-          recordsContainer.innerHTML = "";
-        }
-
-        // Create new record item
-        const recordItem = document.createElement("div");
-        recordItem.className = "record-item";
-        recordItem.dataset.recordId = `record-${recordCount}`;
-
-        // Header
-        const recordHeader = document.createElement("div");
-        recordHeader.className = "record-header";
-
-        const recordTitle = document.createElement("div");
-        recordTitle.className = "record-title";
-        recordTitle.textContent = selectedMachineName;
-
-        const recordActions = document.createElement("div");
-        recordActions.className = "record-actions";
-        recordActions.innerHTML = `
-          <button type="button" class="record-action delete" title="Delete Record">
-            <i class="fas fa-trash-alt"></i>
-          </button>
-        `;
-
-        recordHeader.appendChild(recordTitle);
-        recordHeader.appendChild(recordActions);
-
-        // Content
-        const recordContent = document.createElement("div");
-        recordContent.className = "record-content";
-
-        // Add parameters
-        parameters.forEach((param) => {
-          const recordField = document.createElement("div");
-          recordField.className = "record-field";
-
-          const labelDiv = document.createElement("div");
-          labelDiv.className = "record-field-label";
-          labelDiv.textContent = param.name;
-
-          const valueDiv = document.createElement("div");
-          valueDiv.className = "record-field-value";
-          valueDiv.textContent = param.value;
-
-          recordField.appendChild(labelDiv);
-          recordField.appendChild(valueDiv);
-          recordContent.appendChild(recordField);
-        });
-
-        // Add notes if any
-        const notes = document.getElementById("recordNotes").value;
-        if (notes) {
-          const notesField = document.createElement("div");
-          notesField.className = "record-field";
-          notesField.style.gridColumn = "1 / -1";
-
-          const notesLabel = document.createElement("div");
-          notesLabel.className = "record-field-label";
-          notesLabel.textContent = "Notes";
-
-          const notesValue = document.createElement("div");
-          notesValue.className = "record-field-value";
-          notesValue.textContent = notes;
-
-          notesField.appendChild(notesLabel);
-          notesField.appendChild(notesValue);
-          recordContent.appendChild(notesField);
-        }
-
-        recordItem.appendChild(recordHeader);
-        recordItem.appendChild(recordContent);
-        recordsContainer.appendChild(recordItem);
-
-        // Delete action
-        recordItem
-          .querySelector(".record-action.delete")
-          .addEventListener("click", function () {
-            if (confirm("Are you sure you want to delete this record?")) {
-              recordItem.remove();
-              if (!recordsContainer.querySelector(".record-item")) {
-                recordsContainer.innerHTML = `
-                <div class="alert alert-info">
-                  No records added yet. Use the form above to add records.
-                </div>
-              `;
-              }
+          addRecordBtn.addEventListener("click", function () {
+            const selectedMachine = machineSelect.value;
+            if (!selectedMachine) {
+              alert("Please select a machine");
+              return;
             }
+
+            // Name for display
+            const selectedMachineName =
+              machineSelect.options[machineSelect.selectedIndex].text;
+
+            // Gather all parameters
+            const parameters = getParametersForMachine(selectedMachine);
+            if (parameters.length === 0) {
+              alert("Please fill in at least one parameter");
+              return;
+            }
+
+            recordCount++;
+
+            // Clear "no records" message
+            const alertBox = recordsContainer.querySelector(".alert");
+            if (alertBox) {
+              recordsContainer.innerHTML = "";
+            }
+
+            // Create new record item
+            const recordItem = document.createElement("div");
+            recordItem.className = "record-item";
+            recordItem.dataset.recordId = `record-${recordCount}`;
+
+            // Header
+            const recordHeader = document.createElement("div");
+            recordHeader.className = "record-header";
+
+            const recordTitle = document.createElement("div");
+            recordTitle.className = "record-title";
+            recordTitle.textContent = selectedMachineName;
+
+            const recordActions = document.createElement("div");
+            recordActions.className = "record-actions";
+            recordActions.innerHTML = `
+            <button type="button" class="record-action edit" title="Edit Record">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button type="button" class="record-action delete" title="Delete Record">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          `;
+
+            recordHeader.appendChild(recordTitle);
+            recordHeader.appendChild(recordActions);
+
+            // Content
+            const recordContent = document.createElement("div");
+            recordContent.className = "record-content";
+
+            // Add parameters
+            parameters.forEach((param) => {
+              const recordField = document.createElement("div");
+              recordField.className = "record-field";
+
+              const labelDiv = document.createElement("div");
+              labelDiv.className = "record-field-label";
+              labelDiv.textContent = param.name;
+
+              const valueDiv = document.createElement("div");
+              valueDiv.className = "record-field-value";
+              valueDiv.textContent = param.value;
+
+              recordField.appendChild(labelDiv);
+              recordField.appendChild(valueDiv);
+              recordContent.appendChild(recordField);
+            });
+
+            // Add notes if any
+            const notes = document.getElementById("recordNotes").value;
+            if (notes) {
+              const notesField = document.createElement("div");
+              notesField.className = "record-field";
+              notesField.style.gridColumn = "1 / -1";
+
+              const notesLabel = document.createElement("div");
+              notesLabel.className = "record-field-label";
+              notesLabel.textContent = "Notes";
+
+              const notesValue = document.createElement("div");
+              notesValue.className = "record-field-value";
+              notesValue.textContent = notes;
+
+              notesField.appendChild(notesLabel);
+              notesField.appendChild(notesValue);
+              recordContent.appendChild(notesField);
+            }
+
+            recordItem.appendChild(recordHeader);
+            recordItem.appendChild(recordContent);
+            recordsContainer.appendChild(recordItem);
+
+            // Delete action
+            recordItem
+              .querySelector(".record-action.delete")
+              .addEventListener("click", function () {
+                if (confirm("Are you sure you want to delete this record?")) {
+                  recordItem.remove();
+                  if (!recordsContainer.querySelector(".record-item")) {
+                    recordsContainer.innerHTML = `
+                  <div class="alert alert-info">
+                    No records added yet. Use the form above to add records.
+                  </div>
+                `;
+                  }
+                }
+              });
+
+            // (Optionally implement edit action if needed)
+
+            // Finally, reset record form
+            resetRecordForm();
           });
 
-        // Finally, reset record form
-        resetRecordForm();
-      });
-
-      if (resetRecordBtn) {
-        resetRecordBtn.addEventListener("click", resetRecordForm);
-      }
-    }
-
-    function getParametersForMachine(machineType) {
-      const parameters = [];
-      // Find the matching machine parameters container
-      const parameterForm = document.getElementById(
-        machineType + "Parameters"
-      );
-      if (parameterForm) {
-        const parameterItems =
-          parameterForm.querySelectorAll(".parameter-item");
-
-        parameterItems.forEach((item) => {
-          const label = item.querySelector("label");
-          const input = item.querySelector("input, select");
-          if (!label || !input) return;
-
-          // For <select>, get the selected text
-          let value = input.value;
-          if (input.tagName === "SELECT") {
-            value = input.options[input.selectedIndex].text;
+          if (resetRecordBtn) {
+            resetRecordBtn.addEventListener("click", resetRecordForm);
           }
-          parameters.push({
-            name: label.textContent.trim(),
-            value: value.trim(),
-          });
-        });
-      }
+        }
 
-      // Gather any custom parameters
-      const customParametersList = document.getElementById(
-        "customParametersList"
-      );
-      if (customParametersList) {
-        const customFields =
-          customParametersList.querySelectorAll(".dynamic-field");
-        customFields.forEach((field) => {
-          const inputs = field.querySelectorAll("input");
-          if (inputs.length === 2 && inputs[0].value && inputs[1].value) {
-            parameters.push({
-              name: inputs[0].value.trim(),
-              value: inputs[1].value.trim(),
+        function getParametersForMachine(machineType) {
+          const parameters = [];
+          // Find the matching machine parameters container
+          const parameterForm = document.getElementById(
+            machineType + "Parameters"
+          );
+          if (parameterForm) {
+            const parameterItems =
+              parameterForm.querySelectorAll(".parameter-item");
+
+            parameterItems.forEach((item) => {
+              const label = item.querySelector("label");
+              const input = item.querySelector("input, select");
+              if (!label || !input) return;
+
+              // For <select>, get the selected text
+              let value = input.value;
+              if (input.tagName === "SELECT") {
+                value = input.options[input.selectedIndex].text;
+              }
+              parameters.push({
+                name: label.textContent.trim(),
+                value: value.trim(),
+              });
             });
           }
-        });
+
+          // Gather any custom parameters
+          const customParametersList = document.getElementById(
+            "customParametersList"
+          );
+          if (customParametersList) {
+            const customFields =
+              customParametersList.querySelectorAll(".dynamic-field");
+            customFields.forEach((field) => {
+              const inputs = field.querySelectorAll("input");
+              if (inputs.length === 2 && inputs[0].value && inputs[1].value) {
+                parameters.push({
+                  name: inputs[0].value.trim(),
+                  value: inputs[1].value.trim(),
+                });
+              }
+            });
+          }
+
+          return parameters;
+        }
+
+        function resetRecordForm() {
+          const machineSelect = document.getElementById("machineSelect");
+          machineSelect.value = "";
+          // Hide all parameter forms
+          document.querySelectorAll(".machine-parameters").forEach((form) => {
+            form.classList.remove("active");
+          });
+
+          // Clear custom parameters
+          const customParametersList = document.getElementById(
+            "customParametersList"
+          );
+          if (customParametersList) {
+            customParametersList.innerHTML = "";
+          }
+
+          // Clear attachments UI
+          const fileList = document.getElementById("fileList");
+          if (fileList) fileList.innerHTML = "";
+          const fileInput = document.getElementById("recordAttachments");
+          if (fileInput) fileInput.value = "";
+
+          // Clear notes
+          const recordNotes = document.getElementById("recordNotes");
+          if (recordNotes) recordNotes.value = "";
+        }
       }
 
-      return parameters;
-    }
-
-    function resetRecordForm() {
-      // Reset machine selection
-      machineSelect.value = "";
-      document.getElementById("selectedMachineName").textContent = "None";
-      
-      // Remove selected class from all machine cards
-      document.querySelectorAll('.machine-card').forEach(card => {
-        card.classList.remove('selected');
-      });
-      
-      // Hide all parameter forms
-      document.querySelectorAll(".machine-parameters").forEach((form) => {
-        form.style.display = "none";
-      });
-
-      // Clear custom parameters
-      const customParametersList = document.getElementById(
-        "customParametersList"
-      );
-      if (customParametersList) {
-        customParametersList.innerHTML = "";
-      }
-
-      // Clear attachments UI
-      const fileList = document.getElementById("fileList");
-      if (fileList) fileList.innerHTML = "";
-      const fileInput = document.getElementById("recordAttachments");
-      if (fileInput) fileInput.value = "";
-
-      // Clear notes
-      const recordNotes = document.getElementById("recordNotes");
-      if (recordNotes) recordNotes.value = "";
-    }
-  }
       /* --------------------------------------------
        5) Final Submission: Gather Records + Submit
        -------------------------------------------- */

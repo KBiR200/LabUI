@@ -44,6 +44,8 @@ def new_report(request, task_id):
 def update_report(request,report_id):
     test_name= f'Created: {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}'
     machines = Machine.objects.all()
+    machine_category = machines.values_list('category__name', flat=True).distinct()
+    print(machine_category)
     report = get_object_or_404(Report, id=report_id)
     related_records = report.reports_records.all().prefetch_related('attachments')
     print(report)
@@ -64,7 +66,7 @@ def update_report(request,report_id):
         return redirect('show_report', pk=report.id)
 
     return render(request,"reports/report_update.html", {"pk":report.id, "report":report,
-                                                          'records':related_records, 'machines':machines})
+                                                          'records':related_records, 'machines':machines, "machine_category":machine_category})
 
 
 @login_required(login_url='signin')

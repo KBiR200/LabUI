@@ -5,6 +5,7 @@ from reports.models import Report, Records, Tasks, Records_attachment, Task_atta
 from django.contrib.auth.models import User
 from django.http import HttpResponseForbidden, JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 from chem.settings import BASE_DIR
 from django.contrib.auth.decorators import login_required
 import datetime, json
@@ -173,7 +174,10 @@ def save_record(request, pk):
 
 @login_required(login_url='signin')
 def tasks(request):
-    tasks = Tasks.objects.all().order_by('-created_at')
+    tasks = Tasks.objects.filter(
+            Q(assigned=request.user) |
+            Q(creator=request.user)
+        ).order_by('-created_at')
     new_tasks = Tasks.objects.filter(status=0).order_by('-created_at')
     tasks_history = Tasks.objects.filter(assigned=request.user).order_by('-created_at')
     report = Report.objects.filter(author=request.user)

@@ -15,8 +15,8 @@ class Tasks(models.Model):
     workers_count = models.IntegerField( default=1)
     data = models.JSONField(blank=True)
     status = models.IntegerField(name='status', default=0)
-    created_at = models.DateTimeField(auto_now=True)
-    start_date = models.DateTimeField(default=True)
+    created_at = models.DateTimeField(default=now)
+    start_date = models.DateTimeField(default=now)
     due_date = models.DateTimeField()
     def __str__(self) -> str:
         return self.title
@@ -25,7 +25,7 @@ class Report(models.Model):
     prjct = models.ForeignKey(Project, on_delete=models.CASCADE,blank=True, null=True)
     title = models.TextField()
     author = models.ManyToManyField(User)
-    date_added = models.DateTimeField(auto_now=True)
+    date_added = models.DateTimeField(auto_now=now)
     task = models.ForeignKey(Tasks, on_delete=models.CASCADE,
                               related_name='task_report', blank=True, null=True)
     status = models.IntegerField(name='status', default=1)

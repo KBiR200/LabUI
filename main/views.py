@@ -27,16 +27,32 @@ def signin(request):
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
+            remember_me = request.POST.get('remember_me', False)
+            
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('control')  # Redirect to a success page.
+                
+                # Set session expiry based on remember_me
+                if not remember_me:
+                    # Session expires when browser closes
+                    request.session.set_expiry(0)
+                else:
+                    # Session expires after 2 weeks (in seconds)
+                    request.session.set_expiry(1209600)
+                
+                # Redirect to success page
+                return redirect('control')
             else:
                 messages.error(request, "Invalid username or password.")
         else:
-            messages.error(request, "Invalid username or password.")
+            # Get specific error messages from the form
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, error)
     else:
         form = AuthenticationForm()
+    
     return render(request, 'signin15.html', {'form': form})
 
 @login_required(login_url='signin')

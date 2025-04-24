@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Project, Machine, UserProfile, Laberatory, Team, Machine_Category
-from reports.models import Report, Records, Tasks, Records_attachment
+from reports.models import Report, Records, Tasks, Records_attachment, Task_comment
 
 # Register your models here.
 admin.site.register(Project)
@@ -12,4 +12,5 @@ admin.site.register(Machine_Category)
 admin.site.register(Records)
 admin.site.register(Team)
 admin.site.register(Tasks)
+admin.site.register(Task_comment)
 admin.site.register(Records_attachment)

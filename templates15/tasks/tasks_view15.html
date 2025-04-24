@@ -145,7 +145,16 @@
       z-index: 900;
       box-shadow: var(--shadow);
     }
-
+    .attachments-coming-soon .card-header small {
+      font-size: 0.875rem;
+    }
+    
+    .coming-soon-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
     .search-container {
       position: relative;
       width: 300px;
@@ -835,7 +844,7 @@
                             <span class="info-value">Team B</span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label">Priority</span>
+                            <span class="info-label">Status</span>
                             {% if task.status == 0 %}
                                 <span class="priority-badge priority-medium">Pending</span>
                                 {% elif task.status == 1 %}
@@ -854,7 +863,7 @@
                         </div>
                         <div class="info-item">
                             <span class="info-label">Created By</span>
-                            <span class="info-value">Jamie Lee</span>
+                            <span class="info-value">{{task.creator}}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Task Type</span>
@@ -990,7 +999,26 @@
             </div>
 
             <!-- Attachments Card -->
-            <div class="card">
+            <div class="card attachments-coming-soon">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="mb-0">
+                  Attachments 
+                  <small class="text-muted">(Coming Soon)</small>
+                </h3>
+                <button class="btn btn-outline btn-sm" disabled>
+                  <i class="fas fa-upload btn-icon"></i> Add Files
+                </button>
+              </div>
+              <div class="card-body">
+                <div class="coming-soon-placeholder text-center py-5">
+                  <i class="fas fa-clock fa-3x text-muted mb-3"></i>
+                  <p class="text-muted mb-0">Attachments functionality is on its way!<br/>Stay tuned.</p>
+                </div>
+              </div>
+            </div>
+
+            
+            {% comment %} <div class="card">
                 <div class="card-header">
                     <h3>Attachments</h3>
                     <button class="btn btn-outline btn-sm">
@@ -1027,7 +1055,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> {% endcomment %}
 
             <!-- Comments Card -->
             <div class="card">
@@ -1036,23 +1064,33 @@
                 </div>
                 <div class="card-body">
                     <div class="comments-section">
-                        <div class="comment">
-                            <img src=" " alt="User Avatar" class="comment-avatar">
-                            <div class="comment-content">
-                                <div class="comment-header">
-                                    <span class="comment-author">Jamie Lee</span>
-                                    <span class="comment-time">Oct 15, 2023 at 10:30 AM</span>
-                                </div>
-                                <div class="comment-text">
-                                    <p>Morgan, please make sure to document all calibration steps carefully. We need detailed reports for the upcoming audit.</p>
-                                </div>
-                                <div class="comment-actions">
+                        
+                      
+                      
+                      {% for comment in comments %}
+                      
+                      <div class="comment">
+                        <img src=" " alt="User Avatar" class="comment-avatar">
+                        <div class="comment-content">
+                          <div class="comment-header">
+                            <span class="comment-author">{{comment.user}}</span>
+                                    <span class="comment-time"> {{comment.created}} </span>
+                                  </div>
+                                  <div class="comment-text">
+                                    <p> {{comment.body}} </p>
+                                  </div>
+                                  {% comment %} <div class="comment-actions">
                                     <a href="#" class="comment-action">Reply</a>
                                     <a href="#" class="comment-action">Edit</a>
+                                  </div> {% endcomment %}
                                 </div>
-                            </div>
-                        </div>
-                        <div class="comment">
+                              </div>
+                              
+                              {% endfor %}
+
+
+
+                        {% comment %} <div class="comment">
                             <img src=" " alt="User Avatar" class="comment-avatar">
                             <div class="comment-content">
                                 <div class="comment-header">
@@ -1067,16 +1105,24 @@
                                     <a href="#" class="comment-action">Edit</a>
                                 </div>
                             </div>
-                        </div>
-                        <div class="add-comment">
-                            <img src=" " alt="User Avatar" class="add-comment-avatar">
+                        </div> {% endcomment %}
+                        <form action="{% url 'add_comment' task.id %}" method="post" class="add-comment-form-wrapper">
+                          {% csrf_token %}
+                          <div class="add-comment">
+                            <img src="{{ user.profile.avatar_url }}" alt="{{ user.get_full_name }}" class="add-comment-avatar">
                             <div class="add-comment-form">
-                                <textarea class="add-comment-input" placeholder="Add a comment..."></textarea>
-                                <div class="add-comment-actions">
-                                    <button class="btn btn-primary">Post Comment</button>
-                                </div>
+                              <textarea
+                                name="comment_body"
+                                class="add-comment-input"
+                                placeholder="Add a comment..."
+                                required
+                              ></textarea>
+                              <div class="add-comment-actions">
+                                <button type="submit" class="btn btn-primary">Post Comment</button>
+                              </div>
                             </div>
-                        </div>
+                          </div>
+                        </form>
                     </div>
                 </div>
             </div>

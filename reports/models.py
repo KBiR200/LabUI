@@ -2,6 +2,7 @@ from django.db import models
 from main.models import Project , Machine, Team
 from django.contrib.auth.models import User
 import os
+from chem import settings
 from django.utils.timezone import now
 # Create your models here.
 class Tasks(models.Model):
@@ -69,15 +70,9 @@ class Task_comment(models.Model):
     Task = models.ForeignKey(Tasks,
                              on_delete=models.CASCADE,
                              related_name='comments')
-    name = models.CharField(max_length=80) 
-    email = models.EmailField(blank=True) 
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     body = models.TextField() 
     created = models.DateTimeField(auto_now_add=True) 
-    updated = models.DateTimeField(auto_now=True) 
-    active = models.BooleanField(default=True) 
 
     class Meta: 
         ordering = ('created',) 
-
-    def __str__(self): 
-        return 'Comment by {} on {}'.format(self.name, self.Task) 

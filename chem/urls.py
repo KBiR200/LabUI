@@ -26,12 +26,17 @@ urlpatterns = [
     path('task/<int:pk>/accept/', reports.views.accept_task, name='accept_task'),
     path('task/<int:pk>/submit/', reports.views.submit_task, name='submit_task'),
     path('task/<int:pk>/undosubmit/', reports.views.undo_task, name='undo_task'),
+    path('task/<int:pk>/addcomment/', reports.views.add_comment, name='add_comment'),
     
     # ''' reports '''
     path('report/<int:task_id>/new/', reports.views.new_report, name='new_report'),
     path('report/<int:pk>/data/', reports.views.show_report, name='show_report'),
     path('report/<int:report_id>/update', reports.views.update_report, name='update_report'),
     path('report/<int:pk>/submit/', reports.views.submit_report, name='submit_report'),
+
+
+    path('lab/', main.views.lab, name='lab'),
+    path('machine/<int:pk>/view', main.views.machine, name='machine_view'),
     
 
     # ''' records '''

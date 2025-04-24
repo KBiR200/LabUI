@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
+from main.models import Project, Laberatory, Machine, Team, Machine_Category
 from reports.models import Report, Tasks
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -20,6 +22,19 @@ def contact(request):
 
 def teams(request):
     return render(request, 'teams15.html')
+
+def lab(request):
+    labs = Laberatory.objects.all()
+    machines = Machine.objects.all()
+
+    return render(request, 'lab/lab.html', {'labs': labs, 'machines': machines})
+
+
+
+def machine(request, pk):
+    machine = get_object_or_404(Machine, id=pk)
+    return render(request, 'lab/machine.html', {'machine': machine})
+
 
 def signin(request):
     if request.method == 'POST':

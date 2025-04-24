@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from main.models import Machine
 from django.views.decorators.csrf import csrf_exempt
-from reports.models import Report, Records, Tasks, Records_attachment, Task_attachment
+from reports.models import Report, Records, Tasks, Records_attachment, Task_attachment, Task_comment
 from django.contrib.auth.models import User
 from django.http import HttpResponseForbidden, JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404
@@ -240,15 +240,17 @@ def update_task(request, pk):
 
 @login_required(login_url='signin')
 def show_task(request, pk):
+
     task = get_object_or_404(Tasks, id=pk)
     reo = Report.objects.filter(task=task)
+    comments = task.comments.filter(Task=task).order_by('-created')
     for r in reo:
         auth= r.author.all()
         print(auth)
     print(task.assigned.all().count())
     print(task.title)
     # print(reo.author.all())
-    return render(request, 'tasks/tasks_view15.html', {"task":task, "report":reo})
+    return render(request, 'tasks/tasks_view15.html', {"task":task, "report":reo, "comments":comments})
 
 @login_required(login_url='signin')
 def accept_task(request, pk):
@@ -283,3 +285,17 @@ def undo_task(req, pk):
     task.save()
     print('task is undo')
     return redirect('tasks')
+
+
+
+"""--------------------- Task Comments ---------------------"""
+
+def add_comment(request, pk):
+    task = get_object_or_404(Tasks, id=pk)
+    if request.method == 'POST':
+        comment_body = request.POST['comment_body']
+        comment = Task_comment.objects.create(Task=task, user=request.user, body=comment_body)
+        comment.save()
+        return redirect('show_task', pk=task.id)
+
+    return render(request, 'tasks/task_view15.html', {'task': task})

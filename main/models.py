@@ -19,6 +19,7 @@ class Laberatory(models.Model):
 class Machine_Category(models.Model):
     slug = models.SlugField(unique=True)        # e.g. "research", "analysis"
     name = models.CharField(max_length=50)      # e.g. "Research", "Analysis"
+    
     description = models.TextField(blank=True)  # optional
 
     def __str__(self):
@@ -42,7 +43,8 @@ class Machine(models.Model):
                         blank=True,
                         null=True
                     )
-
+    status        = models.BooleanField(default=False) # True if available, False if not available
+    description   = models.TextField(blank=True) # optional
     def __str__(self):
         return self.name
 

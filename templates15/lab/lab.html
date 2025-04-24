@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Machines by Laboratory - LabUI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Styles */
+        :root {
+          --primary-color: #4a6cf7;
+          --primary-hover: #3a5ce4;
+          --secondary-color: #6c757d;
+          --success-color: #28a745;
+          --danger-color: #dc3545;
+          --warning-color: #ffc107;
+          --info-color: #17a2b8;
+          --light-color: #f8f9fa;
+          --dark-color: #343a40;
+          --body-bg: #f5f7fb;
+          --card-bg: #ffffff;
+          --text-color: #495057;
+          --text-muted: #6c757d;
+          --border-color: #e9ecef;
+          --shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+          --shadow-lg: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+          --border-radius: 0.375rem;
+        }
+
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        body {
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          font-size: 0.9rem;
+          line-height: 1.5;
+          color: var(--text-color);
+          background-color: var(--body-bg);
+        }
+
+        a {
+          color: var(--primary-color);
+          text-decoration: none;
+        }
+
+        a:hover {
+          text-decoration: underline;
+        }
+
+        /* Layout */
+        .layout {
+          display: flex;
+          min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+          width: 250px;
+          background-color: var(--dark-color);
+          color: white;
+          position: fixed;
+          height: 100vh;
+          overflow-y: auto;
+          z-index: 1000;
+          transition: all 0.3s ease;
+        }
+
+        .sidebar-header {
+          display: flex;
+          align-items: center;
+          padding: 1rem;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header i {
+          font-size: 1.5rem;
+          margin-right: 0.5rem;
+        }
+
+        .sidebar-header h1 {
+          font-size: 1.25rem;
+          font-weight: 600;
+          margin: 0;
+        }
+
+        .sidebar-nav ul {
+          padding: 1rem 0;
+          list-style: none;
+        }
+
+        .sidebar-nav li {
+          margin-bottom: 0.25rem;
+        }
+
+        .sidebar-nav a {
+          display: flex;
+          align-items: center;
+          padding: 0.75rem 1rem;
+          color: rgba(255, 255, 255, 0.7);
+          transition: all 0.3s ease;
+        }
+
+        .sidebar-nav a:hover {
+          color: white;
+          background-color: rgba(255, 255, 255, 0.1);
+          text-decoration: none;
+        }
+
+        .sidebar-nav li.active a {
+          color: white;
+          background-color: var(--primary-color);
+        }
+
+        .sidebar-nav i {
+          margin-right: 0.75rem;
+          font-size: 1rem;
+        }
+
+        /* Main Content */
+        .main-content {
+          flex: 1;
+          margin-left: 250px;
+          position: relative;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+          height: 60px;
+          background-color: var(--card-bg);
+          border-bottom: 1px solid var(--border-color);
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 1.5rem;
+          position: sticky;
+          top: 0;
+          z-index: 900;
+          box-shadow: var(--shadow);
+        }
+
+        .search-container {
+          position: relative;
+          width: 300px;
+        }
+
+        .search-container i {
+          position: absolute;
+          left: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+          color: var(--text-muted);
+        }
+
+        .search-container input {
+          width: 100%;
+          padding: 0.5rem 0.5rem 0.5rem 2rem;
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius);
+          font-size: 0.875rem;
+        }
+
+        .user-menu {
+          display: flex;
+          align-items: center;
+        }
+
+        .notifications {
+          position: relative;
+          margin-right: 1.5rem;
+          cursor: pointer;
+        }
+
+        .notifications i {
+          font-size: 1.25rem;
+          color: var(--text-muted);
+        }
+
+        .badge {
+          position: absolute;
+          top: -8px;
+          right: -8px;
+          background-color: var(--danger-color);
+          color: white;
+          border-radius: 50%;
+          width: 18px;
+          height: 18px;
+          font-size: 0.7rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .user-profile {
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          position: relative;
+        }
+
+        .user-profile img {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          margin-right: 0.5rem;
+        }
+
+        .user-name {
+          font-weight: 500;
+          margin-right: 0.5rem;
+        }
+
+        .dropdown-menu {
+          position: absolute;
+          top: 100%;
+          right: 0;
+          background-color: var(--card-bg);
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius);
+          box-shadow: var(--shadow-lg);
+          min-width: 180px;
+          z-index: 1000;
+          display: none;
+        }
+
+        .dropdown-menu a {
+          display: flex;
+          align-items: center;
+          padding: 0.75rem 1rem;
+          color: var(--text-color);
+          transition: background-color 0.3s ease;
+        }
+
+        .dropdown-menu a:hover {
+          background-color: var(--light-color);
+          text-decoration: none;
+        }
+
+        .dropdown-menu i {
+          margin-right: 0.5rem;
+        }
+
+        /* Content Wrapper */
+        .content-wrapper {
+          padding: 1.5rem;
+        }
+
+        .page-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 1.5rem;
+        }
+
+        .page-header h2 {
+          font-size: 1.5rem;
+          font-weight: 600;
+          margin: 0;
+        }
+
+        .page-actions {
+          display: flex;
+          gap: 0.5rem;
+        }
+
+        /* Filter Panel */
+        .filter-panel {
+          background-color: var(--card-bg);
+          border-radius: var(--border-radius);
+          box-shadow: var(--shadow);
+          padding: 1.5rem;
+          margin-bottom: 1.5rem;
+        }
+
+        .filter-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 1rem;
+        }
+
+        .filter-header h3 {
+          font-size: 1.25rem;
+          font-weight: 600;
+          margin: 0;
+        }
+
+        .filter-body {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 1rem;
+        }
+
+        .filter-group {
+          flex: 1;
+          min-width: 200px;
+        }
+
+        .filter-group label {
+          display: block;
+          margin-bottom: 0.5rem;
+          font-weight: 500;
+          font-size: 0.875rem;
+        }
+
+        .filter-group select,
+        .filter-group input {
+          width: 100%;
+          padding: 0.5rem;
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius);
+          font-size: 0.875rem;
+        }
+
+        .filter-actions {
+          display: flex;
+          justify-content: flex-end;
+          margin-top: 1rem;
+          gap: 0.5rem;
+        }
+
+        /* Lab Sections */
+        .lab-section {
+          background-color: var(--card-bg);
+          border-radius: var(--border-radius);
+          box-shadow: var(--shadow);
+          margin-bottom: 1.5rem;
+          overflow: hidden;
+        }
+
+        .lab-header {
+          padding: 1rem 1.5rem;
+          background-color: var(--light-color);
+          border-bottom: 1px solid var(--border-color);
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .lab-header h3 {
+          font-size: 1.25rem;
+          font-weight: 600;
+          margin: 0;
+          display: flex;
+          align-items: center;
+        }
+
+        .lab-header h3 i {
+          margin-right: 0.75rem;
+          color: var(--primary-color);
+        }
+
+        .lab-header .lab-meta {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+        }
+
+        .lab-meta-item {
+          display: flex;
+          align-items: center;
+          font-size: 0.875rem;
+          color: var(--text-muted);
+        }
+
+        .lab-meta-item i {
+          margin-right: 0.5rem;
+        }
+
+        .lab-toggle {
+          background: none;
+          border: none;
+          color: var(--text-muted);
+          cursor: pointer;
+          font-size: 1.25rem;
+          transition: transform 0.3s ease;
+        }
+
+        .lab-toggle.collapsed {
+          transform: rotate(-90deg);
+        }
+
+        .lab-body {
+          padding: 0;
+          max-height: 2000px;
+          overflow: hidden;
+          transition: max-height 0.3s ease;
+        }
+
+        .lab-body.collapsed {
+          max-height: 0;
+        }
+
+        /* Machine Cards */
+        .machine-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+          gap: 1rem;
+          padding: 1.5rem;
+        }
+
+        .machine-card {
+          background-color: var(--card-bg);
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius);
+          overflow: hidden;
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .machine-card:hover {
+          transform: translateY(-5px);
+          box-shadow: var(--shadow-lg);
+        }
+
+        .machine-header {
+          padding: 1rem;
+          border-bottom: 1px solid var(--border-color);
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+        }
+
+        .machine-icon {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-size: 1.25rem;
+        }
+
+        .machine-icon.analysis {
+          background-color: #28a745;
+        }
+
+        .machine-icon.imaging {
+          background-color: #17a2b8;
+        }
+
+        .machine-icon.molecular {
+          background-color: #6f42c1;
+        }
+
+        .machine-icon.separation {
+          background-color: #20c997;
+        }
+
+        .machine-icon.thermal {
+          background-color: #fd7e14;
+        }
+
+        .machine-icon.testing {
+          background-color: #dc3545;
+        }
+
+        .machine-icon.research {
+          background-color: #6c757d;
+        }
+
+        .machine-title {
+          flex: 1;
+        }
+
+        .machine-name {
+          font-weight: 600;
+          margin: 0;
+          font-size: 1rem;
+        }
+
+        .machine-category {
+          font-size: 0.75rem;
+          color: var(--text-muted);
+        }
+
+        .machine-status {
+          display: flex;
+          align-items: center;
+          font-size: 0.75rem;
+          font-weight: 500;
+          padding: 0.25rem 0.5rem;
+          border-radius: 1rem;
+        }
+
+        .machine-status.active {
+          background-color: rgba(40, 167, 69, 0.1);
+          color: #28a745;
+        }
+
+        .machine-status.maintenance {
+          background-color: rgba(255, 193, 7, 0.1);
+          color: #ffc107;
+        }
+
+        .machine-status.inactive {
+          background-color: rgba(220, 53, 69, 0.1);
+          color: #dc3545;
+        }
+
+        .machine-status i {
+          margin-right: 0.25rem;
+        }
+
+        .machine-body {
+          padding: 1rem;
+        }
+
+        .machine-info {
+          margin-bottom: 1rem;
+        }
+
+        .info-item {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 0.5rem;
+          font-size: 0.875rem;
+        }
+
+        .info-label {
+          color: var(--text-muted);
+        }
+
+        .info-value {
+          font-weight: 500;
+        }
+
+        .machine-footer {
+          padding: 1rem;
+          border-top: 1px solid var(--border-color);
+          display: flex;
+          justify-content: space-between;
+        }
+
+        .machine-actions {
+          display: flex;
+          gap: 0.5rem;
+        }
+
+        /* Machine List View */
+        .machine-list-view {
+          width: 100%;
+          border-collapse: collapse;
+        }
+
+        .machine-list-view th,
+        .machine-list-view td {
+          padding: 0.75rem 1rem;
+          text-align: left;
+          border-bottom: 1px solid var(--border-color);
+        }
+
+        .machine-list-view th {
+          background-color: var(--light-color);
+          font-weight: 600;
+        }
+
+        .machine-list-view tr:last-child td {
+          border-bottom: none;
+        }
+
+        .machine-list-view tr:hover {
+          background-color: rgba(0, 0, 0, 0.02);
+        }
+
+        .machine-list-status {
+          display: inline-flex;
+          align-items: center;
+          font-size: 0.75rem;
+          font-weight: 500;
+          padding: 0.25rem 0.5rem;
+          border-radius: 1rem;
+        }
+
+        .machine-list-status.active {
+          background-color: rgba(40, 167, 69, 0.1);
+          color: #28a745;
+        }
+
+        .machine-list-status.maintenance {
+          background-color: rgba(255, 193, 7, 0.1);
+          color: #ffc107;
+        }
+
+        .machine-list-status.inactive {
+          background-color: rgba(220, 53, 69, 0.1);
+          color: #dc3545;
+        }
+
+        .machine-list-status i {
+          margin-right: 0.25rem;
+        }
+
+        .machine-list-actions {
+          display: flex;
+          gap: 0.5rem;
+        }
+
+        /* View Toggle */
+        .view-toggle {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+
+        .view-toggle-btn {
+          background: none;
+          border: none;
+          color: var(--text-muted);
+          cursor: pointer;
+          font-size: 1.25rem;
+          padding: 0.25rem;
+          border-radius: var(--border-radius);
+          transition: all 0.3s ease;
+        }
+
+        .view-toggle-btn:hover {
+          background-color: var(--light-color);
+        }
+
+        .view-toggle-btn.active {
+          color: var(--primary-color);
+          background-color: rgba(74, 108, 247, 0.1);
+        }
+
+        /* Buttons */
+        .btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.5rem 1rem;
+          font-size: 0.875rem;
+          font-weight: 500;
+          border-radius: var(--border-radius);
+          border: none;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+          background-color: var(--primary-color);
+          color: white;
+        }
+
+        .btn-primary:hover {
+          background-color: var(--primary-hover);
+        }
+
+        .btn-outline {
+          background-color: transparent;
+          border: 1px solid var(--border-color);
+          color: var(--text-color);
+        }
+
+        .btn-outline:hover {
+          background-color: var(--light-color);
+        }
+
+        .btn-icon {
+          margin-right: 0.5rem;
+        }
+
+        .btn-sm {
+          padding: 0.25rem 0.5rem;
+          font-size: 0.75rem;
+        }
+
+        .btn-icon-only {
+          width: 32px;
+          height: 32px;
+          padding: 0;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+          .filter-body {
+            flex-direction: column;
+          }
+          
+          .machine-grid {
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+          }
+        }
+
+        @media (max-width: 768px) {
+          .sidebar {
+            width: 0;
+            transform: translateX(-100%);
+          }
+
+          .sidebar.active {
+            width: 250px;
+            transform: translateX(0);
+          }
+
+          .main-content {
+            margin-left: 0;
+          }
+
+          .page-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+          }
+          
+          .machine-grid {
+            grid-template-columns: 1fr;
+          }
+          
+          .machine-list-view {
+            display: block;
+            overflow-x: auto;
+          }
+        }
+
+        @media (max-width: 576px) {
+          .search-container {
+            width: 200px;
+          }
+
+          .user-name {
+            display: none;
+          }
+          
+          .lab-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+          }
+          
+          .lab-meta {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.25rem;
+          }
+        }
+
+        /* Menu Toggle for Mobile */
+        .menu-toggle {
+          background: none;
+          border: none;
+          color: var(--text-color);
+          font-size: 1.25rem;
+          cursor: pointer;
+          display: none;
+          margin-right: 1rem;
+        }
+
+        @media (max-width: 768px) {
+          .menu-toggle {
+            display: block;
+          }
+        }
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-flask"></i>
+                <h1>LabUI</h1>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="/"><i class="fas fa-home"></i> Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="/tasks"><i class="fas fa-tasks"></i> Tasks</a>
+                    </li>
+                    <li>
+                        <a href="/reports"><i class="fas fa-chart-bar"></i> Reports</a>
+                    </li>
+
+                    <li class="active">
+                        <a href="/lab"><i class="fas fa-cogs"></i> Laberatory</a>
+                    </li>
+                    <li>
+                        <a href="/teams"><i class="fas fa-users"></i> Teams</a>
+                    </li>
+                    <li>
+                        <a href="/contactus"><i class="fas fa-envelope"></i> Contact</a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Navigation -->
+            <header class="top-nav">
+                <button class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search machines...">
+                </div>
+                <div class="user-menu">
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </div>
+                    <div class="user-profile">
+                        <span class="user-name">User</span>
+                        <i class="fas fa-chevron-down"></i>
+                        <div class="dropdown-menu">
+                            <a href="/profile"><i class="fas fa-user"></i> Profile</a>
+                            <a href="/passchange/"><i class="fas fa-cog"></i> Change Password</a>
+                            <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Machines Content -->
+            <div class="content-wrapper">
+                <div class="page-header">
+                    <h2>Machines by Laboratory</h2>
+                    <div class="page-actions">
+                        <div class="view-toggle">
+                            <button class="view-toggle-btn active" id="gridViewBtn" title="Grid View">
+                                <i class="fas fa-th"></i>
+                            </button>
+                            <button class="view-toggle-btn" id="listViewBtn" title="List View">
+                                <i class="fas fa-list"></i>
+                            </button>
+                        </div>
+                        <button class="btn btn-outline">
+                            <i class="fas fa-file-export btn-icon"></i> Export
+                        </button>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-plus btn-icon"></i> Add Machine
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filter Panel -->
+                <div class="filter-panel">
+                    <div class="filter-header">
+                        <h3>Filters</h3>
+                    </div>
+                    <div class="filter-body">
+                        <div class="filter-group">
+                            <label for="labFilter">Laboratory</label>
+                            <select id="labFilter">
+                                <option value="all">All Laboratories</option>
+                                <option value="main">Main Laboratory</option>
+                                <option value="research">Research Laboratory</option>
+                                <option value="testing">Testing Laboratory</option>
+                                <option value="analysis">Analysis Laboratory</option>
+                                <option value="molecular">Molecular Biology Lab</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="categoryFilter">Category</label>
+                            <select id="categoryFilter">
+                                <option value="all">All Categories</option>
+                                <option value="analysis">Analytical Instruments</option>
+                                <option value="imaging">Imaging & Microscopy</option>
+                                <option value="molecular">Molecular Biology</option>
+                                <option value="separation">Separation & Centrifugation</option>
+                                <option value="thermal">Thermal Equipment</option>
+                                <option value="research">Research</option>
+                                <option value="testing">Testing</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="statusFilter">Status</label>
+                            <select id="statusFilter">
+                                <option value="all">All Statuses</option>
+                                <option value="active">Active</option>
+                                <option value="maintenance">Maintenance</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="maintenanceFilter">Maintenance Due</label>
+                            <select id="maintenanceFilter">
+                                <option value="all">All</option>
+                                <option value="due-7">Due in 7 days</option>
+                                <option value="due-30">Due in 30 days</option>
+                                <option value="overdue">Overdue</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="filter-actions">
+                        <button class="btn btn-outline">Reset</button>
+                        <button class="btn btn-primary">Apply Filters</button>
+                    </div>
+                </div>
+
+                {% for lab in labs %}
+
+                <div class="lab-section">
+                    <div class="lab-header">
+                        <h3>
+                            <i class="fas fa-flask"></i>
+                            {{ lab.name }}
+                        </h3>
+                        <div class="lab-meta">
+                            <div class="lab-meta-item">
+                                <i class="fas fa-cogs"></i>
+                                <span>12 Machines</span>
+                            </div>
+                            <div class="lab-meta-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>{{ lab.location }}</span>
+                            </div>
+                            <button class="lab-toggle">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="lab-body">
+                        <!-- Grid View -->
+                        <div class="machine-grid">
+                            
+
+{% for machine in machines %}
+{% if machine.lab == lab %}
+<!-- Machine Card 1 -->
+<div class="machine-card">
+  <div class="machine-header">
+      <div class="machine-icon analysis">
+          <i class="fas fa-chart-line"></i>
+      </div>
+      <div class="machine-title">
+          <h4 class="machine-name"> {{machine.name}} </h4>
+          <div class="machine-category">{{machine.category}}</div>
+      </div>
+      <div class="machine-status inactive">
+          <i class="fas fa-check-circle"></i>
+          Inactive
+      </div>
+  </div>
+  <div class="machine-body">
+      <div class="machine-info">
+          <div class="info-item">
+              <div class="info-label">Serial Number</div>
+              <div class="info-value">Comming Soon</div>
+          </div>
+          <div class="info-item">
+              <div class="info-label">Last Calibration</div>
+              <div class="info-value">2023-05-15</div>
+          </div>
+          <div class="info-item">
+              <div class="info-label">Next Maintenance</div>
+              <div class="info-value">2023-11-15</div>
+          </div>
+          <div class="info-item">
+              <div class="info-label">Responsible</div>
+              <div class="info-value">{{machine.lab.LC}}</div>
+          </div>
+      </div>
+  </div>
+  <div class="machine-footer">
+      <button class="btn btn-sm btn-outline">
+          <i class="fas fa-history btn-icon"></i>
+          History
+      </button>
+      <div class="machine-actions">
+          <button class="btn btn-sm btn-outline btn-icon-only" title="Schedule Maintenance">
+              <i class="fas fa-calendar-alt"></i>
+          </button>
+          <button class="btn btn-sm btn-outline btn-icon-only" title="View Details" onclick="location.href='{% url "machine_view" machine.id %}'">
+              <i class="fas fa-eye"></i>
+          </button>
+      </div>
+  </div>
+</div>
+{% endif %}
+{% endfor %}
+
+                    
+
+                        <!-- List View (Initially Hidden) -->
+                        <table class="machine-list-view" style="display: none;">
+                            <thead>
+                                <tr>
+                                    <th>Machine Name</th>
+                                    <th>Category</th>
+                                    <th>Serial Number</th>
+                                    <th>Status</th>
+                                    <th>Last Calibration</th>
+                                    <th>Next Maintenance</th>
+                                    <th>Responsible</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Shimadzu UV-1800</td>
+                                    <td>Spectrophotometer</td>
+                                    <td>SH-UV1800-2245</td>
+                                    <td><span class="machine-list-status active"><i class="fas fa-check-circle"></i> Active</span></td>
+                                    <td>2023-05-15</td>
+                                    <td>2023-11-15</td>
+                                    <td>John Smith</td>
+                                    <td>
+                                        <div class="machine-list-actions">
+                                            <button class="btn btn-sm btn-outline btn-icon-only" title="History">
+                                                <i class="fas fa-history"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline btn-icon-only" title="Schedule Maintenance">
+                                                <i class="fas fa-calendar-alt"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline btn-icon-only" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Agilent 1260 Infinity II</td>
+                                    <td>HPLC</td>
+                                    <td>AG-1260-3782</td>
+                                    <td><span class="machine-list-status active"><i class="fas fa-check-circle"></i> Active</span></td>
+                                    <td>2023-06-10</td>
+                                    <td>2023-12-10</td>
+                                    <td>Sarah Johnson</td>
+                                    <td>
+                                        <div class="machine-list-actions">
+                                            <button class="btn btn-sm btn-outline btn-icon-only" title="History">
+                                                <i class="fas fa-history"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline btn-icon-only" title="Schedule Maintenance">
+                                                <i class="fas fa-calendar-alt"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline btn-icon-only" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Gas Chromatograph</td>
+                                    <td>GC</td>
+                                    <td>GC-8890-1122</td>
+                                    <td><span class="machine-list-status maintenance"><i class="fas fa-tools"></i> Maintenance</span></td>
+                                    <td>2023-04-22</td>
+                                    <td>In Progress</td>
+                                    <td>Michael Brown</td>
+                                    <td>
+                                        <div class="machine-list-actions">
+                                            <button class="btn btn-sm btn-outline btn-icon-only" title="History">
+                                                <i class="fas fa-history"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline btn-icon-only" title="Schedule Maintenance">
+                                                <i class="fas fa-calendar-alt"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline btn-icon-only" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Olympus BX53</td>
+                                    <td>Light Microscope</td>
+                                    <td>OL-BX53-9876</td>
+                                    <td><span class="machine-list-status active"><i class="fas fa-check-circle"></i> Active</span></td>
+                                    <td>2023-07-05</td>
+                                    <td>2024-01-05</td>
+                                    <td>Emily Davis</td>
+                                    <td>
+                                        <div class="machine-list-actions">
+                                            <button class="btn btn-sm btn-outline btn-icon-only" title="History">
+                                                <i class="fas fa-history"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline btn-icon-only" title="Schedule Maintenance">
+                                                <i class="fas fa-calendar-alt"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline btn-icon-only" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                {% endfor %}
+              
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize dropdown menus
+            initDropdowns();
+            
+            // Initialize mobile menu
+            initMobileMenu();
+            
+            // Initialize lab section toggles
+            initLabToggles();
+            
+            // Initialize view toggles
+            initViewToggles();
+            
+            // Initialize filters
+            initFilters();
+        });
+
+        function initDropdowns() {
+            const dropdownTriggers = document.querySelectorAll('.user-profile');
+            
+            dropdownTriggers.forEach(trigger => {
+                trigger.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const dropdown = this.querySelector('.dropdown-menu');
+                    if (dropdown) {
+                        const isVisible = dropdown.style.display === 'block';
+                        // Close all first
+                        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                            menu.style.display = 'none';
+                        });
+                        dropdown.style.display = isVisible ? 'none' : 'block';
+                    }
+                });
+            });
+            
+            document.addEventListener('click', function() {
+                document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                    menu.style.display = 'none';
+                });
+            });
+        }
+
+        function initMobileMenu() {
+            const menuToggle = document.querySelector('.menu-toggle');
+            const sidebar = document.querySelector('.sidebar');
+            
+            if (menuToggle && sidebar) {
+                menuToggle.addEventListener('click', function() {
+                    sidebar.classList.toggle('active');
+                });
+            }
+        }
+
+        function initLabToggles() {
+            const labToggles = document.querySelectorAll('.lab-toggle');
+            
+            labToggles.forEach(toggle => {
+                toggle.addEventListener('click', function() {
+                    const labSection = this.closest('.lab-section');
+                    const labBody = labSection.querySelector('.lab-body');
+                    
+                    if (labBody.classList.contains('collapsed')) {
+                        labBody.classList.remove('collapsed');
+                        this.classList.remove('collapsed');
+                    } else {
+                        labBody.classList.add('collapsed');
+                        this.classList.add('collapsed');
+                    }
+                });
+            });
+        }
+
+        function initViewToggles() {
+            const gridViewBtn = document.getElementById('gridViewBtn');
+            const listViewBtn = document.getElementById('listViewBtn');
+            
+            if (gridViewBtn && listViewBtn) {
+                gridViewBtn.addEventListener('click', function() {
+                    this.classList.add('active');
+                    listViewBtn.classList.remove('active');
+                    
+                    document.querySelectorAll('.machine-grid').forEach(grid => {
+                        grid.style.display = 'grid';
+                    });
+                    
+                    document.querySelectorAll('.machine-list-view').forEach(list => {
+                        list.style.display = 'none';
+                    });
+                });
+                
+                listViewBtn.addEventListener('click', function() {
+                    this.classList.add('active');
+                    gridViewBtn.classList.remove('active');
+                    
+                    document.querySelectorAll('.machine-grid').forEach(grid => {
+                        grid.style.display = 'none';
+                    });
+                    
+                    document.querySelectorAll('.machine-list-view').forEach(list => {
+                        list.style.display = 'table';
+                    });
+                });
+            }
+        }
+
+        function initFilters() {
+            const filterBtn = document.querySelector('.filter-actions .btn-primary');
+            const resetBtn = document.querySelector('.filter-actions .btn-outline');
+            
+            if (filterBtn) {
+                filterBtn.addEventListener('click', function() {
+                    // Filter logic would go here
+                    alert('Filters applied!');
+                });
+            }
+            
+            if (resetBtn) {
+                resetBtn.addEventListener('click', function() {
+                    // Reset filters
+                    document.getElementById('labFilter').value = 'all';
+                    document.getElementById('categoryFilter').value = 'all';
+                    document.getElementById('statusFilter').value = 'all';
+                    document.getElementById('maintenanceFilter').value = 'all';
+                });
+            }
+        }
+    </script>
+</body>
+</html>

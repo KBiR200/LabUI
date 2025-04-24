@@ -1,977 +1,1948 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Change Password - LabUI</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>
-/* Base Styles */
-:root {
-  --primary-color: #4a6cf7;
-  --primary-hover: #3a5ce4;
-  --secondary-color: #6c757d;
-  --success-color: #28a745;
-  --danger-color: #dc3545;
-  --warning-color: #ffc107;
-  --info-color: #17a2b8;
-  --light-color: #f8f9fa;
-  --dark-color: #343a40;
-  --body-bg: #f5f7fb;
-  --card-bg: #ffffff;
-  --text-color: #495057;
-  --text-muted: #6c757d;
-  --border-color: #e9ecef;
-  --sidebar-width: 250px;
-  --header-height: 60px;
-  --shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-  --shadow-lg: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-  --border-radius: 0.375rem;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 0.9rem;
-  line-height: 1.5;
-  color: var(--text-color);
-  background-color: var(--body-bg);
-}
-
-a {
-  color: var(--primary-color);
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-ul {
-  list-style: none;
-}
-
-/* Layout */
-.layout {
-  display: flex;
-  min-height: 100vh;
-}
-
-/* Sidebar */
-.sidebar {
-  width: var(--sidebar-width);
-  background-color: var(--dark-color);
-  color: white;
-  position: fixed;
-  height: 100vh;
-  overflow-y: auto;
-  z-index: 1000;
-  transition: all 0.3s ease;
-}
-
-.sidebar-header {
-  display: flex;
-  align-items: center;
-  padding: 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.sidebar-header i {
-  font-size: 1.5rem;
-  margin-right: 0.5rem;
-}
-
-.sidebar-header h1 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin: 0;
-}
-
-.sidebar-nav ul {
-  padding: 1rem 0;
-}
-
-.sidebar-nav li {
-  margin-bottom: 0.25rem;
-}
-
-.sidebar-nav a {
-  display: flex;
-  align-items: center;
-  padding: 0.75rem 1rem;
-  color: rgba(255, 255, 255, 0.7);
-  transition: all 0.3s ease;
-}
-
-.sidebar-nav a:hover {
-  color: white;
-  background-color: rgba(255, 255, 255, 0.1);
-  text-decoration: none;
-}
-
-.sidebar-nav li.active a {
-  color: white;
-  background-color: var(--primary-color);
-}
-
-.sidebar-nav i {
-  margin-right: 0.75rem;
-  font-size: 1rem;
-}
-
-/* Main Content */
-.main-content {
-  flex: 1;
-  margin-left: var(--sidebar-width);
-  position: relative;
-}
-
-/* Top Navigation */
-.top-nav {
-  height: var(--header-height);
-  background-color: var(--card-bg);
-  border-bottom: 1px solid var(--border-color);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 1.5rem;
-  position: sticky;
-  top: 0;
-  z-index: 900;
-  box-shadow: var(--shadow);
-}
-
-.search-container {
-  position: relative;
-  width: 300px;
-}
-
-.search-container i {
-  position: absolute;
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--text-muted);
-}
-
-.search-container input {
-  width: 100%;
-  padding: 0.5rem 0.5rem 0.5rem 2rem;
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
-  font-size: 0.875rem;
-}
-
-.user-menu {
-  display: flex;
-  align-items: center;
-}
-
-.notifications {
-  position: relative;
-  margin-right: 1.5rem;
-  cursor: pointer;
-}
-
-.notifications i {
-  font-size: 1.25rem;
-  color: var(--text-muted);
-}
-
-.badge {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  background-color: var(--danger-color);
-  color: white;
-  border-radius: 50%;
-  width: 18px;
-  height: 18px;
-  font-size: 0.7rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.user-profile {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  position: relative;
-}
-
-.user-profile img {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  margin-right: 0.5rem;
-}
-
-.user-name {
-  font-weight: 500;
-  margin-right: 0.5rem;
-}
-
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background-color: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-lg);
-  min-width: 180px;
-  z-index: 1000;
-  display: none;
-}
-
-.dropdown-menu a {
-  display: flex;
-  align-items: center;
-  padding: 0.75rem 1rem;
-  color: var(--text-color);
-  transition: background-color 0.3s ease;
-}
-
-.dropdown-menu a:hover {
-  background-color: var(--light-color);
-  text-decoration: none;
-}
-
-.dropdown-menu i {
-  margin-right: 0.5rem;
-}
-
-/* Content Wrapper */
-.content-wrapper {
-  padding: 1.5rem;
-}
-
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-}
-
-.page-header h2 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0;
-}
-
-/* Cards */
-.card {
-  background-color: var(--card-bg);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow);
-  margin-bottom: 1.5rem;
-}
-
-.card-header {
-  padding: 1rem 1.25rem;
-  border-bottom: 1px solid var(--border-color);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.card-header h3 {
-  font-size: 1.125rem;
-  font-weight: 600;
-  margin: 0;
-}
-
-.card-body {
-  padding: 1.25rem;
-}
-
-/* Form Controls */
-.form-group {
-  margin-bottom: 1.25rem;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-}
-
-.form-control {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
-  font-size: 0.9rem;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.form-control:focus {
-  outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 0.2rem rgba(74, 108, 247, 0.25);
-}
-
-.form-text {
-  display: block;
-  margin-top: 0.25rem;
-  font-size: 0.8125rem;
-  color: var(--text-muted);
-}
-
-.required-field::after {
-  content: "*";
-  color: var(--danger-color);
-  margin-left: 0.25rem;
-}
-
-/* Password Strength Meter */
-.password-strength {
-  margin-top: 0.5rem;
-}
-
-.strength-meter {
-  height: 5px;
-  background-color: var(--border-color);
-  border-radius: 2.5px;
-  margin-bottom: 0.5rem;
-  overflow: hidden;
-}
-
-.strength-meter-fill {
-  height: 100%;
-  border-radius: 2.5px;
-  transition: width 0.3s ease, background-color 0.3s ease;
-}
-
-.strength-text {
-  font-size: 0.8125rem;
-  font-weight: 500;
-}
-
-.strength-weak {
-  background-color: var(--danger-color);
-}
-
-.strength-medium {
-  background-color: var(--warning-color);
-}
-
-.strength-strong {
-  background-color: var(--success-color);
-}
-
-/* Password Requirements */
-.password-requirements {
-  margin-top: 0.75rem;
-  padding: 0.75rem;
-  background-color: var(--light-color);
-  border-radius: var(--border-radius);
-}
-
-.requirement-list {
-  margin-top: 0.5rem;
-  padding-left: 1.25rem;
-}
-
-.requirement-item {
-  font-size: 0.8125rem;
-  margin-bottom: 0.25rem;
-  display: flex;
-  align-items: center;
-}
-
-.requirement-item i {
-  margin-right: 0.5rem;
-  font-size: 0.75rem;
-}
-
-.requirement-met {
-  color: var(--success-color);
-}
-
-.requirement-unmet {
-  color: var(--text-muted);
-}
-
-/* Buttons */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.75rem 1.5rem;
-  font-size: 0.9rem;
-  font-weight: 500;
-  border-radius: var(--border-radius);
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.btn-primary {
-  background-color: var(--primary-color);
-  color: white;
-}
-
-.btn-primary:hover {
-  background-color: var(--primary-hover);
-}
-
-.btn-outline {
-  background-color: transparent;
-  border: 1px solid var(--border-color);
-  color: var(--text-color);
-}
-
-.btn-outline:hover {
-  background-color: var(--light-color);
-}
-
-.btn-icon {
-  margin-right: 0.5rem;
-}
-
-/* Form Actions */
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 1.5rem;
-}
-
-/* Alert */
-.alert {
-  padding: 0.75rem 1.25rem;
-  margin-bottom: 1rem;
-  border: 1px solid transparent;
-  border-radius: var(--border-radius);
-  display: flex;
-  align-items: center;
-}
-
-.alert-icon {
-  margin-right: 0.75rem;
-  font-size: 1.25rem;
-}
-
-.alert-success {
-  color: #155724;
-  background-color: #d4edda;
-  border-color: #c3e6cb;
-}
-
-.alert-danger {
-  color: #721c24;
-  background-color: #f8d7da;
-  border-color: #f5c6cb;
-}
-
-.alert-warning {
-  color: #856404;
-  background-color: #fff3cd;
-  border-color: #ffeeba;
-}
-
-.alert-info {
-  color: #0c5460;
-  background-color: #d1ecf1;
-  border-color: #bee5eb;
-}
-
-/* Password Toggle */
-.password-field {
-  position: relative;
-}
-
-.password-toggle {
-  position: absolute;
-  right: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-/* Django Messages */
-.messages {
-  list-style: none;
-  padding: 0;
-  margin-bottom: 1rem;
-}
-
-.messages li {
-  padding: 0.75rem 1.25rem;
-  margin-bottom: 0.5rem;
-  border: 1px solid transparent;
-  border-radius: var(--border-radius);
-}
-
-.messages .success {
-  color: #155724;
-  background-color: #d4edda;
-  border-color: #c3e6cb;
-}
-
-.messages .error {
-  color: #721c24;
-  background-color: #f8d7da;
-  border-color: #f5c6cb;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .sidebar {
-    width: 0;
-    transform: translateX(-100%);
-  }
-  
-  .sidebar.active {
-    width: var(--sidebar-width);
-    transform: translateX(0);
-  }
-  
-  .main-content {
-    margin-left: 0;
-  }
-  
-  .page-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-}
-
-@media (max-width: 576px) {
-  .search-container {
-    width: 200px;
-  }
-  
-  .user-name {
-    display: none;
-  }
-  
-  .form-actions {
-    flex-direction: column;
-  }
-  
-  .form-actions .btn {
-    width: 100%;
-  }
-}
-
-/* Menu Toggle for Mobile */
-.menu-toggle {
-  background: none;
-  border: none;
-  color: var(--text-color);
-  font-size: 1.25rem;
-  cursor: pointer;
-  display: none;
-  margin-right: 1rem;
-}
-
-@media (max-width: 768px) {
-  .menu-toggle {
-    display: block;
-  }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Floor Plan Designer - LabUI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Styles */
+        :root {
+          --primary-color: #4a6cf7;
+          --primary-hover: #3a5ce4;
+          --secondary-color: #6c757d;
+          --success-color: #28a745;
+          --danger-color: #dc3545;
+          --warning-color: #ffc107;
+          --info-color: #17a2b8;
+          --light-color: #f8f9fa;
+          --dark-color: #343a40;
+          --body-bg: #f5f7fb;
+          --card-bg: #ffffff;
+          --text-color: #495057;
+          --text-muted: #6c757d;
+          --border-color: #e9ecef;
+          --shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+          --shadow-lg: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+          --border-radius: 0.375rem;
+          --grid-color: #e9ecef;
+          --grid-size: 20px;
+          --wall-color: #343a40;
+          --door-color: #6c757d;
+          --selected-color: #4a6cf7;
+        }
+
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        body {
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          font-size: 0.9rem;
+          line-height: 1.5;
+          color: var(--text-color);
+          background-color: var(--body-bg);
+        }
+
+        a {
+          color: var(--primary-color);
+          text-decoration: none;
+        }
+
+        a:hover {
+          text-decoration: underline;
+        }
+
+        /* Layout */
+        .layout {
+          display: flex;
+          min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+          width: 250px;
+          background-color: var(--dark-color);
+          color: white;
+          position: fixed;
+          height: 100vh;
+          overflow-y: auto;
+          z-index: 1000;
+          transition: all 0.3s ease;
+        }
+
+        .sidebar-header {
+          display: flex;
+          align-items: center;
+          padding: 1rem;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header i {
+          font-size: 1.5rem;
+          margin-right: 0.5rem;
+        }
+
+        .sidebar-header h1 {
+          font-size: 1.25rem;
+          font-weight: 600;
+          margin: 0;
+        }
+
+        .sidebar-nav ul {
+          padding: 1rem 0;
+          list-style: none;
+        }
+
+        .sidebar-nav li {
+          margin-bottom: 0.25rem;
+        }
+
+        .sidebar-nav a {
+          display: flex;
+          align-items: center;
+          padding: 0.75rem 1rem;
+          color: rgba(255, 255, 255, 0.7);
+          transition: all 0.3s ease;
+        }
+
+        .sidebar-nav a:hover {
+          color: white;
+          background-color: rgba(255, 255, 255, 0.1);
+          text-decoration: none;
+        }
+
+        .sidebar-nav li.active a {
+          color: white;
+          background-color: var(--primary-color);
+        }
+
+        .sidebar-nav i {
+          margin-right: 0.75rem;
+          font-size: 1rem;
+        }
+
+        /* Main Content */
+        .main-content {
+          flex: 1;
+          margin-left: 250px;
+          position: relative;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+          height: 60px;
+          background-color: var(--card-bg);
+          border-bottom: 1px solid var(--border-color);
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 1.5rem;
+          position: sticky;
+          top: 0;
+          z-index: 900;
+          box-shadow: var(--shadow);
+        }
+
+        .user-menu {
+          display: flex;
+          align-items: center;
+        }
+
+        .notifications {
+          position: relative;
+          margin-right: 1.5rem;
+          cursor: pointer;
+        }
+
+        .notifications i {
+          font-size: 1.25rem;
+          color: var(--text-muted);
+        }
+
+        .badge {
+          position: absolute;
+          top: -8px;
+          right: -8px;
+          background-color: var(--danger-color);
+          color: white;
+          border-radius: 50%;
+          width: 18px;
+          height: 18px;
+          font-size: 0.7rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .user-profile {
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          position: relative;
+        }
+
+        .user-profile img {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          margin-right: 0.5rem;
+        }
+
+        .user-name {
+          font-weight: 500;
+          margin-right: 0.5rem;
+        }
+
+        .dropdown-menu {
+          position: absolute;
+          top: 100%;
+          right: 0;
+          background-color: var(--card-bg);
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius);
+          box-shadow: var(--shadow-lg);
+          min-width: 180px;
+          z-index: 1000;
+          display: none;
+        }
+
+        .dropdown-menu a {
+          display: flex;
+          align-items: center;
+          padding: 0.75rem 1rem;
+          color: var(--text-color);
+          transition: background-color 0.3s ease;
+        }
+
+        .dropdown-menu a:hover {
+          background-color: var(--light-color);
+          text-decoration: none;
+        }
+
+        .dropdown-menu i {
+          margin-right: 0.5rem;
+        }
+
+        /* Content Wrapper */
+        .content-wrapper {
+          padding: 1.5rem;
+        }
+
+        .page-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 1.5rem;
+        }
+
+        .page-header h2 {
+          font-size: 1.5rem;
+          font-weight: 600;
+          margin: 0;
+        }
+
+        .page-actions {
+          display: flex;
+          gap: 0.5rem;
+        }
+
+        /* Designer Layout */
+        .designer-layout {
+          display: flex;
+          gap: 1.5rem;
+          height: calc(100vh - 150px);
+        }
+
+        /* Toolbox */
+        .toolbox {
+          width: 250px;
+          background-color: var(--card-bg);
+          border-radius: var(--border-radius);
+          box-shadow: var(--shadow);
+          overflow-y: auto;
+        }
+
+        .toolbox-section {
+          border-bottom: 1px solid var(--border-color);
+        }
+
+        .toolbox-section:last-child {
+          border-bottom: none;
+        }
+
+        .toolbox-header {
+          padding: 1rem;
+          font-weight: 600;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          cursor: pointer;
+        }
+
+        .toolbox-header i {
+          transition: transform 0.3s ease;
+        }
+
+        .toolbox-header.collapsed i {
+          transform: rotate(-90deg);
+        }
+
+        .toolbox-body {
+          padding: 0 1rem 1rem;
+          max-height: 300px;
+          overflow-y: auto;
+        }
+
+        .toolbox-body.collapsed {
+          display: none;
+        }
+
+        .tool-group {
+          margin-bottom: 1rem;
+        }
+
+        .tool-group-label {
+          font-size: 0.8rem;
+          color: var(--text-muted);
+          margin-bottom: 0.5rem;
+          text-transform: uppercase;
+        }
+
+        .tool-buttons {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 0.5rem;
+        }
+
+        .tool-button {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 0.5rem;
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius);
+          background-color: var(--light-color);
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .tool-button:hover {
+          background-color: var(--border-color);
+        }
+
+        .tool-button.active {
+          background-color: var(--primary-color);
+          color: white;
+          border-color: var(--primary-color);
+        }
+
+        .tool-button i {
+          font-size: 1.25rem;
+          margin-bottom: 0.25rem;
+        }
+
+        .tool-button span {
+          font-size: 0.75rem;
+          text-align: center;
+        }
+
+        .machine-list {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+        }
+
+        .machine-item {
+          display: flex;
+          align-items: center;
+          padding: 0.5rem;
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius);
+          margin-bottom: 0.5rem;
+          cursor: move;
+          background-color: var(--light-color);
+          transition: all 0.3s ease;
+        }
+
+        .machine-item:hover {
+          background-color: var(--border-color);
+        }
+
+        .machine-item i {
+          margin-right: 0.5rem;
+          font-size: 1rem;
+          color: var(--primary-color);
+        }
+
+        .machine-item-color {
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+          margin-right: 0.5rem;
+        }
+
+        /* Canvas Area */
+        .canvas-container {
+          flex: 1;
+          background-color: var(--card-bg);
+          border-radius: var(--border-radius);
+          box-shadow: var(--shadow);
+          overflow: hidden;
+          position: relative;
+        }
+
+        .canvas-header {
+          height: 50px;
+          border-bottom: 1px solid var(--border-color);
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 1rem;
+        }
+
+        .canvas-title {
+          font-weight: 600;
+        }
+
+        .canvas-controls {
+          display: flex;
+          gap: 0.5rem;
+        }
+
+        .canvas-body {
+          height: calc(100% - 50px);
+          overflow: auto;
+          position: relative;
+        }
+
+        .canvas-grid {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 2000px;
+          height: 2000px;
+          background-size: var(--grid-size) var(--grid-size);
+          background-image:
+            linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+            linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+        }
+
+        .canvas-element {
+          position: absolute;
+          background-color: var(--wall-color);
+          cursor: pointer;
+        }
+
+        .canvas-element.wall {
+          background-color: var(--wall-color);
+        }
+
+        .canvas-element.door {
+          background-color: var(--door-color);
+        }
+
+        .canvas-element.selected {
+          outline: 2px solid var(--selected-color);
+          z-index: 10;
+        }
+
+        .canvas-element.machine {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-size: 0.75rem;
+          text-align: center;
+          border-radius: 4px;
+          padding: 0.25rem;
+        }
+
+        .canvas-element.machine i {
+          font-size: 1rem;
+          margin-bottom: 0.25rem;
+        }
+
+        .canvas-element.machine.analysis {
+          background-color: #28a745;
+        }
+
+        .canvas-element.machine.imaging {
+          background-color: #17a2b8;
+        }
+
+        .canvas-element.machine.molecular {
+          background-color: #6f42c1;
+        }
+
+        .canvas-element.machine.separation {
+          background-color: #20c997;
+        }
+
+        .canvas-element.machine.thermal {
+          background-color: #fd7e14;
+        }
+
+        .canvas-element.machine.testing {
+          background-color: #dc3545;
+        }
+
+        .canvas-element.machine.research {
+          background-color: #6c757d;
+        }
+
+        /* Properties Panel */
+        .properties-panel {
+          width: 300px;
+          background-color: var(--card-bg);
+          border-radius: var(--border-radius);
+          box-shadow: var(--shadow);
+          overflow-y: auto;
+        }
+
+        .properties-header {
+          padding: 1rem;
+          font-weight: 600;
+          border-bottom: 1px solid var(--border-color);
+        }
+
+        .properties-body {
+          padding: 1rem;
+        }
+
+        .property-group {
+          margin-bottom: 1rem;
+        }
+
+        .property-label {
+          font-weight: 500;
+          margin-bottom: 0.5rem;
+        }
+
+        .property-control {
+          width: 100%;
+          padding: 0.5rem;
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius);
+          font-size: 0.875rem;
+        }
+
+        .property-row {
+          display: flex;
+          gap: 0.5rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .property-row .property-control {
+          flex: 1;
+        }
+
+        .color-picker {
+          width: 100%;
+          height: 38px;
+          padding: 0;
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius);
+        }
+
+        /* Buttons */
+        .btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.5rem 1rem;
+          font-size: 0.875rem;
+          font-weight: 500;
+          border-radius: var(--border-radius);
+          border: none;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+          background-color: var(--primary-color);
+          color: white;
+        }
+
+        .btn-primary:hover {
+          background-color: var(--primary-hover);
+        }
+
+        .btn-outline {
+          background-color: transparent;
+          border: 1px solid var(--border-color);
+          color: var(--text-color);
+        }
+
+        .btn-outline:hover {
+          background-color: var(--light-color);
+        }
+
+        .btn-danger {
+          background-color: var(--danger-color);
+          color: white;
+        }
+
+        .btn-danger:hover {
+          background-color: #c82333;
+        }
+
+        .btn-icon {
+          margin-right: 0.5rem;
+        }
+
+        .btn-sm {
+          padding: 0.25rem 0.5rem;
+          font-size: 0.75rem;
+        }
+
+        .btn-group {
+          display: flex;
+          gap: 0.5rem;
+        }
+
+        /* Modal */
+        .modal-backdrop {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+          z-index: 1050;
+          display: none;
+        }
+
+        .modal {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background-color: var(--card-bg);
+          border-radius: var(--border-radius);
+          box-shadow: var(--shadow-lg);
+          z-index: 1100;
+          width: 500px;
+          max-width: 90%;
+          display: none;
+        }
+
+        .modal-header {
+          padding: 1rem;
+          border-bottom: 1px solid var(--border-color);
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .modal-title {
+          font-weight: 600;
+          font-size: 1.25rem;
+        }
+
+        .modal-close {
+          background: none;
+          border: none;
+          font-size: 1.5rem;
+          cursor: pointer;
+          color: var(--text-muted);
+        }
+
+        .modal-body {
+          padding: 1rem;
+          max-height: 70vh;
+          overflow-y: auto;
+        }
+
+        .modal-footer {
+          padding: 1rem;
+          border-top: 1px solid var(--border-color);
+          display: flex;
+          justify-content: flex-end;
+          gap: 0.5rem;
+        }
+
+        /* Form Controls */
+        .form-group {
+          margin-bottom: 1rem;
+        }
+
+        .form-group label {
+          display: block;
+          margin-bottom: 0.5rem;
+          font-weight: 500;
+        }
+
+        .form-control {
+          width: 100%;
+          padding: 0.5rem;
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius);
+          font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+          .designer-layout {
+            flex-direction: column;
+            height: auto;
+          }
+
+          .toolbox, .properties-panel {
+            width: 100%;
+          }
+
+          .canvas-container {
+            height: 600px;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .sidebar {
+            width: 0;
+            transform: translateX(-100%);
+          }
+
+          .sidebar.active {
+            width: 250px;
+            transform: translateX(0);
+          }
+
+          .main-content {
+            margin-left: 0;
+          }
+
+          .page-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+          }
+        }
+
+        /* Menu Toggle for Mobile */
+        .menu-toggle {
+          background: none;
+          border: none;
+          color: var(--text-color);
+          font-size: 1.25rem;
+          cursor: pointer;
+          display: none;
+          margin-right: 1rem;
+        }
+
+        @media (max-width: 768px) {
+          .menu-toggle {
+            display: block;
+          }
+        }
+    </style>
 </head>
 <body>
-<div class="layout">
-    <!-- Sidebar Navigation -->
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            <i class="fas fa-flask"></i>
-            <h1>LabUI</h1>
-        </div>
-        <nav class="sidebar-nav">
-            <ul>
-                <li>
-                    <a href="/"><i class="fas fa-home"></i> Dashboard</a>
-                </li>
-                <li>
-                    <a href="/tasks"><i class="fas fa-tasks"></i> Tasks</a>
-                </li>
-                <li>
-                    <a href="/reports"><i class="fas fa-chart-bar"></i> Reports</a>
-                </li>
-                <li>
-                    <a href="/teams"><i class="fas fa-users"></i> Teams</a>
-                </li>
-                <li>
-                    <a href="/contactus"><i class="fas fa-envelope"></i> Contact</a>
-                </li>
-            </ul>
-        </nav>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Top Navigation -->
-        <header class="top-nav">
-            <div class="search-container">
-                <i class="fas fa-search"></i>
-                <input type="text" placeholder="Search..." id="searchInput">
+    <div class="layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-flask"></i>
+                <h1>LabUI</h1>
             </div>
-            <div class="user-menu">
-                <div class="notifications">
-                    <i class="fas fa-bell"></i>
-                    <span class="badge">3</span>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="/"><i class="fas fa-home"></i> Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="/tasks"><i class="fas fa-tasks"></i> Tasks</a>
+                    </li>
+                    <li>
+                        <a href="/reports"><i class="fas fa-chart-bar"></i> Reports</a>
+                    </li>
+                    <li>
+                        <a href="/lab"><i class="fas fa-cogs"></i> Laberatory</a>
+                    </li>
+                    <li class="active">
+                        <a href="/floor-plan"><i class="fas fa-map"></i> Floor Plan</a>
+                    </li>
+                    <li>
+                        <a href="/teams"><i class="fas fa-users"></i> Teams</a>
+                    </li>
+                    <li>
+                        <a href="/contactus"><i class="fas fa-envelope"></i> Contact</a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Navigation -->
+            <header class="top-nav">
+                <button class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="user-menu">
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </div>
+                    <div class="user-profile">
+                        <span class="user-name">User</span>
+                        <i class="fas fa-chevron-down"></i>
+                        <div class="dropdown-menu">
+                            <a href="/profile"><i class="fas fa-user"></i> Profile</a>
+                            <a href="/passchange/"><i class="fas fa-cog"></i> Change Password</a>
+                            <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </div>
+                    </div>
                 </div>
-                <div class="user-profile">
-                    <img src="/statics/img/avatar-placeholder.png" alt="User Avatar">
-                    <span class="user-name">User</span>
-                    <i class="fas fa-chevron-down"></i>
-                    <div class="dropdown-menu">
-                        <a href="/profile"><i class="fas fa-user"></i> Profile</a>
-                        <a  href='{% url 'password_change'  %}'" class="active"><i class="fas fa-cog"></i> Change Password</a>
-                        <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </header>
+
+            <!-- Floor Plan Designer Content -->
+            <div class="content-wrapper">
+                <div class="page-header">
+                    <h2>Lab Floor Plan Designer</h2>
+                    <div class="page-actions">
+                        <button class="btn btn-outline" id="newPlanBtn">
+                            <i class="fas fa-file btn-icon"></i> New
+                        </button>
+                        <button class="btn btn-outline" id="loadPlanBtn">
+                            <i class="fas fa-folder-open btn-icon"></i> Load
+                        </button>
+                        <button class="btn btn-primary" id="savePlanBtn">
+                            <i class="fas fa-save btn-icon"></i> Save
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Designer Layout -->
+                <div class="designer-layout">
+                    <!-- Toolbox -->
+                    <div class="toolbox">
+                        <div class="toolbox-section">
+                            <div class="toolbox-header">
+                                <span>Drawing Tools</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="toolbox-body">
+                                <div class="tool-group">
+                                    <div class="tool-group-label">Basic Tools</div>
+                                    <div class="tool-buttons">
+                                        <div class="tool-button active" data-tool="select">
+                                            <i class="fas fa-mouse-pointer"></i>
+                                            <span>Select</span>
+                                        </div>
+                                        <div class="tool-button" data-tool="move">
+                                            <i class="fas fa-arrows-alt"></i>
+                                            <span>Move</span>
+                                        </div>
+                                        <div class="tool-button" data-tool="delete">
+                                            <i class="fas fa-trash-alt"></i>
+                                            <span>Delete</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tool-group">
+                                    <div class="tool-group-label">Structure</div>
+                                    <div class="tool-buttons">
+                                        <div class="tool-button" data-tool="wall">
+                                            <i class="fas fa-grip-lines"></i>
+                                            <span>Wall</span>
+                                        </div>
+                                        <div class="tool-button" data-tool="door">
+                                            <i class="fas fa-door-open"></i>
+                                            <span>Door</span>
+                                        </div>
+                                        <div class="tool-button" data-tool="window">
+                                            <i class="far fa-square"></i>
+                                            <span>Window</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tool-group">
+                                    <div class="tool-group-label">Furniture</div>
+                                    <div class="tool-buttons">
+                                        <div class="tool-button" data-tool="table">
+                                            <i class="fas fa-table"></i>
+                                            <span>Table</span>
+                                        </div>
+                                        <div class="tool-button" data-tool="chair">
+                                            <i class="fas fa-chair"></i>
+                                            <span>Chair</span>
+                                        </div>
+                                        <div class="tool-button" data-tool="cabinet">
+                                            <i class="fas fa-archive"></i>
+                                            <span>Cabinet</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="toolbox-section">
+                            <div class="toolbox-header">
+                                <span>Lab Equipment</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="toolbox-body">
+                                <div class="tool-group">
+                                    <div class="tool-group-label">Analytical Instruments</div>
+                                    <ul class="machine-list">
+                                        <li class="machine-item" data-type="spectrophotometer" data-category="analysis">
+                                            <div class="machine-item-color" style="background-color: #28a745;"></div>
+                                            <span>Spectrophotometer</span>
+                                        </li>
+                                        <li class="machine-item" data-type="hplc" data-category="analysis">
+                                            <div class="machine-item-color" style="background-color: #28a745;"></div>
+                                            <span>HPLC</span>
+                                        </li>
+                                        <li class="machine-item" data-type="gc" data-category="analysis">
+                                            <div class="machine-item-color" style="background-color: #28a745;"></div>
+                                            <span>Gas Chromatograph</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tool-group">
+                                    <div class="tool-group-label">Imaging & Microscopy</div>
+                                    <ul class="machine-list">
+                                        <li class="machine-item" data-type="light-microscope" data-category="imaging">
+                                            <div class="machine-item-color" style="background-color: #17a2b8;"></div>
+                                            <span>Light Microscope</span>
+                                        </li>
+                                        <li class="machine-item" data-type="confocal-microscope" data-category="imaging">
+                                            <div class="machine-item-color" style="background-color: #17a2b8;"></div>
+                                            <span>Confocal Microscope</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tool-group">
+                                    <div class="tool-group-label">Molecular Biology</div>
+                                    <ul class="machine-list">
+                                        <li class="machine-item" data-type="pcr" data-category="molecular">
+                                            <div class="machine-item-color" style="background-color: #6f42c1;"></div>
+                                            <span>PCR Thermal Cycler</span>
+                                        </li>
+                                        <li class="machine-item" data-type="qpcr" data-category="molecular">
+                                            <div class="machine-item-color" style="background-color: #6f42c1;"></div>
+                                            <span>qPCR</span>
+                                        </li>
+                                        <li class="machine-item" data-type="gel-electrophoresis" data-category="molecular">
+                                            <div class="machine-item-color" style="background-color: #6f42c1;"></div>
+                                            <span>Gel Electrophoresis</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tool-group">
+                                    <div class="tool-group-label">Separation & Centrifugation</div>
+                                    <ul class="machine-list">
+                                        <li class="machine-item" data-type="centrifuge" data-category="separation">
+                                            <div class="machine-item-color" style="background-color: #20c997;"></div>
+                                            <span>Benchtop Centrifuge</span>
+                                        </li>
+                                        <li class="machine-item" data-type="ultracentrifuge" data-category="separation">
+                                            <div class="machine-item-color" style="background-color: #20c997;"></div>
+                                            <span>Ultracentrifuge</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tool-group">
+                                    <div class="tool-group-label">Thermal Equipment</div>
+                                    <ul class="machine-list">
+                                        <li class="machine-item" data-type="oven" data-category="thermal">
+                                            <div class="machine-item-color" style="background-color: #fd7e14;"></div>
+                                            <span>Oven</span>
+                                        </li>
+                                        <li class="machine-item" data-type="incubator" data-category="thermal">
+                                            <div class="machine-item-color" style="background-color: #fd7e14;"></div>
+                                            <span>Incubator</span>
+                                        </li>
+                                        <li class="machine-item" data-type="water-bath" data-category="thermal">
+                                            <div class="machine-item-color" style="background-color: #fd7e14;"></div>
+                                            <span>Water Bath</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tool-group">
+                                    <div class="tool-group-label">Testing Equipment</div>
+                                    <ul class="machine-list">
+                                        <li class="machine-item" data-type="rheology" data-category="testing">
+                                            <div class="machine-item-color" style="background-color: #dc3545;"></div>
+                                            <span>Rheology</span>
+                                        </li>
+                                        <li class="machine-item" data-type="consistometer" data-category="testing">
+                                            <div class="machine-item-color" style="background-color: #dc3545;"></div>
+                                            <span>Consistometer</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tool-group">
+                                    <div class="tool-group-label">Research Equipment</div>
+                                    <ul class="machine-list">
+                                        <li class="machine-item" data-type="udc" data-category="research">
+                                            <div class="machine-item-color" style="background-color: #6c757d;"></div>
+                                            <span>UDC</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="toolbox-section">
+                            <div class="toolbox-header">
+                                <span>Settings</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="toolbox-body">
+                                <div class="tool-group">
+                                    <div class="property-group">
+                                        <div class="property-label">Grid Size</div>
+                                        <div class="property-row">
+                                            <input type="range" min="10" max="50" value="20" class="property-control" id="gridSizeSlider">
+                                            <span id="gridSizeValue">20px</span>
+                                        </div>
+                                    </div>
+                                    <div class="property-group">
+                                        <div class="property-label">Snap to Grid</div>
+                                        <div class="property-row">
+                                            <label class="toggle">
+                                                <input type="checkbox" id="snapToGridToggle" checked>
+                                                <span>Enabled</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="property-group">
+                                        <div class="property-label">Show Grid</div>
+                                        <div class="property-row">
+                                            <label class="toggle">
+                                                <input type="checkbox" id="showGridToggle" checked>
+                                                <span>Visible</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Canvas Area -->
+                    <div class="canvas-container">
+                        <div class="canvas-header">
+                            <div class="canvas-title">Untitled Floor Plan</div>
+                            <div class="canvas-controls">
+                                <button class="btn btn-outline btn-sm" id="zoomOutBtn">
+                                    <i class="fas fa-search-minus"></i>
+                                </button>
+                                <span id="zoomLevel">100%</span>
+                                <button class="btn btn-outline btn-sm" id="zoomInBtn">
+                                    <i class="fas fa-search-plus"></i>
+                                </button>
+                                <button class="btn btn-outline btn-sm" id="resetViewBtn">
+                                    <i class="fas fa-compress-arrows-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="canvas-body">
+                            <div class="canvas-grid" id="canvasGrid"></div>
+                        </div>
+                    </div>
+
+                    <!-- Properties Panel -->
+                    <div class="properties-panel">
+                        <div class="properties-header">
+                            <span id="propertiesTitle">Properties</span>
+                        </div>
+                        <div class="properties-body" id="propertiesBody">
+                            <div class="property-group" id="noSelectionProperties">
+                                <p>No element selected. Click on an element to edit its properties.</p>
+                            </div>
+                            <div class="property-group" id="wallProperties" style="display: none;">
+                                <div class="property-label">Wall Properties</div>
+                                <div class="property-group">
+                                    <div class="property-label">Position</div>
+                                    <div class="property-row">
+                                        <div class="property-label">X:</div>
+                                        <input type="number" class="property-control" id="wallX">
+                                    </div>
+                                    <div class="property-row">
+                                        <div class="property-label">Y:</div>
+                                        <input type="number" class="property-control" id="wallY">
+                                    </div>
+                                </div>
+                                <div class="property-group">
+                                    <div class="property-label">Size</div>
+                                    <div class="property-row">
+                                        <div class="property-label">Width:</div>
+                                        <input type="number" class="property-control" id="wallWidth">
+                                    </div>
+                                    <div class="property-row">
+                                        <div class="property-label">Height:</div>
+                                        <input type="number" class="property-control" id="wallHeight">
+                                    </div>
+                                </div>
+                                <div class="property-group">
+                                    <div class="property-label">Color</div>
+                                    <input type="color" class="color-picker" id="wallColor" value="#343a40">
+                                </div>
+                                <div class="property-group">
+                                    <button class="btn btn-danger btn-sm" id="deleteWallBtn">
+                                        <i class="fas fa-trash-alt btn-icon"></i> Delete Wall
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="property-group" id="doorProperties" style="display: none;">
+                                <div class="property-label">Door Properties</div>
+                                <div class="property-group">
+                                    <div class="property-label">Position</div>
+                                    <div class="property-row">
+                                        <div class="property-label">X:</div>
+                                        <input type="number" class="property-control" id="doorX">
+                                    </div>
+                                    <div class="property-row">
+                                        <div class="property-label">Y:</div>
+                                        <input type="number" class="property-control" id="doorY">
+                                    </div>
+                                </div>
+                                <div class="property-group">
+                                    <div class="property-label">Size</div>
+                                    <div class="property-row">
+                                        <div class="property-label">Width:</div>
+                                        <input type="number" class="property-control" id="doorWidth">
+                                    </div>
+                                    <div class="property-row">
+                                        <div class="property-label">Height:</div>
+                                        <input type="number" class="property-control" id="doorHeight">
+                                    </div>
+                                </div>
+                                <div class="property-group">
+                                    <div class="property-label">Door Type</div>
+                                    <select class="property-control" id="doorType">
+                                        <option value="single">Single Door</option>
+                                        <option value="double">Double Door</option>
+                                        <option value="sliding">Sliding Door</option>
+                                    </select>
+                                </div>
+                                <div class="property-group">
+                                    <button class="btn btn-danger btn-sm" id="deleteDoorBtn">
+                                        <i class="fas fa-trash-alt btn-icon"></i> Delete Door
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="property-group" id="machineProperties" style="display: none;">
+                                <div class="property-label">Machine Properties</div>
+                                <div class="property-group">
+                                    <div class="property-label">Name</div>
+                                    <input type="text" class="property-control" id="machineName">
+                                </div>
+                                <div class="property-group">
+                                    <div class="property-label">Position</div>
+                                    <div class="property-row">
+                                        <div class="property-label">X:</div>
+                                        <input type="number" class="property-control" id="machineX">
+                                    </div>
+                                    <div class="property-row">
+                                        <div class="property-label">Y:</div>
+                                        <input type="number" class="property-control" id="machineY">
+                                    </div>
+                                </div>
+                                <div class="property-group">
+                                    <div class="property-label">Size</div>
+                                    <div class="property-row">
+                                        <div class="property-label">Width:</div>
+                                        <input type="number" class="property-control" id="machineWidth">
+                                    </div>
+                                    <div class="property-row">
+                                        <div class="property-label">Height:</div>
+                                        <input type="number" class="property-control" id="machineHeight">
+                                    </div>
+                                </div>
+                                <div class="property-group">
+                                    <div class="property-label">Status</div>
+                                    <select class="property-control" id="machineStatus">
+                                        <option value="active">Active</option>
+                                        <option value="maintenance">Maintenance</option>
+                                        <option value="inactive">Inactive</option>
+                                    </select>
+                                </div>
+                                <div class="property-group">
+                                    <div class="property-label">Additional Information</div>
+                                    <div class="property-row">
+                                        <div class="property-label">Last Calibration:</div>
+                                        <input type="date" class="property-control" id="machineCalibration">
+                                    </div>
+                                    <div class="property-row">
+                                        <div class="property-label">Next Maintenance:</div>
+                                        <input type="date" class="property-control" id="machineMaintenance">
+                                    </div>
+                                </div>
+                                <div class="property-group">
+                                    <button class="btn btn-danger btn-sm" id="deleteMachineBtn">
+                                        <i class="fas fa-trash-alt btn-icon"></i> Delete Machine
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </header>
+        </main>
+    </div>
 
-        <!-- Change Password Content -->
-        <div class="content-wrapper">
-            <div class="page-header">
-                <h2>Change Password</h2>
+    <!-- Save Plan Modal -->
+    <div class="modal-backdrop" id="saveModalBackdrop"></div>
+    <div class="modal" id="saveModal">
+        <div class="modal-header">
+            <h3 class="modal-title">Save Floor Plan</h3>
+            <button class="modal-close" id="closeSaveModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="planName">Floor Plan Name</label>
+                <input type="text" class="form-control" id="planName" placeholder="Enter a name for your floor plan">
             </div>
-
-            <!-- Django Messages -->
-            {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-
-            <!-- Change Password Card -->
-            <div class="card">
-                <div class="card-header">
-                    <h3>Update Your Password</h3>
-                </div>
-                <div class="card-body">
-                    <form id="changePasswordForm" method="POST" action="{% url 'password_change' %}">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <label for="old_password" class="required-field">Current Password</label>
-                            <div class="password-field">
-                                <input type="password" id="old_password" name="old_password" class="form-control" required>
-                                <button type="button" class="password-toggle" data-target="old_password">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="new_password" class="required-field">New Password</label>
-                            <div class="password-field">
-                                <input type="password" id="new_password" name="new_password" class="form-control" required>
-                                <button type="button" class="password-toggle" data-target="new_password">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                            </div>
-                            
-                            <!-- Password Strength Meter -->
-                            <div class="password-strength">
-                                <div class="strength-meter">
-                                    <div class="strength-meter-fill" id="strengthMeter"></div>
-                                </div>
-                                <div class="strength-text" id="strengthText">Password strength</div>
-                            </div>
-                            
-                            <!-- Password Requirements -->
-                            <div class="password-requirements">
-                                <div class="form-text">Your password must meet the following requirements:</div>
-                                <ul class="requirement-list">
-                                    <li class="requirement-item requirement-unmet" id="req-length">
-                                        <i class="fas fa-circle"></i> At least 8 characters long
-                                    </li>
-                                    <li class="requirement-item requirement-unmet" id="req-uppercase">
-                                        <i class="fas fa-circle"></i> At least one uppercase letter
-                                    </li>
-                                    <li class="requirement-item requirement-unmet" id="req-lowercase">
-                                        <i class="fas fa-circle"></i> At least one lowercase letter
-                                    </li>
-                                    <li class="requirement-item requirement-unmet" id="req-number">
-                                        <i class="fas fa-circle"></i> At least one number
-                                    </li>
-                                    <li class="requirement-item requirement-unmet" id="req-special">
-                                        <i class="fas fa-circle"></i> At least one special character
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="confirm_password" class="required-field">Confirm New Password</label>
-                            <div class="password-field">
-                                <input type="password" id="confirm_password" name="confirm_password" class="form-control" required>
-                                <button type="button" class="password-toggle" data-target="confirm_password">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                            </div>
-                            <div class="form-text" id="passwordMatch"></div>
-                        </div>
-
-                        <div class="form-actions">
-                            <a href="{% url 'home' %}" class="btn btn-outline">Cancel</a>
-                            <button type="submit" class="btn btn-primary" id="changePasswordBtn">
-                                <i class="fas fa-key btn-icon"></i> Change Password
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Security Tips Card -->
-            <div class="card">
-                <div class="card-header">
-                    <h3>Password Security Tips</h3>
-                </div>
-                <div class="card-body">
-                    <ul style="padding-left: 1.25rem;">
-                        <li style="margin-bottom: 0.5rem;">Use a unique password for each of your important accounts.</li>
-                        <li style="margin-bottom: 0.5rem;">Use a password manager to generate and store strong passwords.</li>
-                        <li style="margin-bottom: 0.5rem;">Consider using a passphrase (a sequence of random words) for better security and memorability.</li>
-                        <li style="margin-bottom: 0.5rem;">Enable two-factor authentication for additional security.</li>
-                        <li style="margin-bottom: 0.5rem;">Change your passwords periodically, especially for critical accounts.</li>
-                    </ul>
-                </div>
+            <div class="form-group">
+                <label for="planDescription">Description (Optional)</label>
+                <textarea class="form-control" id="planDescription" rows="3" placeholder="Enter a description for your floor plan"></textarea>
             </div>
         </div>
-    </main>
-</div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="cancelSaveBtn">Cancel</button>
+            <button class="btn btn-primary" id="confirmSaveBtn">Save</button>
+        </div>
+    </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Initialize dropdown menus
-        initDropdowns();
-        
-        // Initialize mobile menu
-        initMobileMenu();
-        
-        // Initialize password toggles
-        initPasswordToggles();
-        
-        // Initialize password strength meter
-        initPasswordStrength();
-        
-        // Initialize form validation
-        initFormValidation();
-    });
+    <!-- Load Plan Modal -->
+    <div class="modal-backdrop" id="loadModalBackdrop"></div>
+    <div class="modal" id="loadModal">
+        <div class="modal-header">
+            <h3 class="modal-title">Load Floor Plan</h3>
+            <button class="modal-close" id="closeLoadModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="planSelect">Select Floor Plan</label>
+                <select class="form-control" id="planSelect">
+                    <option value="">-- Select a floor plan --</option>
+                    <option value="main-lab">Main Laboratory</option>
+                    <option value="research-lab">Research Laboratory</option>
+                    <option value="testing-lab">Testing Laboratory</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="cancelLoadBtn">Cancel</button>
+            <button class="btn btn-primary" id="confirmLoadBtn">Load</button>
+        </div>
+    </div>
 
-    function initDropdowns() {
-        const dropdownTriggers = document.querySelectorAll('.user-profile, .actions-dropdown');
-        
-        dropdownTriggers.forEach(trigger => {
-            trigger.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const dropdown = this.querySelector('.dropdown-menu');
-                
-                if (dropdown) {
-                    const isVisible = dropdown.style.display === 'block';
+    <!-- New Plan Modal -->
+    <div class="modal-backdrop" id="newModalBackdrop"></div>
+    <div class="modal" id="newModal">
+        <div class="modal-header">
+            <h3 class="modal-title">New Floor Plan</h3>
+            <button class="modal-close" id="closeNewModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p>Are you sure you want to create a new floor plan? Any unsaved changes will be lost.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="cancelNewBtn">Cancel</button>
+            <button class="btn btn-primary" id="confirmNewBtn">Create New</button>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentTool = 'select';
+        let elements = [];
+        let selectedElement = null;
+        let nextElementId = 1;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize UI components
+            initUI();
+            
+            // Initialize floor plan designer
+            initDesigner();
+            
+            // Initialize modals
+            initModals();
+        });
+
+        function initUI() {
+            // Initialize dropdown menus
+            const dropdownTriggers = document.querySelectorAll('.user-profile');
+            
+            dropdownTriggers.forEach(trigger => {
+                trigger.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const dropdown = this.querySelector('.dropdown-menu');
+                    if (dropdown) {
+                        const isVisible = dropdown.style.display === 'block';
+                        // Close all first
+                        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                            menu.style.display = 'none';
+                        });
+                        dropdown.style.display = isVisible ? 'none' : 'block';
+                    }
+                });
+            });
+            
+            document.addEventListener('click', function() {
+                document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                    menu.style.display = 'none';
+                });
+            });
+
+            // Initialize mobile menu
+            const menuToggle = document.querySelector('.menu-toggle');
+            const sidebar = document.querySelector('.sidebar');
+            
+            if (menuToggle && sidebar) {
+                menuToggle.addEventListener('click', function() {
+                    sidebar.classList.toggle('active');
+                });
+            }
+
+            // Initialize toolbox sections
+            const toolboxHeaders = document.querySelectorAll('.toolbox-header');
+            
+            toolboxHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    const body = this.nextElementSibling;
+                    const isCollapsed = body.classList.contains('collapsed');
                     
-                    // Close all dropdowns first
-                    document.querySelectorAll('.dropdown-menu').forEach(menu => {
-                        menu.style.display = 'none';
+                    if (isCollapsed) {
+                        body.classList.remove('collapsed');
+                        this.classList.remove('collapsed');
+                    } else {
+                        body.classList.add('collapsed');
+                        this.classList.add('collapsed');
+                    }
+                });
+            });
+
+            // Initialize tool buttons
+            const toolButtons = document.querySelectorAll('.tool-button');
+
+            toolButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    toolButtons.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    // Set current tool
+                    currentTool = this.dataset.tool;
+                    console.log('Current tool set to:', currentTool);
+                });
+            });
+
+            // Initialize grid size slider
+            const gridSizeSlider = document.getElementById('gridSizeSlider');
+            const gridSizeValue = document.getElementById('gridSizeValue');
+            
+            if (gridSizeSlider && gridSizeValue) {
+                gridSizeSlider.addEventListener('input', function() {
+                    const value = this.value;
+                    gridSizeValue.textContent = value + 'px';
+                    document.documentElement.style.setProperty('--grid-size', value + 'px');
+                });
+            }
+
+            // Initialize zoom controls
+            const zoomInBtn = document.getElementById('zoomInBtn');
+            const zoomOutBtn = document.getElementById('zoomOutBtn');
+            const resetViewBtn = document.getElementById('resetViewBtn');
+            const zoomLevel = document.getElementById('zoomLevel');
+            const canvasGrid = document.getElementById('canvasGrid');
+            
+            let currentZoom = 100;
+            
+            if (zoomInBtn && zoomOutBtn && resetViewBtn && zoomLevel && canvasGrid) {
+                zoomInBtn.addEventListener('click', function() {
+                    if (currentZoom < 200) {
+                        currentZoom += 10;
+                        updateZoom();
+                    }
+                });
+                
+                zoomOutBtn.addEventListener('click', function() {
+                    if (currentZoom > 50) {
+                        currentZoom -= 10;
+                        updateZoom();
+                    }
+                });
+                
+                resetViewBtn.addEventListener('click', function() {
+                    currentZoom = 100;
+                    updateZoom();
+                    
+                    // Reset pan position
+                    canvasGrid.style.transform = 'translate(0px, 0px)';
+                });
+                
+                function updateZoom() {
+                    zoomLevel.textContent = currentZoom + '%';
+                    canvasGrid.style.transform = `scale(${currentZoom / 100})`;
+                }
+            }
+        }
+
+        function initDesigner() {
+            const canvasGrid = document.getElementById('canvasGrid');
+            const gridSize = 20; // Default grid size
+            let isDragging = false;
+            let startX, startY;
+            
+            // Initialize canvas events
+            if (canvasGrid) {
+                // Mouse down event
+                canvasGrid.addEventListener('mousedown', function(e) {
+                    const rect = canvasGrid.getBoundingClientRect();
+                    const x = Math.floor((e.clientX - rect.left) / gridSize) * gridSize;
+                    const y = Math.floor((e.clientY - rect.top) / gridSize) * gridSize;
+                    
+                    startX = x;
+                    startY = y;
+                    
+                    if (currentTool === 'select') {
+                        // Check if clicked on an element
+                        const clickedElement = getElementAt(x, y);
+                        
+                        if (clickedElement) {
+                            selectElement(clickedElement);
+                            isDragging = true;
+                        } else {
+                            deselectElement();
+                        }
+                    } else if (currentTool === 'wall') {
+                        // Start creating a wall
+                        const newWall = createWall(x, y, gridSize, gridSize);
+                        elements.push(newWall);
+                        selectElement(newWall);
+                        isDragging = true;
+                    } else if (currentTool === 'door') {
+                        // Create a door
+                        const newDoor = createDoor(x, y, gridSize * 2, gridSize);
+                        elements.push(newDoor);
+                        selectElement(newDoor);
+                        isDragging = true;
+                    }
+                });
+                
+                // Mouse move event
+                canvasGrid.addEventListener('mousemove', function(e) {
+                    if (!isDragging) return;
+                    
+                    const rect = canvasGrid.getBoundingClientRect();
+                    const x = Math.floor((e.clientX - rect.left) / gridSize) * gridSize;
+                    const y = Math.floor((e.clientY - rect.top) / gridSize) * gridSize;
+                    
+                    if (currentTool === 'select' && selectedElement) {
+                        // Move the selected element
+                        const dx = x - startX;
+                        const dy = y - startY;
+                        
+                        if (dx !== 0 || dy !== 0) {
+                            selectedElement.x += dx;
+                            selectedElement.y += dy;
+                            updateElementPosition(selectedElement);
+                            
+                            startX = x;
+                            startY = y;
+                        }
+                    } else if ((currentTool === 'wall' || currentTool === 'door') && selectedElement) {
+                        // Resize the wall or door
+                        const width = Math.max(gridSize, x - selectedElement.x + gridSize);
+                        const height = Math.max(gridSize, y - selectedElement.y + gridSize);
+                        
+                        selectedElement.width = width;
+                        selectedElement.height = height;
+                        updateElementSize(selectedElement);
+                    }
+                });
+                
+                // Mouse up event
+                canvasGrid.addEventListener('mouseup', function() {
+                    isDragging = false;
+                    
+                    if (selectedElement) {
+                        updatePropertiesPanel(selectedElement);
+                    }
+                });
+
+                // Handle machine items drag and drop
+                const machineItems = document.querySelectorAll('.machine-item');
+
+                machineItems.forEach(item => {
+                    item.setAttribute('draggable', 'true');
+                    
+                    item.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            type: this.dataset.type,
+                            category: this.dataset.category,
+                            name: this.querySelector('span').textContent.trim()
+                        }));
                     });
-                    
-                    // Toggle current dropdown
-                    dropdown.style.display = isVisible ? 'none' : 'block';
-                }
-            });
-        });
-        
-        // Close dropdowns when clicking outside
-        document.addEventListener('click', function() {
-            document.querySelectorAll('.dropdown-menu').forEach(menu => {
-                menu.style.display = 'none';
-            });
-        });
-    }
-
-    function initMobileMenu() {
-        const menuToggle = document.createElement('button');
-        menuToggle.className = 'menu-toggle';
-        menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
-        
-        document.querySelector('.top-nav').prepend(menuToggle);
-        
-        menuToggle.addEventListener('click', function() {
-            document.querySelector('.sidebar').classList.toggle('active');
-        });
-        
-        function checkScreenSize() {
-            if (window.innerWidth < 768) {
-                menuToggle.style.display = 'block';
-            } else {
-                menuToggle.style.display = 'none';
-                document.querySelector('.sidebar').classList.remove('active');
-            }
-        }
-        
-        window.addEventListener('resize', checkScreenSize);
-        checkScreenSize();
-    }
-
-    function initPasswordToggles() {
-        const toggleButtons = document.querySelectorAll('.password-toggle');
-        
-        toggleButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const targetId = this.getAttribute('data-target');
-                const passwordInput = document.getElementById(targetId);
-                const icon = this.querySelector('i');
+                });
                 
-                if (passwordInput.type === 'password') {
-                    passwordInput.type = 'text';
-                    icon.classList.remove('fa-eye');
-                    icon.classList.add('fa-eye-slash');
-                } else {
-                    passwordInput.type = 'password';
-                    icon.classList.remove('fa-eye-slash');
-                    icon.classList.add('fa-eye');
+                // Handle drop on canvas
+                canvasGrid.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                });
+                
+                canvasGrid.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    
+                    const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                    const rect = canvasGrid.getBoundingClientRect();
+                    const x = Math.floor((e.clientX - rect.left) / gridSize) * gridSize;
+                    const y = Math.floor((e.clientY - rect.top) / gridSize) * gridSize;
+                    
+                    // Create a new machine element
+                    const newMachine = createMachine(x, y, gridSize * 3, gridSize * 2, data.name, data.category, data.type);
+                    elements.push(newMachine);
+                    selectElement(newMachine);
+                });
+            }
+            
+            // Helper functions
+            function createWall(x, y, width, height) {
+                const wall = document.createElement('div');
+                wall.className = 'canvas-element wall';
+                wall.style.left = x + 'px';
+                wall.style.top = y + 'px';
+                wall.style.width = width + 'px';
+                wall.style.height = height + 'px';
+                
+                canvasGrid.appendChild(wall);
+                
+                return {
+                    id: 'element-' + nextElementId++,
+                    type: 'wall',
+                    element: wall,
+                    x: x,
+                    y: y,
+                    width: width,
+                    height: height,
+                    color: '#343a40'
+                };
+            }
+            
+            function createDoor(x, y, width, height) {
+                const door = document.createElement('div');
+                door.className = 'canvas-element door';
+                door.style.left = x + 'px';
+                door.style.top = y + 'px';
+                door.style.width = width + 'px';
+                door.style.height = height + 'px';
+                
+                canvasGrid.appendChild(door);
+                
+                return {
+                    id: 'element-' + nextElementId++,
+                    type: 'door',
+                    element: door,
+                    x: x,
+                    y: y,
+                    width: width,
+                    height: height,
+                    doorType: 'single'
+                };
+            }
+            
+            function createMachine(x, y, width, height, name, category, machineType) {
+                const machine = document.createElement('div');
+                machine.className = 'canvas-element machine ' + category;
+                machine.style.left = x + 'px';
+                machine.style.top = y + 'px';
+                machine.style.width = width + 'px';
+                machine.style.height = height + 'px';
+                
+                // Add icon and name
+                const icon = document.createElement('i');
+                icon.className = getMachineIcon(category);
+                machine.appendChild(icon);
+                
+                const nameSpan = document.createElement('span');
+                nameSpan.textContent = name;
+                machine.appendChild(nameSpan);
+                
+                canvasGrid.appendChild(machine);
+                
+                return {
+                    id: 'element-' + nextElementId++,
+                    type: 'machine',
+                    element: machine,
+                    x: x,
+                    y: y,
+                    width: width,
+                    height: height,
+                    name: name,
+                    category: category,
+                    machineType: machineType,
+                    status: 'active',
+                    lastCalibration: '',
+                    nextMaintenance: ''
+                };
+            }
+            
+            function getMachineIcon(category) {
+                switch (category) {
+                    case 'analysis': return 'fas fa-chart-line';
+                    case 'imaging': return 'fas fa-microscope';
+                    case 'molecular': return 'fas fa-dna';
+                    case 'separation': return 'fas fa-sync-alt';
+                    case 'thermal': return 'fas fa-temperature-high';
+                    case 'testing': return 'fas fa-vial';
+                    case 'research': return 'fas fa-cogs';
+                    default: return 'fas fa-cube';
                 }
-            });
-        });
-    }
-
-    function initPasswordStrength() {
-        const newPassword = document.getElementById('new_password');
-        const strengthMeter = document.getElementById('strengthMeter');
-        const strengthText = document.getElementById('strengthText');
-        
-        // Password requirement elements
-        const reqLength = document.getElementById('req-length');
-        const reqUppercase = document.getElementById('req-uppercase');
-        const reqLowercase = document.getElementById('req-lowercase');
-        const reqNumber = document.getElementById('req-number');
-        const reqSpecial = document.getElementById('req-special');
-        
-        newPassword.addEventListener('input', function() {
-            const password = this.value;
-            let strength = 0;
-            
-            // Check requirements
-            const hasLength = password.length >= 8;
-            const hasUppercase = /[A-Z]/.test(password);
-            const hasLowercase = /[a-z]/.test(password);
-            const hasNumber = /[0-9]/.test(password);
-            const hasSpecial = /[^A-Za-z0-9]/.test(password);
-            
-            // Update requirement indicators
-            updateRequirement(reqLength, hasLength);
-            updateRequirement(reqUppercase, hasUppercase);
-            updateRequirement(reqLowercase, hasLowercase);
-            updateRequirement(reqNumber, hasNumber);
-            updateRequirement(reqSpecial, hasSpecial);
-            
-            // Calculate strength
-            if (hasLength) strength += 20;
-            if (hasUppercase) strength += 20;
-            if (hasLowercase) strength += 20;
-            if (hasNumber) strength += 20;
-            if (hasSpecial) strength += 20;
-            
-            // Update strength meter
-            strengthMeter.style.width = strength + '%';
-            
-            // Remove all classes first
-            strengthMeter.classList.remove('strength-weak', 'strength-medium', 'strength-strong');
-            
-            // Add appropriate class based on strength
-            if (strength < 40) {
-                strengthMeter.classList.add('strength-weak');
-                strengthText.textContent = 'Weak';
-                strengthText.style.color = 'var(--danger-color)';
-            } else if (strength < 80) {
-                strengthMeter.classList.add('strength-medium');
-                strengthText.textContent = 'Medium';
-                strengthText.style.color = 'var(--warning-color)';
-            } else {
-                strengthMeter.classList.add('strength-strong');
-                strengthText.textContent = 'Strong';
-                strengthText.style.color = 'var(--success-color)';
             }
             
-            // Check if passwords match
-            checkPasswordsMatch();
-        });
-        
-        function updateRequirement(element, isMet) {
-            if (isMet) {
-                element.classList.remove('requirement-unmet');
-                element.classList.add('requirement-met');
-                element.querySelector('i').classList.remove('fa-circle');
-                element.querySelector('i').classList.add('fa-check-circle');
-            } else {
-                element.classList.remove('requirement-met');
-                element.classList.add('requirement-unmet');
-                element.querySelector('i').classList.remove('fa-check-circle');
-                element.querySelector('i').classList.add('fa-circle');
+            function getElementAt(x, y) {
+                // Check in reverse order to get the topmost element
+                for (let i = elements.length - 1; i >= 0; i--) {
+                    const el = elements[i];
+                    
+                    if (x >= el.x && x <= el.x + el.width &&
+                        y >= el.y && y <= el.y + el.height) {
+                        return el;
+                    }
+                }
+                
+                return null;
+            }
+            
+            function selectElement(element) {
+                deselectElement();
+                
+                selectedElement = element;
+                element.element.classList.add('selected');
+                
+                updatePropertiesPanel(element);
+            }
+            
+            function deselectElement() {
+                if (selectedElement) {
+                    selectedElement.element.classList.remove('selected');
+                    selectedElement = null;
+                }
+                
+                // Hide all property panels
+                document.getElementById('noSelectionProperties').style.display = 'block';
+                document.getElementById('wallProperties').style.display = 'none';
+                document.getElementById('doorProperties').style.display = 'none';
+                document.getElementById('machineProperties').style.display = 'none';
+            }
+            
+            function updateElementPosition(element) {
+                element.element.style.left = element.x + 'px';
+                element.element.style.top = element.y + 'px';
+            }
+            
+            function updateElementSize(element) {
+                element.element.style.width = element.width + 'px';
+                element.element.style.height = element.height + 'px';
+            }
+            
+            function updatePropertiesPanel(element) {
+                // Hide all property panels
+                document.getElementById('noSelectionProperties').style.display = 'none';
+                document.getElementById('wallProperties').style.display = 'none';
+                document.getElementById('doorProperties').style.display = 'none';
+                document.getElementById('machineProperties').style.display = 'none';
+                
+                // Show the appropriate panel based on element type
+                if (element.type === 'wall') {
+                    document.getElementById('wallProperties').style.display = 'block';
+                    document.getElementById('wallX').value = element.x;
+                    document.getElementById('wallY').value = element.y;
+                    document.getElementById('wallWidth').value = element.width;
+                    document.getElementById('wallHeight').value = element.height;
+                    document.getElementById('wallColor').value = element.color;
+                    
+                    // Add event listeners for property changes
+                    document.getElementById('wallX').onchange = function() {
+                        element.x = parseInt(this.value);
+                        updateElementPosition(element);
+                    };
+                    
+                    document.getElementById('wallY').onchange = function() {
+                        element.y = parseInt(this.value);
+                        updateElementPosition(element);
+                    };
+                    
+                    document.getElementById('wallWidth').onchange = function() {
+                        element.width = parseInt(this.value);
+                        updateElementSize(element);
+                    };
+                    
+                    document.getElementById('wallHeight').onchange = function() {
+                        element.height = parseInt(this.value);
+                        updateElementSize(element);
+                    };
+                    
+                    document.getElementById('wallColor').onchange = function() {
+                        element.color = this.value;
+                        element.element.style.backgroundColor = this.value;
+                    };
+                    
+                    document.getElementById('deleteWallBtn').onclick = function() {
+                        deleteElement(element);
+                    };
+                } else if (element.type === 'door') {
+                    document.getElementById('doorProperties').style.display = 'block';
+                    document.getElementById('doorX').value = element.x;
+                    document.getElementById('doorY').value = element.y;
+                    document.getElementById('doorWidth').value = element.width;
+                    document.getElementById('doorHeight').value = element.height;
+                    document.getElementById('doorType').value = element.doorType;
+                    
+                    // Add event listeners for property changes
+                    document.getElementById('doorX').onchange = function() {
+                        element.x = parseInt(this.value);
+                        updateElementPosition(element);
+                    };
+                    
+                    document.getElementById('doorY').onchange = function() {
+                        element.y = parseInt(this.value);
+                        updateElementPosition(element);
+                    };
+                    
+                    document.getElementById('doorWidth').onchange = function() {
+                        element.width = parseInt(this.value);
+                        updateElementSize(element);
+                    };
+                    
+                    document.getElementById('doorHeight').onchange = function() {
+                        element.height = parseInt(this.value);
+                        updateElementSize(element);
+                    };
+                    
+                    document.getElementById('doorType').onchange = function() {
+                        element.doorType = this.value;
+                    };
+                    
+                    document.getElementById('deleteDoorBtn').onclick = function() {
+                        deleteElement(element);
+                    };
+                } else if (element.type === 'machine') {
+                    document.getElementById('machineProperties').style.display = 'block';
+                    document.getElementById('machineName').value = element.name;
+                    document.getElementById('machineX').value = element.x;
+                    document.getElementById('machineY').value = element.y;
+                    document.getElementById('machineWidth').value = element.width;
+                    document.getElementById('machineHeight').value = element.height;
+                    document.getElementById('machineStatus').value = element.status;
+                    document.getElementById('machineCalibration').value = element.lastCalibration;
+                    document.getElementById('machineMaintenance').value = element.nextMaintenance;
+                    
+                    // Add event listeners for property changes
+                    document.getElementById('machineName').onchange = function() {
+                        element.name = this.value;
+                        element.element.querySelector('span').textContent = this.value;
+                    };
+                    
+                    document.getElementById('machineX').onchange = function() {
+                        element.x = parseInt(this.value);
+                        updateElementPosition(element);
+                    };
+                    
+                    document.getElementById('machineY').onchange = function() {
+                        element.y = parseInt(this.value);
+                        updateElementPosition(element);
+                    };
+                    
+                    document.getElementById('machineWidth').onchange = function() {
+                        element.width = parseInt(this.value);
+                        updateElementSize(element);
+                    };
+                    
+                    document.getElementById('machineHeight').onchange = function() {
+                        element.height = parseInt(this.value);
+                        updateElementSize(element);
+                    };
+                    
+                    document.getElementById('machineStatus').onchange = function() {
+                        element.status = this.value;
+                    };
+                    
+                    document.getElementById('machineCalibration').onchange = function() {
+                        element.lastCalibration = this.value;
+                    };
+                    
+                    document.getElementById('machineMaintenance').onchange = function() {
+                        element.nextMaintenance = this.value;
+                    };
+                    
+                    document.getElementById('deleteMachineBtn').onclick = function() {
+                        deleteElement(element);
+                    };
+                }
+            }
+            
+            function deleteElement(element) {
+                // Remove from DOM
+                element.element.remove();
+                
+                // Remove from elements array
+                const index = elements.findIndex(el => el.id === element.id);
+                if (index !== -1) {
+                    elements.splice(index, 1);
+                }
+                
+                // Deselect
+                deselectElement();
             }
         }
-        
-        // Check if passwords match
-        const confirmPassword = document.getElementById('confirm_password');
-        const passwordMatch = document.getElementById('passwordMatch');
-        
-        confirmPassword.addEventListener('input', checkPasswordsMatch);
-        
-        function checkPasswordsMatch() {
-            const password = newPassword.value;
-            const confirm = confirmPassword.value;
+
+        function initModals() {
+            // Save modal
+            const saveModalBackdrop = document.getElementById('saveModalBackdrop');
+            const saveModal = document.getElementById('saveModal');
+            const closeSaveModal = document.getElementById('closeSaveModal');
+            const cancelSaveBtn = document.getElementById('cancelSaveBtn');
+            const confirmSaveBtn = document.getElementById('confirmSaveBtn');
+            const savePlanBtn = document.getElementById('savePlanBtn');
             
-            if (confirm.length === 0) {
-                passwordMatch.textContent = '';
-                return;
+            if (savePlanBtn) {
+                savePlanBtn.addEventListener('click', function() {
+                    saveModalBackdrop.style.display = 'block';
+                    saveModal.style.display = 'block';
+                });
             }
             
-            if (password === confirm) {
-                passwordMatch.textContent = 'Passwords match';
-                passwordMatch.style.color = 'var(--success-color)';
-            } else {
-                passwordMatch.textContent = 'Passwords do not match';
-                passwordMatch.style.color = 'var(--danger-color)';
+            if (closeSaveModal) {
+                closeSaveModal.addEventListener('click', function() {
+                    saveModalBackdrop.style.display = 'none';
+                    saveModal.style.display = 'none';
+                });
+            }
+            
+            if (cancelSaveBtn) {
+                cancelSaveBtn.addEventListener('click', function() {
+                    saveModalBackdrop.style.display = 'none';
+                    saveModal.style.display = 'none';
+                });
+            }
+            
+            if (confirmSaveBtn) {
+                confirmSaveBtn.addEventListener('click', function() {
+                    // Save logic would go here
+                    
+                    // For demo, just show an alert
+                    alert('Floor plan saved successfully!');
+                    
+                    // Update the canvas title
+                    const planName = document.getElementById('planName').value;
+                    if (planName) {
+                        document.querySelector('.canvas-title').textContent = planName;
+                    }
+                    
+                    saveModalBackdrop.style.display = 'none';
+                    saveModal.style.display = 'none';
+                });
+            }
+            
+            // Load modal
+            const loadModalBackdrop = document.getElementById('loadModalBackdrop');
+            const loadModal = document.getElementById('loadModal');
+            const closeLoadModal = document.getElementById('closeLoadModal');
+            const cancelLoadBtn = document.getElementById('cancelLoadBtn');
+            const confirmLoadBtn = document.getElementById('confirmLoadBtn');
+            const loadPlanBtn = document.getElementById('loadPlanBtn');
+            
+            if (loadPlanBtn) {
+                loadPlanBtn.addEventListener('click', function() {
+                    loadModalBackdrop.style.display = 'block';
+                    loadModal.style.display = 'block';
+                });
+            }
+            
+            if (closeLoadModal) {
+                closeLoadModal.addEventListener('click', function() {
+                    loadModalBackdrop.style.display = 'none';
+                    loadModal.style.display = 'none';
+                });
+            }
+            
+            if (cancelLoadBtn) {
+                cancelLoadBtn.addEventListener('click', function() {
+                    loadModalBackdrop.style.display = 'none';
+                    loadModal.style.display = 'none';
+                });
+            }
+            
+            if (confirmLoadBtn) {
+                confirmLoadBtn.addEventListener('click', function() {
+                    // Load logic would go here
+                    
+                    // For demo, just show an alert
+                    const planSelect = document.getElementById('planSelect');
+                    if (planSelect.value) {
+                        alert('Floor plan loaded successfully!');
+                        
+                        // Update the canvas title
+                        const selectedOption = planSelect.options[planSelect.selectedIndex];
+                        document.querySelector('.canvas-title').textContent = selectedOption.text;
+                        
+                        loadModalBackdrop.style.display = 'none';
+                        loadModal.style.display = 'none';
+                    } else {
+                        alert('Please select a floor plan to load.');
+                    }
+                });
+            }
+            
+            // New modal
+            const newModalBackdrop = document.getElementById('newModalBackdrop');
+            const newModal = document.getElementById('newModal');
+            const closeNewModal = document.getElementById('closeNewModal');
+            const cancelNewBtn = document.getElementById('cancelNewBtn');
+            const confirmNewBtn = document.getElementById('confirmNewBtn');
+            const newPlanBtn = document.getElementById('newPlanBtn');
+            
+            if (newPlanBtn) {
+                newPlanBtn.addEventListener('click', function() {
+                    newModalBackdrop.style.display = 'block';
+                    newModal.style.display = 'block';
+                });
+            }
+            
+            if (closeNewModal) {
+                closeNewModal.addEventListener('click', function() {
+                    newModalBackdrop.style.display = 'none';
+                    newModal.style.display = 'none';
+                });
+            }
+            
+            if (cancelNewBtn) {
+                cancelNewBtn.addEventListener('click', function() {
+                    newModalBackdrop.style.display = 'none';
+                    newModal.style.display = 'none';
+                });
+            }
+            
+            if (confirmNewBtn) {
+                confirmNewBtn.addEventListener('click', function() {
+                    // Clear the canvas
+                    const canvasGrid = document.getElementById('canvasGrid');
+                    const elementsToRemove = document.querySelectorAll('.canvas-element');
+                    elementsToRemove.forEach(el => el.remove());
+                    
+                    // Reset the elements array
+                    elements = [];
+                    selectedElement = null;
+                    
+                    // Reset the canvas title
+                    document.querySelector('.canvas-title').textContent = 'Untitled Floor Plan';
+                    
+                    newModalBackdrop.style.display = 'none';
+                    newModal.style.display = 'none';
+                });
             }
         }
-    }
-
-    function initFormValidation() {
-        const changePasswordForm = document.getElementById('changePasswordForm');
-        
-        changePasswordForm.addEventListener('submit', function(e) {
-            const newPassword = document.getElementById('new_password').value;
-            const confirmPassword = document.getElementById('confirm_password').value;
-            
-            // Basic client-side validation before submitting to server
-            if (newPassword.length < 8) {
-                e.preventDefault();
-                alert('Your new password must be at least 8 characters long.');
-                return false;
-            }
-            
-            if (newPassword !== confirmPassword) {
-                e.preventDefault();
-                alert('Your new passwords do not match.');
-                return false;
-            }
-            
-            // All validation passed, form will submit
-            return true;
-        });
-    }
-</script>
+    </script>
 </body>
 </html>

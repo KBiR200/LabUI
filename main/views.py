@@ -78,6 +78,11 @@ def logout_view(request):
 @login_required(login_url='signin')
 def dashboard(request):
     tasks = Tasks.objects.filter(status=1, assigned=request.user).order_by('-created_at')
+    teams = Team.objects.filter(members=request.user)
+    for team in teams:
+        print(team.name)
+        print(team.members.all())
+    
     new_tasks = Tasks.objects.filter(status=0).order_by('-created_at')
     tasks_history = Tasks.objects.filter(assigned=request.user).order_by('-created_at')
     report = Report.objects.filter(author=request.user)

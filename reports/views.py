@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from main.models import Machine
+from main.models import Machine, Team
 from django.views.decorators.csrf import csrf_exempt
 from reports.models import Report, Records, Tasks, Records_attachment, Task_attachment, Task_comment
 from django.contrib.auth.models import User
@@ -172,23 +172,51 @@ def save_record(request, pk):
 
 """--------------------- Tasks ---------------------"""
 
+
 @login_required(login_url='signin')
 def tasks(request):
+    user = request.user
+
+    # Get all teams the user belongs to
+    user_teams = Team.objects.filter(
+        Q(members=user) | Q(supervisor=user)
+    )
+
+    # Get all users in those teams (members + supervisors)
+    related_users = set()
+    for team in user_teams:
+        related_users.update(team.members.all())
+        if team.supervisor:
+            related_users.add(team.supervisor)
+
+    # Filter tasks where the creator or assigned users are in the same team
     tasks = Tasks.objects.filter(
-            Q(assigned=request.user) |
-            Q(creator=request.user)
-        ).order_by('-created_at')
-    new_tasks = Tasks.objects.filter(status=0).order_by('-created_at')
-    tasks_history = Tasks.objects.filter(assigned=request.user).order_by('-created_at')
-    report = Report.objects.filter(author=request.user)
+        Q(creator__in=related_users) |
+        Q(assigned__in=related_users)
+    ).distinct().order_by('-created_at')
+
+    q_task = []
+    for t in tasks:
+        if user in t.assigned.all() or t.assigned.count() == 0 or t.creator == user:
+            q_task.append(t)
+
+    print(q_task)
+    # Optional: Only show new tasks created by or assigned to related users
+    new_tasks = tasks.filter(status=0)
+
+    # Optional: History of tasks directly assigned to this user
+    tasks_history = tasks.filter(assigned=user)
+
+    report = Report.objects.filter(author=user)
+
     context = {
-        'tasks': tasks,
+        'tasks': q_task,
         'new_tasks': new_tasks,
         'tasks_history': tasks_history,
-        'reports':report
+        'reports': report
     }
-    
-    return render(request, 'tasks/tasks15.html', {'tasks': tasks})
+
+    return render(request, 'tasks/tasks15.html', {'context': context})
 
 
 
@@ -196,6 +224,13 @@ def tasks(request):
 def create_task15(request):
     print("hello")
     users = User.objects.all()
+    user = request.user
+
+    # Get all teams the user belongs to
+    user_teams = Team.objects.filter(
+        Q(members=user) | Q(supervisor=user)
+    ).distinct()
+    print(user_teams)
     if request.method == 'POST':
         title = request.POST['title']
         data = request.POST.get('data', '')
@@ -212,7 +247,7 @@ def create_task15(request):
             r= Task_attachment.objects.create(task=task, attachment=i)
         return redirect('show_task', pk=task.id)
     
-    return render(request, 'tasks/task_create15.html', {'users': users})
+    return render(request, 'tasks/task_create15.html', {'users': users, 'teams': user_teams})
 
 
 

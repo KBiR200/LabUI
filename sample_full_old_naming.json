@@ -1,0 +1,361 @@
+[
+    {
+        "model": "auth.user",
+        "pk": 1,
+        "fields": {
+            "username": "admin1",
+            "is_superuser": true,
+            "is_staff": true,
+            "is_active": true,
+            "password": "pbkdf2_sha256$600000$test$Cjpy3A94yywBz2f1N0HnmsnUUP2zVhA6x6ufb2JozHc="
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 2,
+        "fields": {
+            "username": "admin2",
+            "is_superuser": true,
+            "is_staff": true,
+            "is_active": true,
+            "password": "pbkdf2_sha256$600000$test$Cjpy3A94yywBz2f1N0HnmsnUUP2zVhA6x6ufb2JozHc="
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 3,
+        "fields": {
+            "username": "super1",
+            "is_superuser": false,
+            "is_staff": true,
+            "is_active": true,
+            "password": "pbkdf2_sha256$600000$test$Cjpy3A94yywBz2f1N0HnmsnUUP2zVhA6x6ufb2JozHc="
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 4,
+        "fields": {
+            "username": "super2",
+            "is_superuser": false,
+            "is_staff": true,
+            "is_active": true,
+            "password": "pbkdf2_sha256$600000$test$Cjpy3A94yywBz2f1N0HnmsnUUP2zVhA6x6ufb2JozHc="
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 5,
+        "fields": {
+            "username": "tech1",
+            "is_superuser": false,
+            "is_staff": true,
+            "is_active": true,
+            "password": "pbkdf2_sha256$600000$test$Cjpy3A94yywBz2f1N0HnmsnUUP2zVhA6x6ufb2JozHc="
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 6,
+        "fields": {
+            "username": "tech2",
+            "is_superuser": false,
+            "is_staff": true,
+            "is_active": true,
+            "password": "pbkdf2_sha256$600000$test$Cjpy3A94yywBz2f1N0HnmsnUUP2zVhA6x6ufb2JozHc="
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 7,
+        "fields": {
+            "username": "tech3",
+            "is_superuser": false,
+            "is_staff": true,
+            "is_active": true,
+            "password": "pbkdf2_sha256$600000$test$Cjpy3A94yywBz2f1N0HnmsnUUP2zVhA6x6ufb2JozHc="
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 8,
+        "fields": {
+            "username": "tech4",
+            "is_superuser": false,
+            "is_staff": true,
+            "is_active": true,
+            "password": "pbkdf2_sha256$600000$test$Cjpy3A94yywBz2f1N0HnmsnUUP2zVhA6x6ufb2JozHc="
+        }
+    },
+    {
+        "model": "main.team",
+        "pk": 1,
+        "fields": {
+            "name": "Team Alpha"
+        }
+    },
+    {
+        "model": "main.team",
+        "pk": 2,
+        "fields": {
+            "name": "Team Beta"
+        }
+    },
+    {
+        "model": "main.project",
+        "pk": 1,
+        "fields": {
+            "name": "Project Lab1",
+            "description": "Description for Project Lab1"
+        }
+    },
+    {
+        "model": "main.project",
+        "pk": 2,
+        "fields": {
+            "name": "Project Lab2",
+            "description": "Description for Project Lab2"
+        }
+    },
+    {
+        "model": "main.machine",
+        "pk": 1,
+        "fields": {
+            "name": "Machine A",
+            "serial_number": "SN-1",
+            "last_maintenance": "2025-07-24"
+        }
+    },
+    {
+        "model": "main.machine",
+        "pk": 2,
+        "fields": {
+            "name": "Machine B",
+            "serial_number": "SN-2",
+            "last_maintenance": "2025-07-24"
+        }
+    },
+    {
+        "model": "reports.tasks",
+        "pk": 1,
+        "fields": {
+            "title": "Calibrate Machine A",
+            "creator": 3,
+            "assigned": [
+                5,
+                6
+            ],
+            "team": 1,
+            "workers_count": 2,
+            "data": {
+                "notes": "Auto-generated task Calibrate Machine A"
+            },
+            "status": 1,
+            "created_at": "2025-07-24 18:42:54.049537",
+            "start_date": "2025-07-24 18:42:54.049546",
+            "due_date": "2025-07-31 18:42:54.049549"
+        }
+    },
+    {
+        "model": "reports.tasks",
+        "pk": 2,
+        "fields": {
+            "title": "Measure Acid Samples",
+            "creator": 4,
+            "assigned": [
+                7
+            ],
+            "team": 2,
+            "workers_count": 1,
+            "data": {
+                "notes": "Auto-generated task Measure Acid Samples"
+            },
+            "status": 0,
+            "created_at": "2025-07-24 18:42:54.049562",
+            "start_date": "2025-07-24 18:42:54.049565",
+            "due_date": "2025-07-31 18:42:54.049568"
+        }
+    },
+    {
+        "model": "reports.tasks",
+        "pk": 3,
+        "fields": {
+            "title": "Update Lab Inventory",
+            "creator": 3,
+            "assigned": [
+                8
+            ],
+            "team": 1,
+            "workers_count": 1,
+            "data": {
+                "notes": "Auto-generated task Update Lab Inventory"
+            },
+            "status": 2,
+            "created_at": "2025-07-24 18:42:54.049575",
+            "start_date": "2025-07-24 18:42:54.049578",
+            "due_date": "2025-07-31 18:42:54.049581"
+        }
+    },
+    {
+        "model": "reports.tasks",
+        "pk": 4,
+        "fields": {
+            "title": "Finalize Report for Lab1",
+            "creator": 4,
+            "assigned": [
+                6,
+                7
+            ],
+            "team": 2,
+            "workers_count": 2,
+            "data": {
+                "notes": "Auto-generated task Finalize Report for Lab1"
+            },
+            "status": 1,
+            "created_at": "2025-07-24 18:42:54.049589",
+            "start_date": "2025-07-24 18:42:54.049592",
+            "due_date": "2025-07-31 18:42:54.049595"
+        }
+    },
+    {
+        "model": "reports.report",
+        "pk": 1,
+        "fields": {
+            "prjct": 1,
+            "title": "Calibration Report",
+            "author": [
+                6
+            ],
+            "date_added": "2025-07-24 18:42:54.049838",
+            "task": 1,
+            "status": 1
+        }
+    },
+    {
+        "model": "reports.report",
+        "pk": 2,
+        "fields": {
+            "prjct": 1,
+            "title": "Acid Measurement Report",
+            "author": [
+                7
+            ],
+            "date_added": "2025-07-24 18:42:54.049845",
+            "task": 2,
+            "status": 1
+        }
+    },
+    {
+        "model": "reports.report",
+        "pk": 3,
+        "fields": {
+            "prjct": 2,
+            "title": "Inventory Update Summary",
+            "author": [
+                8
+            ],
+            "date_added": "2025-07-24 18:42:54.049850",
+            "task": 3,
+            "status": 1
+        }
+    },
+    {
+        "model": "reports.report",
+        "pk": 4,
+        "fields": {
+            "prjct": 2,
+            "title": "Final Lab1 Summary",
+            "author": [
+                6,
+                7
+            ],
+            "date_added": "2025-07-24 18:42:54.049854",
+            "task": 4,
+            "status": 1
+        }
+    },
+    {
+        "model": "reports.records",
+        "pk": 1,
+        "fields": {
+            "report": [
+                1
+            ],
+            "data": {
+                "temperature": "23.5C",
+                "ph": "7.1"
+            },
+            "machine": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "reports.records",
+        "pk": 2,
+        "fields": {
+            "report": [
+                2
+            ],
+            "data": {
+                "volume": "120ml",
+                "ph": "5.5"
+            },
+            "machine": [
+                1,
+                2
+            ]
+        }
+    },
+    {
+        "model": "reports.records",
+        "pk": 3,
+        "fields": {
+            "report": [
+                3
+            ],
+            "data": {
+                "quantity_checked": "50 bottles"
+            },
+            "machine": [
+                2
+            ]
+        }
+    },
+    {
+        "model": "reports.records",
+        "pk": 4,
+        "fields": {
+            "report": [
+                4
+            ],
+            "data": {
+                "final_result": "All machines calibrated"
+            },
+            "machine": [
+                1,
+                2
+            ]
+        }
+    },
+    {
+        "model": "chem.chemical",
+        "pk": 1,
+        "fields": {
+            "name": "Hydrochloric Acid",
+            "quantity": 250,
+            "unit": "ml",
+            "expiry_date": "2026-07-24"
+        }
+    },
+    {
+        "model": "chem.chemical",
+        "pk": 2,
+        "fields": {
+            "name": "Sodium Hydroxide",
+            "quantity": 500,
+            "unit": "g",
+            "expiry_date": "2026-02-09"
+        }
+    }
+]

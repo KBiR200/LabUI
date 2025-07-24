@@ -1,0 +1,279 @@
+<!-- 
+  INTEGRATION INSTRUCTIONS:
+  
+  1. Replace the existing machine dropdown in create-report.html with this code
+  2. Add the CSS to your stylesheet or in a <style> tag in the head
+  3. Add the JavaScript at the end of your file before the closing </body> tag
+  4. Make sure Font Awesome is included for the icons
+-->
+
+<!-- STEP 1: Replace the existing machine dropdown with this code -->
+<div class="form-group">
+    <label for="machineSelect">Select Machine <span class="text-danger">*</span></label>
+    
+    <div class="machine-selector">
+      <input type="text" id="machineSearch" class="form-control" placeholder="Search machines..." style="margin-bottom: 15px;">
+      
+      <div class="machine-categories">
+        <div class="category-tab active" data-category="all">All</div>
+        <div class="category-tab" data-category="analysis">Analysis</div>
+        <div class="category-tab" data-category="testing">Testing</div>
+        <div class="category-tab" data-category="imaging">Imaging</div>
+      </div>
+      
+      <div class="machine-grid">
+        <!-- Lab Equipment Cards -->
+        <div class="machine-card" data-value="rheology" data-category="testing">
+          <div class="machine-icon"><i class="fas fa-vial"></i></div>
+          <div class="machine-name">RHEOLOGY</div>
+        </div>
+        
+        <div class="machine-card" data-value="density" data-category="analysis">
+          <div class="machine-icon"><i class="fas fa-weight"></i></div>
+          <div class="machine-name">DENSITY</div>
+        </div>
+        
+        <div class="machine-card" data-value="free-fluid" data-category="analysis">
+          <div class="machine-icon"><i class="fas fa-tint"></i></div>
+          <div class="machine-name">FREE FLUID</div>
+        </div>
+        
+        <div class="machine-card" data-value="consistometer" data-category="testing">
+          <div class="machine-icon"><i class="fas fa-thermometer-half"></i></div>
+          <div class="machine-name">CONSISTOMETER</div>
+        </div>
+        
+        <div class="machine-card" data-value="uca" data-category="analysis">
+          <div class="machine-icon"><i class="fas fa-wave-square"></i></div>
+          <div class="machine-name">UCA</div>
+        </div>
+        
+        <div class="machine-card" data-value="static-fluid-loss" data-category="testing">
+          <div class="machine-icon"><i class="fas fa-fill-drip"></i></div>
+          <div class="machine-name">STATIC FLUID LOSS</div>
+        </div>
+        
+        <div class="machine-card" data-value="curing-chamber" data-category="testing">
+          <div class="machine-icon"><i class="fas fa-temperature-high"></i></div>
+          <div class="machine-name">CURING CHAMBER</div>
+        </div>
+        
+        <div class="machine-card" data-value="micro" data-category="imaging">
+          <div class="machine-icon"><i class="fas fa-microscope"></i></div>
+          <div class="machine-name">MICRO</div>
+        </div>
+        
+        <div class="machine-card" data-value="new-tester-machine" data-category="testing">
+          <div class="machine-icon"><i class="fas fa-cogs"></i></div>
+          <div class="machine-name">NEW TESTER MACHINE</div>
+        </div>
+        
+        <div class="machine-card" data-value="new" data-category="imaging">
+          <div class="machine-icon"><i class="fas fa-microscope"></i></div>
+          <div class="machine-name">New Olympus BX53 Microscope</div>
+        </div>
+        
+        <div class="machine-card" data-value="microscope" data-category="imaging">
+          <div class="machine-icon"><i class="fas fa-microscope"></i></div>
+          <div class="machine-name">Olympus BX53 Microscope</div>
+        </div>
+        
+        <div class="machine-card" data-value="centrifuge" data-category="analysis">
+          <div class="machine-icon"><i class="fas fa-sync-alt"></i></div>
+          <div class="machine-name">Thermo Scientific Centrifuge</div>
+        </div>
+        
+        <div class="machine-card" data-value="spectrophotometer" data-category="analysis">
+          <div class="machine-icon"><i class="fas fa-rainbow"></i></div>
+          <div class="machine-name">Shimadzu UV-1800 Spectrophotometer</div>
+        </div>
+        
+        <div class="machine-card" data-value="pcr" data-category="analysis">
+          <div class="machine-icon"><i class="fas fa-dna"></i></div>
+          <div class="machine-name">Bio-Rad T100 PCR Thermal Cycler</div>
+        </div>
+        
+        <div class="machine-card" data-value="hplc" data-category="analysis">
+          <div class="machine-icon"><i class="fas fa-chart-line"></i></div>
+          <div class="machine-name">Agilent 1260 Infinity II HPLC</div>
+        </div>
+      </div>
+      
+      <div class="selected-machine">
+        <span>Selected: </span><strong id="selectedMachineName">None</strong>
+        <input type="hidden" id="machineSelect" name="machine" value="">
+      </div>
+    </div>
+  </div>
+  
+  <!-- STEP 2: Add this CSS to your stylesheet or in a <style> tag in the head -->
+  <style>
+    /* Machine Selector Styles */
+    .machine-selector {
+      margin-bottom: 20px;
+    }
+    
+    .machine-categories {
+      display: flex;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #e9ecef;
+      overflow-x: auto;
+    }
+    
+    .category-tab {
+      padding: 8px 16px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.3s ease;
+    }
+    
+    .category-tab.active {
+      color: #4a6cf7;
+      border-bottom: 2px solid #4a6cf7;
+      font-weight: 500;
+    }
+    
+    .machine-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 15px;
+      max-height: 400px;
+      overflow-y: auto;
+      padding: 10px 0;
+    }
+    
+    .machine-card {
+      border: 1px solid #e9ecef;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .machine-card:hover {
+      border-color: #4a6cf7;
+      background-color: rgba(74, 108, 247, 0.05);
+    }
+    
+    .machine-card.selected {
+      border-color: #4a6cf7;
+      background-color: rgba(74, 108, 247, 0.1);
+      box-shadow: 0 0 0 2px rgba(74, 108, 247, 0.25);
+    }
+    
+    .machine-icon {
+      font-size: 24px;
+      margin-bottom: 10px;
+      color: #6c757d;
+    }
+    
+    .machine-card.selected .machine-icon {
+      color: #4a6cf7;
+    }
+    
+    .machine-name {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.3;
+    }
+    
+    .selected-machine {
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #f8f9fa;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .machine-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      }
+    }
+  </style>
+  
+  <!-- STEP 3: Add this JavaScript at the end of your file before the closing </body> tag -->
+  <script>
+    // Machine selector functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      // Only initialize if the machine selector exists on the page
+      if (!document.querySelector('.machine-selector')) return;
+      
+      const machineCards = document.querySelectorAll('.machine-card');
+      const machineSelect = document.getElementById('machineSelect');
+      const selectedMachineName = document.getElementById('selectedMachineName');
+      const machineParameters = document.querySelectorAll('.machine-parameters');
+      const machineSearch = document.getElementById('machineSearch');
+      const categoryTabs = document.querySelectorAll('.category-tab');
+      
+      // Initialize - hide all parameter sections
+      machineParameters.forEach(section => {
+        section.style.display = 'none';
+      });
+      
+      // Machine card selection
+      machineCards.forEach(card => {
+        card.addEventListener('click', function() {
+          // Remove selected class from all cards
+          machineCards.forEach(c => c.classList.remove('selected'));
+          
+          // Add selected class to clicked card
+          this.classList.add('selected');
+          
+          // Update hidden input and display selected machine
+          const machineValue = this.getAttribute('data-value');
+          const machineName = this.querySelector('.machine-name').textContent;
+          
+          machineSelect.value = machineValue;
+          selectedMachineName.textContent = machineName;
+          
+          // Hide all parameter sections
+          machineParameters.forEach(section => {
+            section.style.display = 'none';
+          });
+          
+          // Show the selected machine's parameters
+          const selectedParameters = document.getElementById(machineValue + 'Parameters');
+          if (selectedParameters) {
+            selectedParameters.style.display = 'block';
+          }
+        });
+      });
+      
+      // Machine search functionality
+      machineSearch.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        
+        machineCards.forEach(card => {
+          const machineName = card.querySelector('.machine-name').textContent.toLowerCase();
+          
+          if (machineName.includes(searchTerm)) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+      
+      // Category filtering
+      categoryTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          // Update active tab
+          categoryTabs.forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+          
+          const category = this.getAttribute('data-category');
+          
+          machineCards.forEach(card => {
+            if (category === 'all' || card.getAttribute('data-category') === category) {
+              card.style.display = 'block';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      });
+    });
+  </script>

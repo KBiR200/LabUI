@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - LabUI</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      /* Base Styles */
+      :root {
+        --primary-color: #4a6cf7;
+        --primary-hover: #3a5ce4;
+        --secondary-color: #6c757d;
+        --success-color: #28a745;
+        --danger-color: #dc3545;
+        --warning-color: #ffc107;
+        --info-color: #17a2b8;
+        --light-color: #f8f9fa;
+        --dark-color: #343a40;
+        --body-bg: #f5f7fb;
+        --card-bg: #ffffff;
+        --text-color: #495057;
+        --text-muted: #6c757d;
+        --border-color: #e9ecef;
+        --sidebar-width: 250px;
+        --header-height: 60px;
+        --shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        --shadow-lg: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        --border-radius: 0.375rem;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        color: var(--text-color);
+        background-color: var(--body-bg);
+      }
+
+      a {
+        color: var(--primary-color);
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      ul {
+        list-style: none;
+      }
+
+      /* Layout */
+      .layout {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      /* Sidebar */
+      .sidebar {
+        width: var(--sidebar-width);
+        background-color: var(--dark-color);
+        color: white;
+        position: fixed;
+        height: 100vh;
+        overflow-y: auto;
+        z-index: 1000;
+        transition: all 0.3s ease;
+      }
+
+      .sidebar-header {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .sidebar-header i {
+        font-size: 1.5rem;
+        margin-right: 0.5rem;
+      }
+
+      .sidebar-header h1 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin: 0;
+      }
+
+      .sidebar-nav ul {
+        padding: 1rem 0;
+      }
+
+      .sidebar-nav li {
+        margin-bottom: 0.25rem;
+      }
+
+      .sidebar-nav a {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        color: rgba(255, 255, 255, 0.7);
+        transition: all 0.3s ease;
+      }
+
+      .sidebar-nav a:hover {
+        color: white;
+        background-color: rgba(255, 255, 255, 0.1);
+        text-decoration: none;
+      }
+
+      .sidebar-nav li.active a {
+        color: white;
+        background-color: var(--primary-color);
+      }
+
+      .sidebar-nav i {
+        margin-right: 0.75rem;
+        font-size: 1rem;
+      }
+
+      /* Main Content */
+      .main-content {
+        flex: 1;
+        margin-left: var(--sidebar-width);
+        position: relative;
+      }
+
+      /* Top Navigation */
+      .top-nav {
+        height: var(--header-height);
+        background-color: var(--card-bg);
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 1.5rem;
+        position: sticky;
+        top: 0;
+        z-index: 900;
+        box-shadow: var(--shadow);
+      }
+
+      .search-container {
+        position: relative;
+        width: 300px;
+      }
+
+      .search-container i {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+      }
+
+      .search-container input {
+        width: 100%;
+        padding: 0.5rem 0.5rem 0.5rem 2rem;
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        font-size: 0.875rem;
+      }
+
+      .user-menu {
+        display: flex;
+        align-items: center;
+      }
+
+      .notifications {
+        position: relative;
+        margin-right: 1.5rem;
+        cursor: pointer;
+      }
+
+      .notifications i {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+      }
+
+      .badge {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background-color: var(--danger-color);
+        color: white;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        font-size: 0.7rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .user-profile {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        position: relative;
+      }
+
+      .user-profile img {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        margin-right: 0.5rem;
+      }
+
+      .user-name {
+        font-weight: 500;
+        margin-right: 0.5rem;
+      }
+
+      .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background-color: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow-lg);
+        min-width: 180px;
+        z-index: 1000;
+        display: none;
+      }
+
+      .dropdown-menu a {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        color: var(--text-color);
+        transition: background-color 0.3s ease;
+      }
+
+      .dropdown-menu a:hover {
+        background-color: var(--light-color);
+        text-decoration: none;
+      }
+
+      .dropdown-menu i {
+        margin-right: 0.5rem;
+      }
+
+      /* Content Wrapper */
+      .content-wrapper {
+        padding: 1.5rem;
+      }
+
+      .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+      }
+
+      .page-header h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 0;
+      }
+
+      .actions {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      /* Cards */
+      .card {
+        background-color: var(--card-bg);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        margin-bottom: 1.5rem;
+      }
+
+      .card-header {
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .card-header h3 {
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin: 0;
+      }
+
+      .card-body {
+        padding: 1.25rem;
+      }
+
+      .card-body.p-0 {
+        padding: 0;
+      }
+
+      .card-footer {
+        padding: 1rem 1.25rem;
+        border-top: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+      }
+
+      /* Stats Cards */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .stat-card {
+        background-color: var(--card-bg);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        padding: 1.25rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .stat-card-content h3 {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-value {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 0.25rem;
+      }
+
+      .stat-change {
+        font-size: 0.75rem;
+        display: flex;
+        align-items: center;
+      }
+
+      .stat-change.positive {
+        color: var(--success-color);
+      }
+
+      .stat-change.negative {
+        color: var(--danger-color);
+      }
+
+      .stat-card-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background-color: rgba(74, 108, 247, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .stat-card-icon i {
+        font-size: 1.25rem;
+        color: var(--primary-color);
+      }
+
+      /* Dashboard Grid */
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .chart-card .card-body {
+        height: 300px;
+      }
+
+      /* Activity Feed */
+      .activity-feed {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .activity-item {
+        display: flex;
+        align-items: flex-start;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .activity-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+
+      .activity-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background-color: rgba(74, 108, 247, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 0.75rem;
+      }
+
+      .activity-icon i {
+        font-size: 1rem;
+        color: var(--primary-color);
+      }
+
+      .activity-content h4 {
+        font-size: 0.9375rem;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+      }
+
+      .activity-content p {
+        font-size: 0.8125rem;
+        color: var(--text-muted);
+        margin-bottom: 0.5rem;
+      }
+
+      .activity-time {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+      }
+
+      /* Buttons */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        border-radius: var(--border-radius);
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .btn-primary {
+        background-color: var(--primary-color);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background-color: var(--primary-hover);
+      }
+
+      .btn-danger {
+        background-color: var(--danger-color);
+        color: white;
+      }
+
+      .btn-danger:hover {
+        background-color: #c82333;
+      }
+
+      .btn-outline {
+        background-color: transparent;
+        border: 1px solid var(--border-color);
+        color: var(--text-color);
+      }
+
+      .btn-outline:hover {
+        background-color: var(--light-color);
+      }
+
+      .btn-icon {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .btn-icon:hover {
+        background-color: var(--light-color);
+      }
+
+      .btn-block {
+        display: block;
+        width: 100%;
+      }
+
+      .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+      }
+
+      /* Badges */
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        border-radius: 0.25rem;
+        text-transform: capitalize;
+      }
+
+      .badge-success {
+        background-color: rgba(40, 167, 69, 0.1);
+        color: var(--success-color);
+      }
+
+      .badge-warning {
+        background-color: rgba(255, 193, 7, 0.1);
+        color: #d39e00;
+      }
+
+      .badge-danger {
+        background-color: rgba(220, 53, 69, 0.1);
+        color: var(--danger-color);
+      }
+
+      .badge-secondary {
+        background-color: rgba(108, 117, 125, 0.1);
+        color: var(--secondary-color);
+      }
+
+      .badge-light {
+        background-color: var(--light-color);
+        color: var(--text-color);
+      }
+
+      .badge-default {
+        background-color: rgba(74, 108, 247, 0.1);
+        color: var(--primary-color);
+      }
+
+      /* Calendar */
+      .calendar {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .calendar th,
+      .calendar td {
+        padding: 0.75rem;
+        text-align: center;
+        border: 1px solid var(--border-color);
+      }
+
+      .calendar th {
+        background-color: var(--light-color);
+        font-weight: 600;
+      }
+
+      .calendar td {
+        height: 80px;
+        vertical-align: top;
+      }
+
+      .calendar .today {
+        background-color: rgba(74, 108, 247, 0.1);
+      }
+
+      .calendar .event {
+        background-color: rgba(40, 167, 69, 0.1);
+      }
+
+      .calendar .event-indicator {
+        display: block;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background-color: var(--primary-color);
+        margin: 2px auto;
+      }
+
+      .calendar .date-number {
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+      }
+
+      /* Responsive */
+      @media (max-width: 992px) {
+        .dashboard-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .sidebar {
+          width: 0;
+          transform: translateX(-100%);
+        }
+
+        .sidebar.active {
+          width: var(--sidebar-width);
+          transform: translateX(0);
+        }
+
+        .main-content {
+          margin-left: 0;
+        }
+
+        .stats-grid {
+          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        }
+      }
+
+      @media (max-width: 576px) {
+        .search-container {
+          width: 200px;
+        }
+
+        .stats-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .user-name {
+          display: none;
+        }
+      }
+
+      /* Menu Toggle for Mobile */
+      .menu-toggle {
+        background: none;
+        border: none;
+        color: var(--text-color);
+        font-size: 1.25rem;
+        cursor: pointer;
+        display: none;
+        margin-right: 1rem;
+      }
+
+      @media (max-width: 768px) {
+        .menu-toggle {
+          display: block;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-flask"></i>
+                <h1>LabUI</h1>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active">
+                        <a href="/"><i class="fas fa-home"></i> Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="/tasks"><i class="fas fa-tasks"></i> Tasks</a>
+                    </li>
+                    <li>
+                        <a href="/reports"><i class="fas fa-chart-bar"></i> Reports</a>
+                    </li>
+                    <li>
+                        <a href="/lab"><i class="fas fa-cogs"></i> Laberatory</a>
+                    </li>
+                    <li >
+                        <a href="/floor-plan"><i class="fas fa-map"></i> Floor Plan</a>
+                    </li>
+                    <li>
+                        <a href="/teams"><i class="fas fa-users"></i> Teams</a>
+                    </li>
+                    <li>
+                        <a href="/contactus"><i class="fas fa-envelope"></i> Contact</a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Top Navigation -->
+        <header class="top-nav">
+          <div class="search-container">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search..." />
+          </div>
+          <div class="user-menu">
+            <div class="notifications">
+              <i class="fas fa-bell"></i>
+              <span class="badge">3</span>
+            </div>
+            <div class="user-profile">
+              <span class="user-name">User</span>
+              <i class="fas fa-chevron-down"></i>
+              <div class="dropdown-menu">
+                <a href="/profile"><i class="fas fa-user"></i> Profile</a>
+                <a  href='{% url 'profile'  %}'><i class="fas fa-cog"></i> Change Password</a>
+                <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="content-wrapper">
+          <div class="page-header">
+            <h2>Dashboard</h2>
+            <div class="actions">
+              <button class="btn btn-primary">
+                <i class="fas fa-plus"></i> Create Task
+              </button>
+            </div>
+          </div>
+
+          <!-- Stats Cards -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-card-content">
+                <h3>Ongoing Tasks</h3>
+                <p class="stat-value">{{ tasks|length }}</p>
+                {% comment %}
+                <p class="stat-change positive">+2 from yesterday</p>
+                {% endcomment %}
+              </div>
+              <div class="stat-card-icon">
+                <i class="fas fa-clipboard-list"></i>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-content">
+                <h3>Pending Tasks</h3>
+                <p class="stat-value">{{ new_tasks|length }}</p>
+                {% comment %}
+                <p class="stat-change negative">-3 from yesterday</p>
+                {% endcomment %}
+              </div>
+              <div class="stat-card-icon">
+                <i class="fas fa-hourglass-half"></i>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-content">
+                <h3>Team Members</h3>
+                <p class="stat-value">12</p>
+                {% comment %}
+                <p class="stat-change positive">+1 new member</p>
+                {% endcomment %}
+              </div>
+              <div class="stat-card-icon">
+                <i class="fas fa-users"></i>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-content">
+                <h3>Completion Rate</h3>
+                <p class="stat-value">87%</p>
+                {% comment %}
+                <p class="stat-change positive">+5% from last week</p>
+                {% endcomment %}
+              </div>
+              <div class="stat-card-icon">
+                <i class="fas fa-chart-line"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity Feed and Calendar -->
+          <div class="dashboard-grid">
+            <div class="card">
+              <div class="card-header">
+                <h3>Recent Activity</h3>
+                <div class="card-actions">
+                  <button class="btn-icon">
+                    <i class="fas fa-ellipsis-v"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="card-body">
+                <ul class="activity-feed">
+                  <li class="activity-item">
+                    <div class="activity-icon">
+                      <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="activity-content">
+                      <h4>Task Completed</h4>
+                      <p>Alex Johnson completed "Sample Analysis - Batch A"</p>
+                      <span class="activity-time">2 hours ago</span>
+                    </div>
+                  </li>
+                  <li class="activity-item">
+                    <div class="activity-icon">
+                      <i class="fas fa-plus-circle"></i>
+                    </div>
+                    <div class="activity-content">
+                      <h4>New Task Created</h4>
+                      <p>You created "Equipment Calibration" task</p>
+                      <span class="activity-time">Yesterday at 3:45 PM</span>
+                    </div>
+                  </li>
+                  <li class="activity-item">
+                    <div class="activity-icon">
+                      <i class="fas fa-user-plus"></i>
+                    </div>
+                    <div class="activity-content">
+                      <h4>New Team Member</h4>
+                      <p>Morgan Chen joined the team</p>
+                      <span class="activity-time">Yesterday at 10:30 AM</span>
+                    </div>
+                  </li>
+                  <li class="activity-item">
+                    <div class="activity-icon">
+                      <i class="fas fa-comment"></i>
+                    </div>
+                    <div class="activity-content">
+                      <h4>New Comment</h4>
+                      <p>Sam Taylor commented on "Data Analysis - Project X"</p>
+                      <span class="activity-time">2 days ago</span>
+                    </div>
+                  </li>
+                  <li class="activity-item">
+                    <div class="activity-icon">
+                      <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                    <div class="activity-content">
+                      <h4>Task Overdue</h4>
+                      <p>"Quality Control Check" is now overdue</p>
+                      <span class="activity-time">3 days ago</span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <h3>Calendar</h3>
+                <div class="card-actions">
+                  <button class="btn-outline btn-sm">View Full Calendar</button>
+                </div>
+              </div>
+              <div class="card-body p-0">
+                <table class="calendar">
+                  <thead>
+                    <tr>
+                      <th>Mon</th>
+                      <th>Tue</th>
+                      <th>Wed</th>
+                      <th>Thu</th>
+                      <th>Fri</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <div class="date-number">1</div>
+                      </td>
+                      <td>
+                        <div class="date-number">2</div>
+                      </td>
+                      <td class="event">
+                        <div class="date-number">3</div>
+                        <span class="event-indicator"></span>
+                      </td>
+                      <td>
+                        <div class="date-number">4</div>
+                      </td>
+                      <td>
+                        <div class="date-number">5</div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="date-number">8</div>
+                      </td>
+                      <td>
+                        <div class="date-number">9</div>
+                      </td>
+                      <td class="today">
+                        <div class="date-number">10</div>
+                      </td>
+                      <td class="event">
+                        <div class="date-number">11</div>
+                        <span class="event-indicator"></span>
+                      </td>
+                      <td>
+                        <div class="date-number">12</div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Task Overview -->
+          <div class="card">
+            <div class="card-header">
+              <h3>Task Overview</h3>
+              <div class="card-actions">
+                <button class="btn-outline btn-sm">View All Tasks</button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div id="taskOverviewChart" style="height: 300px"></div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Initialize charts
+        initTaskOverviewChart();
+
+        // Initialize dropdown menus
+        initDropdowns();
+
+        // Initialize notifications
+        initNotifications();
+
+        // Initialize mobile menu
+        initMobileMenu();
+      });
+
+      function initTaskOverviewChart() {
+        const ctx = document.getElementById("taskOverviewChart");
+
+        if (!ctx) return;
+
+        const data = {
+          labels: ["Completed", "In Progress", "Pending", "Overdue"],
+          datasets: [
+            {
+              data: [12, 5, 7, 3],
+              backgroundColor: ["#28a745", "#ffc107", "#6c757d", "#dc3545"],
+              borderWidth: 0,
+              borderRadius: 4,
+            },
+          ],
+        };
+
+        const config = {
+          type: "bar",
+          data: data,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: "y",
+            scales: {
+              x: {
+                beginAtZero: true,
+                grid: {
+                  borderDash: [2, 4],
+                  color: "#e9ecef",
+                },
+              },
+              y: {
+                grid: {
+                  display: false,
+                },
+              },
+            },
+            plugins: {
+              legend: {
+                display: false,
+              },
+            },
+          },
+        };
+
+        new Chart(ctx, config);
+      }
+
+      function initDropdowns() {
+        const dropdownTriggers = document.querySelectorAll(
+          ".user-profile, .actions-dropdown"
+        );
+
+        dropdownTriggers.forEach((trigger) => {
+          trigger.addEventListener("click", function (e) {
+            e.stopPropagation();
+            const dropdown = this.querySelector(".dropdown-menu");
+
+            if (dropdown) {
+              const isVisible = dropdown.style.display === "block";
+
+              // Close all dropdowns first
+              document.querySelectorAll(".dropdown-menu").forEach((menu) => {
+                menu.style.display = "none";
+              });
+
+              // Toggle current dropdown
+              dropdown.style.display = isVisible ? "none" : "block";
+            }
+          });
+        });
+
+        // Close dropdowns when clicking outside
+        document.addEventListener("click", function () {
+          document.querySelectorAll(".dropdown-menu").forEach((menu) => {
+            menu.style.display = "none";
+          });
+        });
+      }
+
+      function initNotifications() {
+        const notificationBell = document.querySelector(".notifications");
+
+        if (notificationBell) {
+          notificationBell.addEventListener("click", function () {
+            alert("Notifications feature coming soon!");
+          });
+        }
+      }
+
+      function initMobileMenu() {
+        const menuToggle = document.createElement("button");
+        menuToggle.className = "menu-toggle";
+        menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+
+        document.querySelector(".top-nav").prepend(menuToggle);
+
+        menuToggle.addEventListener("click", function () {
+          document.querySelector(".sidebar").classList.toggle("active");
+        });
+
+        function checkScreenSize() {
+          if (window.innerWidth < 768) {
+            menuToggle.style.display = "block";
+          } else {
+            menuToggle.style.display = "none";
+            document.querySelector(".sidebar").classList.remove("active");
+          }
+        }
+
+        window.addEventListener("resize", checkScreenSize);
+        checkScreenSize();
+      }
+    </script>
+  </body>
+</html>

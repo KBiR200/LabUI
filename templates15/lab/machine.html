@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Machine Details - LabUI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Styles */
+        :root {
+          --primary-color: #4a6cf7;
+          --primary-hover: #3a5ce4;
+          --secondary-color: #6c757d;
+          --success-color: #28a745;
+          --danger-color: #dc3545;
+          --warning-color: #ffc107;
+          --info-color: #17a2b8;
+          --light-color: #f8f9fa;
+          --dark-color: #343a40;
+          --body-bg: #f5f7fb;
+          --card-bg: #ffffff;
+          --text-color: #495057;
+          --text-muted: #6c757d;
+          --border-color: #e9ecef;
+          --shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+          --shadow-lg: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+          --border-radius: 0.375rem;
+        }
+
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        body {
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          font-size: 0.9rem;
+          line-height: 1.5;
+          color: var(--text-color);
+          background-color: var(--body-bg);
+        }
+
+        a {
+          color: var(--primary-color);
+          text-decoration: none;
+        }
+
+        a:hover {
+          text-decoration: underline;
+        }
+
+        /* Layout */
+        .layout {
+          display: flex;
+          min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+          width: 250px;
+          background-color: var(--dark-color);
+          color: white;
+          position: fixed;
+          height: 100vh;
+          overflow-y: auto;
+          z-index: 1000;
+          transition: all 0.3s ease;
+        }
+
+        .sidebar-header {
+          display: flex;
+          align-items: center;
+          padding: 1rem;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header i {
+          font-size: 1.5rem;
+          margin-right: 0.5rem;
+        }
+
+        .sidebar-header h1 {
+          font-size: 1.25rem;
+          font-weight: 600;
+          margin: 0;
+        }
+
+        .sidebar-nav ul {
+          padding: 1rem 0;
+          list-style: none;
+        }
+
+        .sidebar-nav li {
+          margin-bottom: 0.25rem;
+        }
+
+        .sidebar-nav a {
+          display: flex;
+          align-items: center;
+          padding: 0.75rem 1rem;
+          color: rgba(255, 255, 255, 0.7);
+          transition: all 0.3s ease;
+        }
+
+        .sidebar-nav a:hover {
+          color: white;
+          background-color: rgba(255, 255, 255, 0.1);
+          text-decoration: none;
+        }
+
+        .sidebar-nav li.active a {
+          color: white;
+          background-color: var(--primary-color);
+        }
+
+        .sidebar-nav i {
+          margin-right: 0.75rem;
+          font-size: 1rem;
+        }
+
+        /* Main Content */
+        .main-content {
+          flex: 1;
+          margin-left: 250px;
+          position: relative;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+          height: 60px;
+          background-color: var(--card-bg);
+          border-bottom: 1px solid var(--border-color);
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 1.5rem;
+          position: sticky;
+          top: 0;
+          z-index: 900;
+          box-shadow: var(--shadow);
+        }
+
+        .search-container {
+          position: relative;
+          width: 300px;
+        }
+
+        .search-container i {
+          position: absolute;
+          left: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+          color: var(--text-muted);
+        }
+
+        .search-container input {
+          width: 100%;
+          padding: 0.5rem 0.5rem 0.5rem 2rem;
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius);
+          font-size: 0.875rem;
+        }
+
+        .user-menu {
+          display: flex;
+          align-items: center;
+        }
+
+        .notifications {
+          position: relative;
+          margin-right: 1.5rem;
+          cursor: pointer;
+        }
+
+        .notifications i {
+          font-size: 1.25rem;
+          color: var(--text-muted);
+        }
+
+        .badge {
+          position: absolute;
+          top: -8px;
+          right: -8px;
+          background-color: var(--danger-color);
+          color: white;
+          border-radius: 50%;
+          width: 18px;
+          height: 18px;
+          font-size: 0.7rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .user-profile {
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          position: relative;
+        }
+
+        .user-profile img {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          margin-right: 0.5rem;
+        }
+
+        .user-name {
+          font-weight: 500;
+          margin-right: 0.5rem;
+        }
+
+        .dropdown-menu {
+          position: absolute;
+          top: 100%;
+          right: 0;
+          background-color: var(--card-bg);
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius);
+          box-shadow: var(--shadow-lg);
+          min-width: 180px;
+          z-index: 1000;
+          display: none;
+        }
+
+        .dropdown-menu a {
+          display: flex;
+          align-items: center;
+          padding: 0.75rem 1rem;
+          color: var(--text-color);
+          transition: background-color 0.3s ease;
+        }
+
+        .dropdown-menu a:hover {
+          background-color: var(--light-color);
+          text-decoration: none;
+        }
+
+        .dropdown-menu i {
+          margin-right: 0.5rem;
+        }
+
+        /* Content Wrapper */
+        .content-wrapper {
+          padding: 1.5rem;
+        }
+
+        .page-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 1.5rem;
+        }
+
+        .page-header h2 {
+          font-size: 1.5rem;
+          font-weight: 600;
+          margin: 0;
+        }
+
+        .page-actions {
+          display: flex;
+          gap: 0.5rem;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+          display: flex;
+          align-items: center;
+          margin-bottom: 1.5rem;
+          font-size: 0.875rem;
+        }
+
+        .breadcrumb-item {
+          display: flex;
+          align-items: center;
+        }
+
+        .breadcrumb-item:not(:last-child)::after {
+          content: '/';
+          margin: 0 0.5rem;
+          color: var(--text-muted);
+        }
+
+        .breadcrumb-item a {
+          color: var(--text-muted);
+        }
+
+        .breadcrumb-item.active {
+          color: var(--text-color);
+          font-weight: 500;
+        }
+
+        /* Machine Details */
+        .machine-details-container {
+          display: grid;
+          grid-template-columns: 1fr 300px;
+          gap: 1.5rem;
+        }
+
+        .machine-main {
+          display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
+        }
+
+        .machine-sidebar {
+          display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
+        }
+
+        .machine-header {
+          background-color: var(--card-bg);
+          border-radius: var(--border-radius);
+          box-shadow: var(--shadow);
+          padding: 1.5rem;
+          display: flex;
+          gap: 1.5rem;
+        }
+
+        .machine-icon-large {
+          width: 80px;
+          height: 80px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-size: 2rem;
+          flex-shrink: 0;
+        }
+
+        .machine-icon-large.analysis {
+          background-color: #28a745;
+        }
+
+        .machine-icon-large.imaging {
+          background-color: #17a2b8;
+        }
+
+        .machine-icon-large.molecular {
+          background-color: #6f42c1;
+        }
+
+        .machine-icon-large.separation {
+          background-color: #20c997;
+        }
+
+        .machine-icon-large.thermal {
+          background-color: #fd7e14;
+        }
+
+        .machine-icon-large.testing {
+          background-color: #dc3545;
+        }
+
+        .machine-icon-large.research {
+          background-color: #6c757d;
+        }
+
+        .machine-title-container {
+          flex: 1;
+        }
+
+        .machine-title {
+          font-size: 1.5rem;
+          font-weight: 600;
+          margin-bottom: 0.5rem;
+        }
+
+        .machine-subtitle {
+          font-size: 1rem;
+          color: var(--text-muted);
+          margin-bottom: 1rem;
+        }
+
+        .machine-status-large {
+          display: inline-flex;
+          align-items: center;
+          font-size: 0.875rem;
+          font-weight: 500;
+          padding: 0.375rem 0.75rem;
+          border-radius: 1rem;
+        }
+
+        .machine-status-large.active {
+          background-color: rgba(40, 167, 69, 0.1);
+          color: #28a745;
+        }
+
+        .machine-status-large.maintenance {
+          background-color: rgba(255, 193, 7, 0.1);
+          color: #ffc107;
+        }
+
+        .machine-status-large.inactive {
+          background-color: rgba(220, 53, 69, 0.1);
+          color: #dc3545;
+        }
+
+        .machine-status-large i {
+          margin-right: 0.375rem;
+        }
+
+        .machine-actions-container {
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+          align-items: flex-end;
+        }
+
+        /* Machine Info Card */
+        .machine-card {
+          background-color: var(--card-bg);
+          border-radius: var(--border-radius);
+          box-shadow: var(--shadow);
+          overflow: hidden;
+        }
+
+        .machine-card-header {
+          padding: 1rem 1.5rem;
+          border-bottom: 1px solid var(--border-color);
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .machine-card-title {
+          font-size: 1.125rem;
+          font-weight: 600;
+          margin: 0;
+        }
+
+        .machine-card-body {
+          padding: 1.5rem;
+        }
+
+        .info-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 1rem;
+        }
+
+        .info-item {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .info-label {
+          font-size: 0.75rem;
+          color: var(--text-muted);
+          margin-bottom: 0.25rem;
+        }
+
+        .info-value {
+          font-weight: 500;
+        }
+
+        /* Description */
+        .description-content {
+          line-height: 1.6;
+        }
+
+        .description-content p {
+          margin-bottom: 1rem;
+        }
+
+        .description-content p:last-child {
+          margin-bottom: 0;
+        }
+
+        /* Tabs */
+        .tabs {
+          display: flex;
+          border-bottom: 1px solid var(--border-color);
+          margin-bottom: 1.5rem;
+        }
+
+        .tab {
+          padding: 0.75rem 1.5rem;
+          cursor: pointer;
+          font-weight: 500;
+          color: var(--text-muted);
+          border-bottom: 2px solid transparent;
+          transition: all 0.3s ease;
+        }
+
+        .tab:hover {
+          color: var(--text-color);
+        }
+
+        .tab.active {
+          color: var(--primary-color);
+          border-bottom-color: var(--primary-color);
+        }
+
+        .tab-content {
+          display: none;
+        }
+
+        .tab-content.active {
+          display: block;
+        }
+
+        /* Comments */
+        .comment {
+          display: flex;
+          gap: 1rem;
+          padding: 1.5rem 0;
+          border-bottom: 1px solid var(--border-color);
+        }
+
+        .comment:first-child {
+          padding-top: 0;
+        }
+
+        .comment:last-child {
+          padding-bottom: 0;
+          border-bottom: none;
+        }
+
+        .comment-avatar {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background-color: var(--light-color);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--text-muted);
+          font-weight: 600;
+          flex-shrink: 0;
+        }
+
+        .comment-content {
+          flex: 1;
+        }
+
+        .comment-header {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 0.5rem;
+        }
+
+        .comment-author {
+          font-weight: 600;
+        }
+
+        .comment-date {
+          font-size: 0.75rem;
+          color: var(--text-muted);
+        }
+
+        .comment-text {
+          margin-bottom: 0.5rem;
+        }
+
+        .comment-actions {
+          display: flex;
+          gap: 1rem;
+        }
+
+        .comment-action {
+          font-size: 0.75rem;
+          color: var(--text-muted);
+          cursor: pointer;
+        }
+
+        .comment-action:hover {
+          color: var(--primary-color);
+        }
+
+        /* Comment Form */
+        .comment-form {
+          margin-top: 1.5rem;
+        }
+
+        .comment-form-header {
+          margin-bottom: 1rem;
+          font-weight: 500;
+        }
+
+        .comment-textarea {
+          width: 100%;
+          padding: 0.75rem;
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius);
+          resize: vertical;
+          min-height: 100px;
+          margin-bottom: 1rem;
+          font-family: inherit;
+          font-size: 0.9rem;
+        }
+
+        /* Maintenance History */
+        .timeline {
+          position: relative;
+          padding-left: 2rem;
+        }
+
+        .timeline::before {
+          content: '';
+          position: absolute;
+          left: 7px;
+          top: 0;
+          height: 100%;
+          width: 2px;
+          background-color: var(--border-color);
+        }
+
+        .timeline-item {
+          position: relative;
+          padding-bottom: 1.5rem;
+        }
+
+        .timeline-item:last-child {
+          padding-bottom: 0;
+        }
+
+        .timeline-marker {
+          position: absolute;
+          left: -2rem;
+          top: 0;
+          width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          background-color: var(--primary-color);
+          border: 3px solid var(--card-bg);
+        }
+
+        .timeline-marker.maintenance {
+          background-color: var(--warning-color);
+        }
+
+        .timeline-marker.repair {
+          background-color: var(--danger-color);
+        }
+
+        .timeline-marker.calibration {
+          background-color: var(--info-color);
+        }
+
+        .timeline-content {
+          padding-bottom: 0.5rem;
+        }
+
+        .timeline-date {
+          font-size: 0.75rem;
+          color: var(--text-muted);
+          margin-bottom: 0.25rem;
+        }
+
+        .timeline-title {
+          font-weight: 500;
+          margin-bottom: 0.25rem;
+        }
+
+        .timeline-text {
+          font-size: 0.875rem;
+        }
+
+        /* Documents */
+        .document-list {
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+
+        .document-item {
+          display: flex;
+          align-items: center;
+          padding: 0.75rem;
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius);
+          transition: all 0.3s ease;
+        }
+
+        .document-item:hover {
+          background-color: var(--light-color);
+        }
+
+        .document-icon {
+          width: 40px;
+          height: 40px;
+          border-radius: var(--border-radius);
+          background-color: rgba(74, 108, 247, 0.1);
+          color: var(--primary-color);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.25rem;
+          margin-right: 1rem;
+        }
+
+        .document-info {
+          flex: 1;
+        }
+
+        .document-name {
+          font-weight: 500;
+          margin-bottom: 0.25rem;
+        }
+
+        .document-meta {
+          font-size: 0.75rem;
+          color: var(--text-muted);
+        }
+
+        .document-actions {
+          display: flex;
+          gap: 0.5rem;
+        }
+
+        /* Stats */
+        .stats-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 1rem;
+        }
+
+        .stat-card {
+          background-color: var(--light-color);
+          border-radius: var(--border-radius);
+          padding: 1rem;
+          text-align: center;
+        }
+
+        .stat-value {
+          font-size: 1.5rem;
+          font-weight: 600;
+          margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+          font-size: 0.75rem;
+          color: var(--text-muted);
+        }
+
+        /* Buttons */
+        .btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.5rem 1rem;
+          font-size: 0.875rem;
+          font-weight: 500;
+          border-radius: var(--border-radius);
+          border: none;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+          background-color: var(--primary-color);
+          color: white;
+        }
+
+        .btn-primary:hover {
+          background-color: var(--primary-hover);
+        }
+
+        .btn-outline {
+          background-color: transparent;
+          border: 1px solid var(--border-color);
+          color: var(--text-color);
+        }
+
+        .btn-outline:hover {
+          background-color: var(--light-color);
+        }
+
+        .btn-danger {
+          background-color: var(--danger-color);
+          color: white;
+        }
+
+        .btn-danger:hover {
+          background-color: #c82333;
+        }
+
+        .btn-warning {
+          background-color: var(--warning-color);
+          color: #212529;
+        }
+
+        .btn-warning:hover {
+          background-color: #e0a800;
+        }
+
+        .btn-success {
+          background-color: var(--success-color);
+          color: white;
+        }
+
+        .btn-success:hover {
+          background-color: #218838;
+        }
+
+        .btn-icon {
+          margin-right: 0.5rem;
+        }
+
+        .btn-sm {
+          padding: 0.25rem 0.5rem;
+          font-size: 0.75rem;
+        }
+
+        .btn-icon-only {
+          width: 32px;
+          height: 32px;
+          padding: 0;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+          .machine-details-container {
+            grid-template-columns: 1fr;
+          }
+          
+          .info-grid {
+            grid-template-columns: 1fr;
+          }
+          
+          .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+
+        @media (max-width: 768px) {
+          .sidebar {
+            width: 0;
+            transform: translateX(-100%);
+          }
+
+          .sidebar.active {
+            width: 250px;
+            transform: translateX(0);
+          }
+
+          .main-content {
+            margin-left: 0;
+          }
+
+          .page-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+          }
+          
+          .machine-header {
+            flex-direction: column;
+          }
+          
+          .machine-actions-container {
+            align-items: flex-start;
+          }
+        }
+
+        @media (max-width: 576px) {
+          .search-container {
+            width: 200px;
+          }
+
+          .user-name {
+            display: none;
+          }
+          
+          .tabs {
+            overflow-x: auto;
+            white-space: nowrap;
+            padding-bottom: 0.5rem;
+          }
+          
+          .tab {
+            padding: 0.75rem 1rem;
+          }
+        }
+
+        /* Menu Toggle for Mobile */
+        .menu-toggle {
+          background: none;
+          border: none;
+          color: var(--text-color);
+          font-size: 1.25rem;
+          cursor: pointer;
+          display: none;
+          margin-right: 1rem;
+        }
+
+        @media (max-width: 768px) {
+          .menu-toggle {
+            display: block;
+          }
+        }
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-flask"></i>
+                <h1>LabUI</h1>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="/"><i class="fas fa-home"></i> Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="/tasks"><i class="fas fa-tasks"></i> Tasks</a>
+                    </li>
+                    <li>
+                        <a href="/reports"><i class="fas fa-chart-bar"></i> Reports</a>
+                    </li>
+                    <li class="active">
+                        <a href="/lab"><i class="fas fa-cogs"></i> Laberatory</a>
+                    </li>
+                    <li >
+                        <a href="/floor-plan"><i class="fas fa-map"></i> Floor Plan</a>
+                    </li>
+                    <li>
+                        <a href="/teams"><i class="fas fa-users"></i> Teams</a>
+                    </li>
+                    <li>
+                        <a href="/contactus"><i class="fas fa-envelope"></i> Contact</a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Navigation -->
+            <header class="top-nav">
+                <div class="search-container">
+                  <i class="fas fa-search"></i>
+                  <input type="text" placeholder="Search..." />
+                </div>
+                <div class="user-menu">
+                  <div class="notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                  </div>
+                  <div class="user-profile">
+                    <span class="user-name">User</span>
+                    <i class="fas fa-chevron-down"></i>
+                    <div class="dropdown-menu">
+                      <a href="/profile"><i class="fas fa-user"></i> Profile</a>
+                      <a  href='{% url 'profile'  %}'><i class="fas fa-cog"></i> Change Password</a>
+                      <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                  </div>
+                </div>
+              </header>
+
+            <!-- Machine Details Content -->
+            <div class="content-wrapper">
+                <!-- Breadcrumb -->
+                <div class="breadcrumb">
+                    <div class="breadcrumb-item">
+                        <a href="/">Dashboard</a>
+                    </div>
+                    <div class="breadcrumb-item">
+                        <a href="/lab">Lab</a>
+                    </div>
+                    <div class="breadcrumb-item active">
+                        {{machine.name}}
+                    </div>
+                </div>
+
+                <!-- Machine Header -->
+                <div class="machine-header">
+                    <div class="machine-icon-large analysis">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="machine-title-container">
+                        <h1 class="machine-title">{{machine.name}}</h1>
+                        <div class="machine-subtitle">{{machine.category}} • {{machine.lab}}</div>
+                        <div class="machine-status-large inactive">
+                            <i class="fas fa-check-circle"></i>
+                            Inactive
+                        </div>
+                    </div>
+                    <div class="machine-actions-container">
+                        <button class="btn btn-outline">
+                            <i class="fas fa-print btn-icon"></i> Print Details
+                        </button>
+                        <button class="btn btn-warning">
+                            <i class="fas fa-tools btn-icon"></i> Schedule Maintenance
+                        </button>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-edit btn-icon"></i> Edit Machine
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Machine Details Container -->
+                <div class="machine-details-container">
+                    <!-- Main Content -->
+                    <div class="machine-main">
+                        <!-- Machine Info -->
+                        <div class="machine-card">
+                            <div class="machine-card-header">
+                                <h3 class="machine-card-title">Machine Information</h3>
+                            </div>
+                            <div class="machine-card-body">
+                                <div class="info-grid">
+                                    <div class="info-item">
+                                        <div class="info-label">Serial Number</div>
+                                        <div class="info-value">SH-UV1800-2245</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Model</div>
+                                        <div class="info-value">UV-1800</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Manufacturer</div>
+                                        <div class="info-value">Shimadzu</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Category</div>
+                                        <div class="info-value">{{machine.category}}</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Location</div>
+                                        <div class="info-value">{{machine.lab}}</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Acquisition Date</div>
+                                        <div class="info-value">2021-03-15</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Last Calibration</div>
+                                        <div class="info-value">2023-05-15</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Next Maintenance</div>
+                                        <div class="info-value">2023-11-15</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Responsible</div>
+                                        <div class="info-value">{{machine.lab.LC}}</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Warranty Until</div>
+                                        <div class="info-value">2024-03-15</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tabs Section -->
+                        <div class="machine-card">
+                            <div class="machine-card-header">
+                                <div class="tabs">
+                                    <div class="tab active" data-tab="description">Description</div>
+                                    <div class="tab" data-tab="comments">Comments</div>
+                                    <div class="tab" data-tab="maintenance">Maintenance History</div>
+                                    <div class="tab" data-tab="usage">Usage Logs</div>
+                                </div>
+                            </div>
+                            <div class="machine-card-body">
+                                <!-- Description Tab -->
+                                <div class="tab-content active" id="description-tab">
+                                    <div class="description-content">
+                                        {{machine.description|linebreaksbr}}
+                                    </div>
+                                </div>
+
+                                <!-- Comments Tab -->
+                                <div class="tab-content" id="comments-tab">
+                                    <div class="comments-container">
+                                        <!-- Comment 1 -->
+                                        <div class="comment">
+                                            <div class="comment-avatar">JS</div>
+                                            <div class="comment-content">
+                                                <div class="comment-header">
+                                                    <div class="comment-author">John Smith</div>
+                                                    <div class="comment-date">2023-09-15 10:23 AM</div>
+                                                </div>
+                                                <div class="comment-text">
+                                                    <p>Completed the monthly calibration check today. All parameters are within acceptable ranges. The baseline stability has improved after the recent maintenance.</p>
+                                                </div>
+                                                <div class="comment-actions">
+                                                    <div class="comment-action">Reply</div>
+                                                    <div class="comment-action">Edit</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Comment 2 -->
+                                        <div class="comment">
+                                            <div class="comment-avatar">SJ</div>
+                                            <div class="comment-content">
+                                                <div class="comment-header">
+                                                    <div class="comment-author">Sarah Johnson</div>
+                                                    <div class="comment-date">2023-08-22 02:45 PM</div>
+                                                </div>
+                                                <div class="comment-text">
+                                                    <p>Noticed some fluctuations in readings when using the instrument for extended periods. It might need a check on the lamp stability. Otherwise, it's working well for routine analyses.</p>
+                                                </div>
+                                                <div class="comment-actions">
+                                                    <div class="comment-action">Reply</div>
+                                                    <div class="comment-action">Edit</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Comment 3 -->
+                                        <div class="comment">
+                                            <div class="comment-avatar">MB</div>
+                                            <div class="comment-content">
+                                                <div class="comment-header">
+                                                    <div class="comment-author">Michael Brown</div>
+                                                    <div class="comment-date">2023-07-10 09:15 AM</div>
+                                                </div>
+                                                <div class="comment-text">
+                                                    <p>Replaced the deuterium lamp today as part of scheduled maintenance. The instrument is now showing improved performance in the UV range. Also updated the firmware to the latest version (v2.5.3).</p>
+                                                </div>
+                                                <div class="comment-actions">
+                                                    <div class="comment-action">Reply</div>
+                                                    <div class="comment-action">Edit</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Add Comment Form -->
+                                        <div class="comment-form">
+                                            <div class="comment-form-header">Add a Comment</div>
+                                            <textarea class="comment-textarea" placeholder="Write your comment here..."></textarea>
+                                            <button class="btn btn-primary">
+                                                <i class="fas fa-comment btn-icon"></i> Post Comment
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Maintenance History Tab -->
+                                <div class="tab-content" id="maintenance-tab">
+                                    <div class="timeline">
+                                        <!-- Maintenance Item 1 -->
+                                        <div class="timeline-item">
+                                            <div class="timeline-marker calibration"></div>
+                                            <div class="timeline-content">
+                                                <div class="timeline-date">2023-05-15</div>
+                                                <div class="timeline-title">Calibration</div>
+                                                <div class="timeline-text">Full calibration performed. All parameters within specifications. Wavelength accuracy: ±0.08 nm, Photometric accuracy: ±0.001 Abs.</div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Maintenance Item 2 -->
+                                        <div class="timeline-item">
+                                            <div class="timeline-marker maintenance"></div>
+                                            <div class="timeline-content">
+                                                <div class="timeline-date">2023-02-10</div>
+                                                <div class="timeline-title">Preventive Maintenance</div>
+                                                <div class="timeline-text">Quarterly preventive maintenance performed. Cleaned optical components, checked mechanical parts, and verified system performance.</div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Maintenance Item 3 -->
+                                        <div class="timeline-item">
+                                            <div class="timeline-marker repair"></div>
+                                            <div class="timeline-content">
+                                                <div class="timeline-date">2022-11-05</div>
+                                                <div class="timeline-title">Lamp Replacement</div>
+                                                <div class="timeline-text">Replaced deuterium lamp due to decreased intensity. Performed alignment and verification after replacement.</div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Maintenance Item 4 -->
+                                        <div class="timeline-item">
+                                            <div class="timeline-marker calibration"></div>
+                                            <div class="timeline-content">
+                                                <div class="timeline-date">2022-08-22</div>
+                                                <div class="timeline-title">Calibration</div>
+                                                <div class="timeline-text">Full calibration performed. All parameters within specifications.</div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Maintenance Item 5 -->
+                                        <div class="timeline-item">
+                                            <div class="timeline-marker maintenance"></div>
+                                            <div class="timeline-content">
+                                                <div class="timeline-date">2022-05-17</div>
+                                                <div class="timeline-title">Software Update</div>
+                                                <div class="timeline-text">Updated control software to version 2.4.1. Added new features for data analysis and improved stability.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Usage Logs Tab -->
+                                <div class="tab-content" id="usage-tab">
+                                    <table class="machine-list-view">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>User</th>
+                                                <th>Project</th>
+                                                <th>Duration</th>
+                                                <th>Samples</th>
+                                                <th>Notes</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>2023-09-18</td>
+                                                <td>Emily Davis</td>
+                                                <td>PRJ-2023-089</td>
+                                                <td>1h 45m</td>
+                                                <td>12</td>
+                                                <td>Protein concentration analysis</td>
+                                            </tr>
+                                            <tr>
+                                                <td>2023-09-15</td>
+                                                <td>John Smith</td>
+                                                <td>PRJ-2023-085</td>
+                                                <td>0h 30m</td>
+                                                <td>1</td>
+                                                <td>Calibration check</td>
+                                            </tr>
+                                            <tr>
+                                                <td>2023-09-12</td>
+                                                <td>Sarah Johnson</td>
+                                                <td>PRJ-2023-082</td>
+                                                <td>2h 15m</td>
+                                                <td>24</td>
+                                                <td>Environmental sample analysis</td>
+                                            </tr>
+                                            <tr>
+                                                <td>2023-09-10</td>
+                                                <td>Robert Wilson</td>
+                                                <td>PRJ-2023-080</td>
+                                                <td>1h 30m</td>
+                                                <td>18</td>
+                                                <td>Drug dissolution testing</td>
+                                            </tr>
+                                            <tr>
+                                                <td>2023-09-05</td>
+                                                <td>Jennifer Lee</td>
+                                                <td>PRJ-2023-078</td>
+                                                <td>3h 00m</td>
+                                                <td>36</td>
+                                                <td>Method development for new assay</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar -->
+                    <div class="machine-sidebar">
+                        <!-- Quick Stats -->
+                        <div class="machine-card">
+                            <div class="machine-card-header">
+                                <h3 class="machine-card-title">Quick Stats</h3>
+                            </div>
+                            <div class="machine-card-body">
+                                <div class="stats-grid">
+                                    <div class="stat-card">
+                                        <div class="stat-value">98%</div>
+                                        <div class="stat-label">Uptime</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-value">245</div>
+                                        <div class="stat-label">Uses This Year</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-value">58</div>
+                                        <div class="stat-label">Days Until Service</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-value">3</div>
+                                        <div class="stat-label">Pending Tasks</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Documents -->
+                        <div class="machine-card">
+                            <div class="machine-card-header">
+                                <h3 class="machine-card-title">Documents</h3>
+                            </div>
+                            <div class="machine-card-body">
+                                <div class="document-list">
+                                    <div class="document-item">
+                                        <div class="document-icon">
+                                            <i class="fas fa-file-pdf"></i>
+                                        </div>
+                                        <div class="document-info">
+                                            <div class="document-name">User Manual</div>
+                                            <div class="document-meta">PDF • 5.2 MB • Uploaded 2021-03-20</div>
+                                        </div>
+                                        <div class="document-actions">
+                                            <button class="btn btn-sm btn-outline btn-icon-only" title="Download">
+                                                <i class="fas fa-download"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="document-item">
+                                        <div class="document-icon">
+                                            <i class="fas fa-file-pdf"></i>
+                                        </div>
+                                        <div class="document-info">
+                                            <div class="document-name">Service Manual</div>
+                                            <div class="document-meta">PDF • 8.7 MB • Uploaded 2021-03-20</div>
+                                        </div>
+                                        <div class="document-actions">
+                                            <button class="btn btn-sm btn-outline btn-icon-only" title="Download">
+                                                <i class="fas fa-download"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="document-item">
+                                        <div class="document-icon">
+                                            <i class="fas fa-file-excel"></i>
+                                        </div>
+                                        <div class="document-info">
+                                            <div class="document-name">Calibration Records</div>
+                                            <div class="document-meta">XLSX • 1.2 MB • Updated 2023-05-15</div>
+                                        </div>
+                                        <div class="document-actions">
+                                            <button class="btn btn-sm btn-outline btn-icon-only" title="Download">
+                                                <i class="fas fa-download"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="document-item">
+                                        <div class="document-icon">
+                                            <i class="fas fa-file-word"></i>
+                                        </div>
+                                        <div class="document-info">
+                                            <div class="document-name">SOP - Standard Operation</div>
+                                            <div class="document-meta">DOCX • 0.8 MB • Updated 2022-11-10</div>
+                                        </div>
+                                        <div class="document-actions">
+                                            <button class="btn btn-sm btn-outline btn-icon-only" title="Download">
+                                                <i class="fas fa-download"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="document-item">
+                                        <div class="document-icon">
+                                            <i class="fas fa-file-image"></i>
+                                        </div>
+                                        <div class="document-info">
+                                            <div class="document-name">Installation Photos</div>
+                                            <div class="document-meta">ZIP • 15.4 MB • Uploaded 2021-03-18</div>
+                                        </div>
+                                        <div class="document-actions">
+                                            <button class="btn btn-sm btn-outline btn-icon-only" title="Download">
+                                                <i class="fas fa-download"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Related Tasks -->
+                        
+
+                        
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize dropdown menus
+            initDropdowns();
+            
+            // Initialize mobile menu
+            initMobileMenu();
+            
+            // Initialize tabs
+            initTabs();
+        });
+
+        function initDropdowns() {
+            const dropdownTriggers = document.querySelectorAll('.user-profile');
+            
+            dropdownTriggers.forEach(trigger => {
+                trigger.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const dropdown = this.querySelector('.dropdown-menu');
+                    if (dropdown) {
+                        const isVisible = dropdown.style.display === 'block';
+                        // Close all first
+                        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                            menu.style.display = 'none';
+                        });
+                        dropdown.style.display = isVisible ? 'none' : 'block';
+                    }
+                });
+            });
+            
+            document.addEventListener('click', function() {
+                document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                    menu.style.display = 'none';
+                });
+            });
+        }
+
+        function initMobileMenu() {
+            const menuToggle = document.querySelector('.menu-toggle');
+            const sidebar = document.querySelector('.sidebar');
+            
+            if (menuToggle && sidebar) {
+                menuToggle.addEventListener('click', function() {
+                    sidebar.classList.toggle('active');
+                });
+            }
+        }
+
+        function initTabs() {
+            const tabs = document.querySelectorAll('.tab');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Hide all tab content
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    // Show the corresponding tab content
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId + '-tab').classList.add('active');
+                });
+            });
+        }
+    </script>
+</body>
+</html>

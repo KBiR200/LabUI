@@ -1,0 +1,412 @@
+{% for lab in labs %}
+
+                <div class="lab-section">
+                    <div class="lab-header">
+                        <h3>
+                            <i class="fas fa-flask"></i>
+                            Main Laboratory
+                        </h3>
+                        <div class="lab-meta">
+                            <div class="lab-meta-item">
+                                <i class="fas fa-cogs"></i>
+                                <span>12 Machines</span>
+                            </div>
+                            <div class="lab-meta-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Building A, Floor 2</span>
+                            </div>
+                            <button class="lab-toggle">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="lab-body">
+                        <!-- Grid View -->
+                        <div class="machine-grid">
+                            <!-- Machine Card 1 -->
+                            <div class="machine-card">
+                                <div class="machine-header">
+                                    <div class="machine-icon analysis">
+                                        <i class="fas fa-chart-line"></i>
+                                    </div>
+                                    <div class="machine-title">
+                                        <h4 class="machine-name">Shimadzu UV-1800</h4>
+                                        <div class="machine-category">Spectrophotometer</div>
+                                    </div>
+                                    <div class="machine-status active">
+                                        <i class="fas fa-check-circle"></i>
+                                        Active
+                                    </div>
+                                </div>
+                                <div class="machine-body">
+                                    <div class="machine-info">
+                                        <div class="info-item">
+                                            <div class="info-label">Serial Number</div>
+                                            <div class="info-value">SH-UV1800-2245</div>
+                                        </div>
+                                        <div class="info-item">
+                                            <div class="info-label">Last Calibration</div>
+                                            <div class="info-value">2023-05-15</div>
+                                        </div>
+                                        <div class="info-item">
+                                            <div class="info-label">Next Maintenance</div>
+                                            <div class="info-value">2023-11-15</div>
+                                        </div>
+                                        <div class="info-item">
+                                            <div class="info-label">Responsible</div>
+                                            <div class="info-value">John Smith</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="machine-footer">
+                                    <button class="btn btn-sm btn-outline">
+                                        <i class="fas fa-history btn-icon"></i>
+                                        History
+                                    </button>
+                                    <div class="machine-actions">
+                                        <button class="btn btn-sm btn-outline btn-icon-only" title="Schedule Maintenance">
+                                            <i class="fas fa-calendar-alt"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline btn-icon-only" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Machine Card 2 -->
+                            <div class="machine-card">
+                                <div class="machine-header">
+                                    <div class="machine-icon analysis">
+                                        <i class="fas fa-chart-line"></i>
+                                    </div>
+                                    <div class="machine-title">
+                                        <h4 class="machine-name">Agilent 1260 Infinity II</h4>
+                                        <div class="machine-category">HPLC</div>
+                                    </div>
+                                    <div class="machine-status active">
+                                        <i class="fas fa-check-circle"></i>
+                                        Active
+                                    </div>
+                                </div>
+                                <div class="machine-body">
+                                    <div class="machine-info">
+                                        <div class="info-item">
+                                            <div class="info-label">Serial Number</div>
+                                            <div class="info-value">AG-1260-3782</div>
+                                        </div>
+                                        <div class="info-item">
+                                            <div class="info-label">Last Calibration</div>
+                                            <div class="info-value">2023-06-10</div>
+                                        </div>
+                                        <div class="info-item">
+                                            <div class="info-label">Next Maintenance</div>
+                                            <div class="info-value">2023-12-10</div>
+                                        </div>
+                                        <div class="info-item">
+                                            <div class="info-label">Responsible</div>
+                                            <div class="info-value">Sarah Johnson</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="machine-footer">
+                                    <button class="btn btn-sm btn-outline">
+                                        <i class="fas fa-history btn-icon"></i>
+                                        History
+                                    </button>
+                                    <div class="machine-actions">
+                                        <button class="btn btn-sm btn-outline btn-icon-only" title="Schedule Maintenance">
+                                            <i class="fas fa-calendar-alt"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline btn-icon-only" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Machine Card 3 -->
+                            <div class="machine-card">
+                                <div class="machine-header">
+                                    <div class="machine-icon analysis">
+                                        <i class="fas fa-chart-line"></i>
+                                    </div>
+                                    <div class="machine-title">
+                                        <h4 class="machine-name">Gas Chromatograph</h4>
+                                        <div class="machine-category">GC</div>
+                                    </div>
+                                    <div class="machine-status maintenance">
+                                        <i class="fas fa-tools"></i>
+                                        Maintenance
+                                    </div>
+                                </div>
+                                <div class="machine-body">
+                                    <div class="machine-info">
+                                        <div class="info-item">
+                                            <div class="info-label">Serial Number</div>
+                                            <div class="info-value">GC-8890-1122</div>
+                                        </div>
+                                        <div class="info-item">
+                                            <div class="info-label">Last Calibration</div>
+                                            <div class="info-value">2023-04-22</div>
+                                        </div>
+                                        <div class="info-item">
+                                            <div class="info-label">Next Maintenance</div>
+                                            <div class="info-value">In Progress</div>
+                                        </div>
+                                        <div class="info-item">
+                                            <div class="info-label">Responsible</div>
+                                            <div class="info-value">Michael Brown</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="machine-footer">
+                                    <button class="btn btn-sm btn-outline">
+                                        <i class="fas fa-history btn-icon"></i>
+                                        History
+                                    </button>
+                                    <div class="machine-actions">
+                                        <button class="btn btn-sm btn-outline btn-icon-only" title="Schedule Maintenance">
+                                            <i class="fas fa-calendar-alt"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline btn-icon-only" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Machine Card 4 -->
+                            <div class="machine-card">
+                                <div class="machine-header">
+                                    <div class="machine-icon imaging">
+                                        <i class="fas fa-microscope"></i>
+                                    </div>
+                                    <div class="machine-title">
+                                        <h4 class="machine-name">Olympus BX53</h4>
+                                        <div class="machine-category">Light Microscope</div>
+                                    </div>
+                                    <div class="machine-status active">
+                                        <i class="fas fa-check-circle"></i>
+                                        Active
+                                    </div>
+                                </div>
+                                <div class="machine-body">
+                                    <div class="machine-info">
+                                        <div class="info-item">
+                                            <div class="info-label">Serial Number</div>
+                                            <div class="info-value">OL-BX53-9876</div>
+                                        </div>
+                                        <div class="info-item">
+                                            <div class="info-label">Last Calibration</div>
+                                            <div class="info-value">2023-07-05</div>
+                                        </div>
+                                        <div class="info-item">
+                                            <div class="info-label">Next Maintenance</div>
+                                            <div class="info-value">2024-01-05</div>
+                                        </div>
+                                        <div class="info-item">
+                                            <div class="info-label">Responsible</div>
+                                            <div class="info-value">Emily Davis</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="machine-footer">
+                                    <button class="btn btn-sm btn-outline">
+                                        <i class="fas fa-history btn-icon"></i>
+                                        History
+                                    </button>
+                                    <div class="machine-actions">
+                                        <button class="btn btn-sm btn-outline btn-icon-only" title="Schedule Maintenance">
+                                            <i class="fas fa-calendar-alt"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline btn-icon-only" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- List View (Initially Hidden) -->
+                        <table class="machine-list-view" style="display: none;">
+                            <thead>
+                                <tr>
+                                    <th>Machine Name</th>
+                                    <th>Category</th>
+                                    <th>Serial Number</th>
+                                    <th>Status</th>
+                                    <th>Last Calibration</th>
+                                    <th>Next Maintenance</th>
+                                    <th>Responsible</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Shimadzu UV-1800</td>
+                                    <td>Spectrophotometer</td>
+                                    <td>SH-UV1800-2245</td>
+                                    <td><span class="machine-list-status active"><i class="fas fa-check-circle"></i> Active</span></td>
+                                    <td>2023-05-15</td>
+                                    <td>2023-11-15</td>
+                                    <td>John Smith</td>
+                                    <td>
+                                        <div class="machine-list-actions">
+                                            <button class="btn btn-sm btn-outline btn-icon-only" title="History">
+                                                <i class="fas fa-history"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline btn-icon-only" title="Schedule Maintenance">
+                                                <i class="fas fa-calendar-alt"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline btn-icon-only" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Agilent 1260 Infinity II</td>
+                                    <td>HPLC</td>
+                                    <td>AG-1260-3782</td>
+                                    <td><span class="machine-list-status active"><i class="fas fa-check-circle"></i> Active</span></td>
+                                    <td>2023-06-10</td>
+                                    <td>2023-12-10</td>
+                                    <td>Sarah Johnson</td>
+                                    <td>
+                                        <div class="machine-list-actions">
+                                            <button class="btn btn-sm btn-outline btn-icon-only" title="History">
+                                                <i class="fas fa-history"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline btn-icon-only" title="Schedule Maintenance">
+                                                <i class="fas fa-calendar-alt"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline btn-icon-only" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Gas Chromatograph</td>
+                                    <td>GC</td>
+                                    <td>GC-8890-1122</td>
+                                    <td><span class="machine-list-status maintenance"><i class="fas fa-tools"></i> Maintenance</span></td>
+                                    <td>2023-04-22</td>
+                                    <td>In Progress</td>
+                                    <td>Michael Brown</td>
+                                    <td>
+                                        <div class="machine-list-actions">
+                                            <button class="btn btn-sm btn-outline btn-icon-only" title="History">
+                                                <i class="fas fa-history"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline btn-icon-only" title="Schedule Maintenance">
+                                                <i class="fas fa-calendar-alt"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline btn-icon-only" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Olympus BX53</td>
+                                    <td>Light Microscope</td>
+                                    <td>OL-BX53-9876</td>
+                                    <td><span class="machine-list-status active"><i class="fas fa-check-circle"></i> Active</span></td>
+                                    <td>2023-07-05</td>
+                                    <td>2024-01-05</td>
+                                    <td>Emily Davis</td>
+                                    <td>
+                                        <div class="machine-list-actions">
+                                            <button class="btn btn-sm btn-outline btn-icon-only" title="History">
+                                                <i class="fas fa-history"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline btn-icon-only" title="Schedule Maintenance">
+                                                <i class="fas fa-calendar-alt"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline btn-icon-only" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                {% endfor %}
+
+
+
+
+{% for machine in machines %}
+  {% if machine.lab == lab %}
+    <p>{{ machine.name }}</p>
+  {% endif %}
+{% endfor %}
+
+
+
+
+
+
+
+
+
+
+{% for machine in machines %}
+  {% if machine.lab == lab %}
+<!-- Machine Card 1 -->
+<div class="machine-card">
+    <div class="machine-header">
+        <div class="machine-icon analysis">
+            <i class="fas fa-chart-line"></i>
+        </div>
+        <div class="machine-title">
+            <h4 class="machine-name"> {{machine.name}} </h4>
+            <div class="machine-category">{{machine.category}}</div>
+        </div>
+        <div class="machine-status active">
+            <i class="fas fa-check-circle"></i>
+            Active
+        </div>
+    </div>
+    <div class="machine-body">
+        <div class="machine-info">
+            <div class="info-item">
+                <div class="info-label">Serial Number</div>
+                <div class="info-value">Comming Soon</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Last Calibration</div>
+                <div class="info-value">2023-05-15</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Next Maintenance</div>
+                <div class="info-value">2023-11-15</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Responsible</div>
+                <div class="info-value">{{machine.lab.LC}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="machine-footer">
+        <button class="btn btn-sm btn-outline">
+            <i class="fas fa-history btn-icon"></i>
+            History
+        </button>
+        <div class="machine-actions">
+            <button class="btn btn-sm btn-outline btn-icon-only" title="Schedule Maintenance">
+                <i class="fas fa-calendar-alt"></i>
+            </button>
+            <button class="btn btn-sm btn-outline btn-icon-only" title="View Details">
+                <i class="fas fa-eye"></i>
+            </button>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endfor %}

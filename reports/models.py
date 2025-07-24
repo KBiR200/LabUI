@@ -1,7 +1,8 @@
 from django.db import models
-from main.models import Project , Machine
+from main.models import Project , Machine, Team
 from django.contrib.auth.models import User
 import os
+from chem import settings
 from django.utils.timezone import now
 # Create your models here.
 class Tasks(models.Model):
@@ -10,9 +11,13 @@ class Tasks(models.Model):
                                  related_name='created_task')
     assigned = models.ManyToManyField(User, default=None, blank=True,
                                        related_name='assigned_task')
+    team = models.ForeignKey(Team, on_delete=models.CASCADE,
+                             related_name='team_task', blank=True, null=True)
+    workers_count = models.IntegerField( default=1)
     data = models.JSONField(blank=True)
     status = models.IntegerField(name='status', default=0)
-    created_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(default=now)
+    start_date = models.DateTimeField(default=now)
     due_date = models.DateTimeField()
     def __str__(self) -> str:
         return self.title
@@ -21,10 +26,10 @@ class Report(models.Model):
     prjct = models.ForeignKey(Project, on_delete=models.CASCADE,blank=True, null=True)
     title = models.TextField()
     author = models.ManyToManyField(User)
-    date_added = models.DateTimeField(auto_now=True)
+    date_added = models.DateTimeField(auto_now=now)
     task = models.ForeignKey(Tasks, on_delete=models.CASCADE,
                               related_name='task_report', blank=True, null=True)
-    status = models.IntegerField(name='status', default=0)
+    status = models.IntegerField(name='status', default=1)
     def __str__(self) -> str:
         return f"# {self.title}"
     class Meta:
@@ -53,7 +58,21 @@ def task_custom_upload_to(instance, filename):
     new_filename = f"{base}_{now():%Y%m%dT%H%M%S}{extension}"
     print(new_filename)  # Appends timestamp
     return os.path.join("task_attachments/", new_filename)
+    
 class Task_attachment(models.Model):
+    created = models.DateTimeField(auto_now_add=True) 
     task = models.ForeignKey(Tasks,related_name="attachments", on_delete=models.CASCADE)
     attachment= models.FileField(upload_to=task_custom_upload_to, blank=True, null=True)
-    
+    class Meta: 
+        ordering = ('created',) 
+
+class Task_comment(models.Model): 
+    Task = models.ForeignKey(Tasks,
+                             on_delete=models.CASCADE,
+                             related_name='comments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    body = models.TextField() 
+    created = models.DateTimeField(auto_now_add=True) 
+
+    class Meta: 
+        ordering = ('created',) 

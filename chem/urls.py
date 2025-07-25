@@ -5,6 +5,7 @@ from django.conf.urls.static import static
 import main.views
 # import main, reports
 import reports.views 
+import laboratory.views 
 
 app_name = 'chem'
 
@@ -34,9 +35,11 @@ urlpatterns = [
     path('report/<int:report_id>/update', reports.views.update_report, name='update_report'),
     path('report/<int:pk>/submit/', reports.views.submit_report, name='submit_report'),
 
-
-    path('lab/', main.views.lab, name='lab'),
-    path('machine/<int:pk>/view', main.views.machine, name='machine_view'),
+    #''' laboratory '''
+    path('lab/', laboratory.views.lab, name='lab'),
+    path('machine/<int:pk>/view', laboratory.views.machine, name='machine_view'),
+    path('machine/edit/<int:pk>/', laboratory.views.machine_edit, name='machine_edit'),
+    path('machine/add', laboratory.views.machine_add, name='machine_add'),
     
 
     # ''' records '''
@@ -47,4 +50,7 @@ urlpatterns = [
     # path('dashboard/', main.views.dashboard, name='control1'),
     path('dashboard15/', main.views.dashboard, name='control'),
     path('requests/', main.views.new_requests, name='requests'),
+    
+    # ''' errors '''
+    path('404/', main.views.error_404, name='error_404'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # for static media 

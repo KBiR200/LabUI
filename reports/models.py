@@ -26,7 +26,8 @@ class Report(models.Model):
     prjct = models.ForeignKey(Project, on_delete=models.CASCADE,blank=True, null=True)
     title = models.TextField()
     author = models.ManyToManyField(User)
-    date_added = models.DateTimeField(auto_now=now)
+    date_added = models.DateTimeField(auto_now=now) # type: ignore
+    
     task = models.ForeignKey(Tasks, on_delete=models.CASCADE,
                               related_name='task_report', blank=True, null=True)
     status = models.IntegerField(name='status', default=1)
@@ -55,6 +56,7 @@ class Records_attachment(models.Model):
     
 def task_custom_upload_to(instance, filename):
     base, extension = os.path.splitext(filename)
+    
     new_filename = f"{base}_{now():%Y%m%dT%H%M%S}{extension}"
     print(new_filename)  # Appends timestamp
     return os.path.join("task_attachments/", new_filename)

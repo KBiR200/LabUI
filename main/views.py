@@ -23,17 +23,17 @@ def contact(request):
 def teams(request):
     return render(request, 'teams15.html')
 
-def lab(request):
-    labs = Laberatory.objects.all()
-    machines = Machine.objects.all()
+# def lab(request):
+#     labs = Laberatory.objects.all()
+#     machines = Machine.objects.all()
 
-    return render(request, 'lab/lab.html', {'labs': labs, 'machines': machines})
+#     return render(request, 'lab/lab.html', {'labs': labs, 'machines': machines})
 
 
 
-def machine(request, pk):
-    machine = get_object_or_404(Machine, id=pk)
-    return render(request, 'lab/machine.html', {'machine': machine})
+# def machine(request, pk):
+#     machine = get_object_or_404(Machine, id=pk)
+#     return render(request, 'lab/machine.html', {'machine': machine})
 
 
 def signin(request):
@@ -139,3 +139,17 @@ def password_change(request):
         return redirect('signin')
 
     return render(request, 'passchange.html')
+
+
+
+def error_404(request):
+    context = {
+            'error_type': 'permission',
+            'error_code': '500',
+            'error_title': 'Access Denied',
+            'error_message': 'You are not the Laboratory Coordinator (LC) so you cannot access this page.',
+            'user': request.user,
+            'required_role': 'Laboratory Coordinator (LC)',
+            'current_role': request.user,
+        }
+    return render(request, 'error/error.html',context=context, status=500)

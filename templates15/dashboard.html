@@ -893,12 +893,10 @@
                 <div class="page-header">
                     <h2>Dashboard</h2>
                     <div class="page-actions">
-                        <button class="btn btn-outline">
+                        {% comment %} <button class="btn btn-outline">
                             <i class="fas fa-download btn-icon"></i> Export
-                        </button>
-                        <button class="btn btn-primary" id="addTaskBtn">
-                            <i class="fas fa-plus btn-icon"></i> Add Task
-                        </button>
+                        </button> {% endcomment %}
+                        
                     </div>
                 </div>
 
@@ -908,7 +906,7 @@
                         <div class="stat-icon tasks">
                             <i class="fas fa-tasks"></i>
                         </div>
-                        <div class="stat-value">24</div>
+                        <div class="stat-value"> {{tasks.count}} </div>
                         <div class="stat-label">Active Tasks</div>
                     </div>
                     <div class="stat-card">
@@ -973,16 +971,23 @@
                         </div>
                         <div class="card-body">
                             <div class="task-list">
+                                
+                              {% for task in tasks %}
+                              
+                              <div class="task-list-item" onclick="location.href='/task/{{task.id}}'">
+                                  <div class="task-content">
+                                      <div class="task-title">{{task.title}}</div>
+                                      <div class="task-meta">Due:{{task.due_date}} Oct 25, 2023 • Assigned to: {% for asigned in task.assigned.all %}
+                                      | {{asigned}}
+                                      {% endfor %} </div>
+                                  </div>
+                                  <div class="task-priority high">High</div>
+                              </div>
+                              {% endfor %}
+
+
                                 <div class="task-list-item">
-                                    <input type="checkbox" class="task-checkbox">
-                                    <div class="task-content">
-                                        <div class="task-title">Calibrate Spectrophotometer</div>
-                                        <div class="task-meta">Due: Oct 25, 2023 • Assigned to: John Smith</div>
-                                    </div>
-                                    <div class="task-priority high">High</div>
-                                </div>
-                                <div class="task-list-item">
-                                    <input type="checkbox" class="task-checkbox">
+                                    
                                     <div class="task-content">
                                         <div class="task-title">Weekly Equipment Check</div>
                                         <div class="task-meta">Due: Oct 22, 2023 • Assigned to: Sarah Johnson</div>
@@ -990,7 +995,6 @@
                                     <div class="task-priority medium">Medium</div>
                                 </div>
                                 <div class="task-list-item">
-                                    <input type="checkbox" class="task-checkbox" checked>
                                     <div class="task-content">
                                         <div class="task-title">Update Lab Inventory</div>
                                         <div class="task-meta">Completed: Oct 18, 2023 • Assigned to: Emily Davis</div>
@@ -998,7 +1002,7 @@
                                     <div class="task-priority low">Low</div>
                                 </div>
                                 <div class="task-list-item">
-                                    <input type="checkbox" class="task-checkbox">
+                                    
                                     <div class="task-content">
                                         <div class="task-title">HPLC Maintenance</div>
                                         <div class="task-meta">Due: Oct 30, 2023 • Assigned to: Michael Brown</div>
@@ -1006,7 +1010,7 @@
                                     <div class="task-priority medium">Medium</div>
                                 </div>
                                 <div class="task-list-item">
-                                    <input type="checkbox" class="task-checkbox">
+                                    
                                     <div class="task-content">
                                         <div class="task-title">Safety Training Session</div>
                                         <div class="task-meta">Due: Nov 5, 2023 • Assigned to: All Team</div>
@@ -1109,8 +1113,8 @@
             <!-- Task details will be populated by JavaScript -->
         </div>
         <div class="modal-footer">
-            <button class="btn btn-outline" id="editTaskBtn">Edit</button>
-            <button class="btn btn-success" id="completeTaskBtn">Mark Complete</button>
+            
+            <button class="btn btn-success" id="completeTaskBtn">View Task</button>
         </div>
     </div>
 
@@ -1154,9 +1158,7 @@
                 });
 
                 // Add task button
-                document.getElementById('addTaskBtn').addEventListener('click', () => {
-                    this.openTaskModal();
-                });
+
 
                 // Task modal events
                 document.getElementById('closeTaskModal').addEventListener('click', () => {
@@ -1176,13 +1178,13 @@
                     this.closeTaskDetailsModal();
                 });
 
-                document.getElementById('editTaskBtn').addEventListener('click', () => {
+                {% comment %} document.getElementById('editTaskBtn').addEventListener('click', () => {
                     this.editCurrentTask();
-                });
+                }); {% endcomment %}
 
-                document.getElementById('completeTaskBtn').addEventListener('click', () => {
+                 document.getElementById('completeTaskBtn').addEventListener('click', () => {
                     this.completeCurrentTask();
-                });
+                }); 
 
                 // Modal backdrop clicks
                 document.getElementById('taskModalBackdrop').addEventListener('click', () => {
@@ -1196,126 +1198,21 @@
 
             loadSampleTasks() {
                 return [
-                    {
-                        id: 1,
-                        title: 'Calibrate Spectrophotometer',
-                        description: 'Monthly calibration of Shimadzu UV-1800',
-                        date: '2023-10-25',
-                        time: '09:00',
+                {% for task in tasks %}
+                {
+                        id: {{ task.id }},
+                        title: '{{ task.title }}',
+                        description: 'new',
+                        date: '{{task.due_date|date:"Y-m-d"}}',
+                        time: '{{task.due_date|time:"H:i"}}',
                         priority: 'high',
                         category: 'calibration',
                         assignee: 'john-smith',
                         machine: 'shimadzu-uv1800',
                         completed: false
                     },
-                    {
-                        id: 2,
-                        title: 'Weekly Equipment Check',
-                        description: 'Routine inspection of all laboratory equipment',
-                        date: '2023-10-22',
-                        time: '14:00',
-                        priority: 'medium',
-                        category: 'inspection',
-                        assignee: 'sarah-johnson',
-                        machine: '',
-                        completed: false
-                    },
-                    {
-                        id: 3,
-                        title: 'HPLC Maintenance',
-                        description: 'Preventive maintenance for Agilent HPLC system',
-                        date: '2023-10-30',
-                        time: '10:30',
-                        priority: 'medium',
-                        category: 'maintenance',
-                        assignee: 'michael-brown',
-                        machine: 'agilent-hplc',
-                        completed: false
-                    },
-                    {
-                        id: 4,
-                        title: 'Safety Training Session',
-                        description: 'Monthly safety training for all lab personnel',
-                        date: '2023-11-05',
-                        time: '15:00',
-                        priority: 'low',
-                        category: 'training',
-                        assignee: 'emily-davis',
-                        machine: '',
-                        completed: false
-                    },
-                    {
-                        id: 5,
-                        title: 'Update Lab Inventory',
-                        description: 'Monthly inventory update and stock check',
-                        date: '2023-10-18',
-                        time: '11:00',
-                        priority: 'low',
-                        category: 'general',
-                        assignee: 'emily-davis',
-                        machine: '',
-                        completed: true
-                    },
-                    {
-                        id: 6,
-                        title: 'PCR Machine Calibration',
-                        description: 'Quarterly calibration of PCR thermal cycler',
-                        date: '2025-10-28',
-                        time: '13:00',
-                        priority: 'high',
-                        category: 'calibration',
-                        assignee: 'robert-wilson',
-                        machine: 'pcr-cycler',
-                        completed: false
-                    },
-                    {
-                        id: 6,
-                        title: 'PCR Machine Calibration',
-                        description: 'Quarterly calibration of PCR thermal cycler',
-                        date: '2025-10-28',
-                        time: '13:00',
-                        priority: 'high',
-                        category: 'calibration',
-                        assignee: 'robert-wilson',
-                        machine: 'pcr-cycler',
-                        completed: false
-                    },
-                    {
-                        id: 6,
-                        title: 'PCR Machine Calibration',
-                        description: 'Quarterly calibration of PCR thermal cycler',
-                        date: '2025-10-28',
-                        time: '13:00',
-                        priority: 'high',
-                        category: 'calibration',
-                        assignee: 'robert-wilson',
-                        machine: 'pcr-cycler',
-                        completed: false
-                    },
-                    {
-                        id: 6,
-                        title: 'PCR Machine Calibration',
-                        description: 'Quarterly calibration of PCR thermal cycler',
-                        date: '2025-10-28',
-                        time: '13:00',
-                        priority: 'high',
-                        category: 'calibration',
-                        assignee: 'robert-wilson',
-                        machine: 'pcr-cycler',
-                        completed: false
-                    },
-                    {
-                        id: 7,
-                        title: 'Microscope Lens Cleaning',
-                        description: 'Weekly cleaning and maintenance of microscope lenses',
-                        date: '2023-10-24',
-                        time: '16:00',
-                        priority: 'medium',
-                        category: 'maintenance',
-                        assignee: 'john-smith',
-                        machine: 'olympus-microscope',
-                        completed: false
-                    },
+                {% endfor %}
+                  
                     {
                         id: 8,
                         title: 'Gas Chromatograph Service',
@@ -1653,16 +1550,16 @@
             }
 
             completeCurrentTask() {
-                if (!this.currentTask) return;
+            if (!this.currentTask) return;
                 
-                // Mark task as completed
+                // ✅ Mark task as completed (frontend change only)
                 this.currentTask.completed = true;
                 
-                // Close modal and refresh
-                this.closeTaskDetailsModal();
-                this.renderCalendar();
+                // ✅ Close modal and refresh UI
                 
-                this.showNotification('Task marked as completed!', 'success');
+
+                // ✅ Redirect to task detail page only after button click
+                window.location.href = `/task/${this.currentTask.id}/`;
             }
 
             getAssigneeName(assigneeId) {

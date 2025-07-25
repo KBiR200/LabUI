@@ -44,7 +44,7 @@ urlpatterns = [
 
     # ''' records '''
     path('reports/', reports.views.reports, name='reports'),
-    path('report/<int:pk>/save/', reports.views.save_record, name='save_record'),
+    path('record/<int:pk>/save/', reports.views.save_record, name='save_record'),
     path('report/<int:pk>/delete/<int:record_id>', reports.views.delete_record, name='delete_record'),
     
     # path('dashboard/', main.views.dashboard, name='control1'),

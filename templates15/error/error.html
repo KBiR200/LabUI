@@ -512,10 +512,10 @@
                         <i class="fas fa-user"></i>
                     </div>
                     <div class="user-details">
-                        <h4>Current User: John Doe</h4>
-                        <p>Role: Lab Technician</p>
+                        <h4>Current User: {{user}}</h4>
+                        <p>Role: {{current_role}}</p>
                         <p>Department: Chemistry Department</p>
-                        <p>Lab: Main Laboratory</p>
+                        {% comment %} <p>Lab: Main Laboratory</p> {% endcomment %}
                     </div>
                 </div>
 
@@ -559,10 +559,7 @@
                             <i class="fas fa-home btn-icon"></i>
                             Go to Dashboard
                         </a>
-                        <a href="/machines" class="btn btn-outline">
-                            <i class="fas fa-cogs btn-icon"></i>
-                            View Machines (Read-Only)
-                        </a>
+                        
                     </div>
                     
                     <div class="btn-group">

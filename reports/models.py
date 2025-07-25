@@ -7,6 +7,7 @@ from django.utils.timezone import now
 # Create your models here.
 class Tasks(models.Model):
     title = models.TextField()
+    # description = models.TextField(blank=True, null=True)
     creator = models.ForeignKey(User, on_delete=models.CASCADE,
                                  related_name='created_task')
     assigned = models.ManyToManyField(User, default=None, blank=True,

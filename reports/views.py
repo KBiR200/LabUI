@@ -134,7 +134,7 @@ def save_record(request, pk):
                 
                 # Build final data structure to store in the Records model
                 # (Here we wrap machine and parameters into a single dict.)
-                final_data = {"machine": machine_name, "parameters": parameters}
+                final_data = {"machine22": machine_name, "parameters": parameters}
                 
                 # Create a Records instance with the final_data
                 record = Records.objects.create(data=final_data)

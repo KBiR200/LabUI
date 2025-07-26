@@ -129,18 +129,26 @@ def save_record(request, pk):
             # Process each record in the JSON array
             for record_obj in records_data:
                 # Extract machine name and parameters from the JSON record
+                # record_id = record_obj.get("id", '')  # Optional, if you want to track existing records
                 machine_name = record_obj.get("machine", "")
                 parameters = record_obj.get("parameters", {})
-                
-                # Build final data structure to store in the Records model
-                # (Here we wrap machine and parameters into a single dict.)
-                final_data = {"machine22": machine_name, "parameters": parameters}
-                
-                # Create a Records instance with the final_data
-                record = Records.objects.create(data=final_data)
-                
-                # Associate the record with the report (assuming ManyToMany field)
-                record.report.add(report)
+                # print(list(parameters.keys())[0])  # Debugging line to see the keys in parameters
+                if list(parameters.keys())[0] != 'id':
+                    
+                    # Build final data structure to store in the Records model
+                    # (Here we wrap machine and parameters into a single dict.)
+                    final_data = {"machine": machine_name, "parameters": parameters}
+                    
+                    # Create a Records instance with the final_data
+                    record = Records.objects.create(data=final_data)
+                    
+                    # Associate the record with the report (assuming ManyToMany field)
+                    print(f"record: {record.id} is created")
+                    record.report.add(report)
+                else:
+                    # If the first key is 'id', we assume it's an existing record and skip creation.
+                    print("skipping")
+                    continue
                 
                 # Look up the Machine object based on the machine name.
                 # (Assumes machine names are unique. Adjust lookup as needed.)

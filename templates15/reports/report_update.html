@@ -1132,25 +1132,17 @@
                     </div>
                   </div>
                   <div class="record-content">
+                    <div class="record-field" style="display: none;">
+                      <div class="record-field-label">id</div>
+                      <div class="record-field-value">{{ record.id }}</div>
+                    </div>
                     {% for param, value in record.data.parameters.items %}
                     <div class="record-field">
                       <div class="record-field-label">{{ param }}</div>
                       <div class="record-field-value">{{ value }}</div>
                     </div>
                     {% endfor %}
-                    <div class="record-field">
-                      <div class="record-field-label">
-                        Light Source Intensity (%)
-                      </div>
-                      <div class="record-field-value">10054</div>
-                    </div>
-
-                    <div class="record-field">
-                      <div class="record-field-label">
-                        Light Source Intensity (%)
-                      </div>
-                      <div class="record-field-value">100</div>
-                    </div>
+                    
                   </div>
                 </div>
                 {% empty %}

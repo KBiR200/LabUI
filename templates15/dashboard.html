@@ -877,7 +877,7 @@
                         <span class="badge">3</span>
                     </div>
                     <div class="user-profile">
-                        <span class="user-name">User</span>
+                        <span class="user-name">{{ request.user }}</span>
                         <i class="fas fa-chevron-down"></i>
                         <div class="dropdown-menu">
                             <a href="/profile"><i class="fas fa-user"></i> Profile</a>
@@ -964,7 +964,7 @@
                     <!-- Recent Tasks -->
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Recent Tasks</h3>
+                            <h3 class="card-title">Upcoming Tasks</h3>
                             <button class="btn btn-outline btn-sm">
                                 <i class="fas fa-eye"></i> View All
                             </button>

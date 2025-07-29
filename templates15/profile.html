@@ -696,12 +696,12 @@
                           <div class="info-value">{{ user.profile.phone|default:"Not provided" }}</div>
                       </div>
                       <div class="info-item">
-                          <div class="info-label">Department</div>
-                          <div class="info-value">{{ user.profile.department|default:"Not assigned" }}</div>
+                        <div class="info-label">Department</div>
+                        <div class="info-value">{{ user.userprofile.get_teams|capfirst|default:"Not specified" }}</div>
                       </div>
                       <div class="info-item">
                           <div class="info-label">Position</div>
-                          <div class="info-value">{{ user.profile.position|default:"Not specified" }}</div>
+                          <div class="info-value">{{ user.userprofile.role|capfirst|default:"Not assigned" }}</div>
                       </div>
                   </div>
               </div>
@@ -757,11 +757,10 @@
                   <div class="info-item">
                       <div class="info-label">Team Members</div>
                       <div class="team-members">
-                          {% for member in user.profile.primary_team.members.all %}
+                          {% for member in user.userprofile.get_team_members %}
                               {% if member != user %}
                                   <div class="team-member">
-                                      <img src="{{ member.profile.avatar.url|default:'/statics/img/avatar-placeholder.png' }}" alt="{{ member.get_full_name }}" class="team-member-avatar">
-                                      <span>{{ member.get_full_name }}</span>
+                                      <span>{{ member.name }}</span>
                                   </div>
                               {% endif %}
                           {% empty %}

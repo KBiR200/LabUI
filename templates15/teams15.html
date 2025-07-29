@@ -844,7 +844,10 @@
                 <!-- Team Filters -->
                 <div class="team-filters">
                     <div class="filter-tab active" data-filter="all">All Teams</div>
-                    <div class="filter-tab" data-filter="team-a">Team A</div>
+                    {% for T in team %}
+                    
+                    <div class="filter-tab" data-filter="team-{{T.name}}">{{T.name}}</div>
+                    {% endfor %}
                     <div class="filter-tab" data-filter="team-b">Team B</div>
                     <div class="filter-tab" data-filter="team-c">Team C</div>
                     <div class="filter-tab" data-filter="leaders">Team Leaders</div>
@@ -854,67 +857,45 @@
                 <!-- Team Members Grid -->
                 <div class="team-grid">
                     <!-- Team Member 1 -->
-                    <div class="team-member-card" data-team="team-a" data-role="leader">
+                    
+                    {% for T in team %}
+                      {% for m in T.members.all %}
+                      
+                      <div class="team-member-card" data-team="team-{{T.name}}" data-role="leader">
                         <div class="member-cover"></div>
                         <div class="member-avatar">
                             <img src=" " alt="Team Member">
-                        </div>
-                        <div class="member-info">
-                            <h3 class="member-name">Alex Johnson</h3>
-                            <p class="member-role">Team Leader - Team A</p>
+                          </div>
+                        
+                          <div class="member-info">
+                            <h3 class="member-name">{{m}}</h3>
+                            <p class="member-role">Team Leader: {{T.supervisor}} - Team: {{T.name}}</p>
                             <p class="member-bio">Experienced team leader with expertise in sample analysis and quality control procedures.</p>
                             <div class="member-stats">
-                                <div class="member-stat">
-                                    <span class="stat-value">12</span>
-                                    <span class="stat-label">Tasks</span>
+                              <div class="member-stat">
+                                <span class="stat-value">12</span>
+                                <span class="stat-label">Tasks</span>
+                              </div>
+                              <div class="member-stat">
+                                  <span class="stat-value">8</span>
+                                  <span class="stat-label">Completed</span>
                                 </div>
                                 <div class="member-stat">
-                                    <span class="stat-value">8</span>
-                                    <span class="stat-label">Completed</span>
+                                  <span class="stat-value">67%</span>
+                                  <span class="stat-label">Rate</span>
                                 </div>
-                                <div class="member-stat">
-                                    <span class="stat-value">67%</span>
-                                    <span class="stat-label">Rate</span>
-                                </div>
-                            </div>
-                            <div class="member-actions">
+                              </div>
+                              <div class="member-actions">
                                 <button class="btn btn-outline btn-sm">View Profile</button>
                                 <button class="btn btn-outline btn-sm">Assign Task</button>
+                              </div>
                             </div>
-                        </div>
-                    </div>
-
+                          </div>
+                          
+                            {% endfor %}
                     <!-- Team Member 2 -->
-                    <div class="team-member-card" data-team="team-a" data-role="technician">
-                        <div class="member-cover"></div>
-                        <div class="member-avatar">
-                            <img src=" " alt="Team Member">
-                        </div>
-                        <div class="member-info">
-                            <h3 class="member-name">Sam Taylor</h3>
-                            <p class="member-role">Senior Lab Technician - Team A</p>
-                            <p class="member-bio">Specialized in equipment calibration and maintenance with 5+ years of experience.</p>
-                            <div class="member-stats">
-                                <div class="member-stat">
-                                    <span class="stat-value">10</span>
-                                    <span class="stat-label">Tasks</span>
-                                </div>
-                                <div class="member-stat">
-                                    <span class="stat-value">7</span>
-                                    <span class="stat-label">Completed</span>
-                                </div>
-                                <div class="member-stat">
-                                    <span class="stat-value">70%</span>
-                                    <span class="stat-label">Rate</span>
-                                </div>
-                            </div>
-                            <div class="member-actions">
-                                <button class="btn btn-outline btn-sm">View Profile</button>
-                                <button class="btn btn-outline btn-sm">Assign Task</button>
-                            </div>
-                        </div>
-                    </div>
-
+                          {% endfor %}
+                          
                     <!-- Team Member 3 -->
                     <div class="team-member-card" data-team="team-b" data-role="leader">
                         <div class="member-cover"></div>

@@ -1,5 +1,7 @@
+from enum import member
+import profile
 from django.shortcuts import render, redirect
-from main.models import Project, Laberatory, Machine, Team, Machine_Category
+from main.models import Project, Laberatory, Machine, Team, Machine_Category, UserProfile
 from reports.models import Report, Tasks
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
@@ -21,7 +23,8 @@ def contact(request):
     return render(request, 'contactus.html')
 
 def teams(request):
-    return render(request, 'teams15.html')
+    team = Team.objects.filter(members = request.user)
+    return render(request, 'teams15.html',{'team': team})
 
 # def lab(request):
 #     labs = Laberatory.objects.all()
@@ -92,17 +95,8 @@ def dashboard(request):
 
 @login_required(login_url='signin')
 def userprofile(request):
-    tasks = Tasks.objects.filter(status=1, assigned=request.user).order_by('-created_at')
-    new_tasks = Tasks.objects.filter(status=0).order_by('-created_at')
-    tasks_history = Tasks.objects.filter(assigned=request.user).order_by('-created_at')
-    report = Report.objects.filter(author=request.user)
-    context = {
-        'tasks': tasks,
-        'new_tasks': new_tasks,
-        'tasks_history': tasks_history,
-        'reports':report
-    }
-    return render(request, 'profile.html', context)
+
+    return render(request, 'profile.html')
 
 
 @login_required(login_url='signin')

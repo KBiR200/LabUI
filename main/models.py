@@ -64,11 +64,27 @@ class Team(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     is_supervisor = models.BooleanField(default=False)
+    department = models.CharField(max_length=100, blank=True, null=True)
     supervisor = models.ManyToManyField('self', symmetrical=False, blank=True, related_name='employees')
-
+    position = {
+        'technician': 'Technician',
+        'scientist': 'Scientist',
+        'laboratory_manager': 'Laboratory Manager',
+        'manager': 'Manager',
+    }
+    
+    role = models.CharField(max_length=50, choices=[(key, value) for key, value in position.items()], default='technician')
     
     def __str__(self):
         return self.user.username
+    
+    def get_team_members(self):
+        # Return a QuerySet of all User objects who are members of teams supervised by this user
+        return Team.objects.filter(members=self.user).distinct()
+    
+    def get_teams(self):
+        # Return a QuerySet of all Team objects supervised by this user
+        return " , ".join(map(str, (list(Team.objects.filter(members=self.user).values_list('name', flat=True)))))
     
     def get_supervisor_users(self):
         # Return a QuerySet of all User objects who are the supervisors

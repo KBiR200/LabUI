@@ -348,7 +348,8 @@
     }
 
     .card-body {
-        padding: 1.5rem;
+        height: 800px;
+        overflow-y: auto;
     }
 
     /* Calendar Styles */
@@ -526,7 +527,7 @@
 
     /* Task List */
     .task-list {
-        max-height: 400px;
+        max-height: 800px;
         overflow-y: auto;
     }
 

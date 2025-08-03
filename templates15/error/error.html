@@ -1,596 +1,110 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Access Denied - LabUI</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* Base Styles */
-        :root {
-          --primary-color: #4a6cf7;
-          --primary-hover: #3a5ce4;
-          --secondary-color: #6c757d;
-          --success-color: #28a745;
-          --danger-color: #dc3545;
-          --warning-color: #ffc107;
-          --info-color: #17a2b8;
-          --light-color: #f8f9fa;
-          --dark-color: #343a40;
-          --body-bg: #f5f7fb;
-          --card-bg: #ffffff;
-          --text-color: #495057;
-          --text-muted: #6c757d;
-          --border-color: #e9ecef;
-          --shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-          --shadow-lg: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-          --border-radius: 0.375rem;
-        }
+{% extends "base.html" %}
 
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-        }
+{% block content %}
 
-        body {
-          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-          font-size: 0.9rem;
-          line-height: 1.5;
-          color: var(--text-color);
-          background-color: var(--body-bg);
-          min-height: 100vh;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        a {
-          color: var(--primary-color);
-          text-decoration: none;
-        }
-
-        a:hover {
-          text-decoration: underline;
-        }
-
-        /* Error Container */
-        .error-container {
-          max-width: 600px;
-          width: 100%;
-          margin: 2rem;
-          text-align: center;
-        }
-
-        .error-card {
-          background-color: var(--card-bg);
-          border-radius: var(--border-radius);
-          box-shadow: var(--shadow-lg);
-          overflow: hidden;
-          border-top: 4px solid var(--danger-color);
-        }
-
-        .error-header {
-          padding: 2rem 2rem 1rem;
-          background: linear-gradient(135deg, rgba(220, 53, 69, 0.1) 0%, rgba(220, 53, 69, 0.05) 100%);
-        }
-
-        .error-icon {
-          width: 80px;
-          height: 80px;
-          margin: 0 auto 1.5rem;
-          background-color: var(--danger-color);
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: white;
-          font-size: 2.5rem;
-          animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-          0% {
-            transform: scale(1);
-            box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
-          }
-          70% {
-            transform: scale(1.05);
-            box-shadow: 0 0 0 10px rgba(220, 53, 69, 0);
-          }
-          100% {
-            transform: scale(1);
-            box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
-          }
-        }
-
-        .error-code {
-          font-size: 3rem;
-          font-weight: 700;
-          color: var(--danger-color);
-          margin-bottom: 0.5rem;
-          font-family: 'Courier New', monospace;
-        }
-
-        .error-title {
-          font-size: 1.5rem;
-          font-weight: 600;
-          color: var(--text-color);
-          margin-bottom: 1rem;
-        }
-
-        .error-body {
-          padding: 1rem 2rem 2rem;
-        }
-
-        .error-message {
-          font-size: 1rem;
-          color: var(--text-muted);
-          margin-bottom: 1.5rem;
-          line-height: 1.6;
-        }
-
-        .error-details {
-          background-color: var(--light-color);
-          border: 1px solid var(--border-color);
-          border-radius: var(--border-radius);
-          padding: 1rem;
-          margin-bottom: 1.5rem;
-          text-align: left;
-        }
-
-        .error-details h4 {
-          font-size: 0.875rem;
-          font-weight: 600;
-          color: var(--text-color);
-          margin-bottom: 0.5rem;
-          display: flex;
-          align-items: center;
-        }
-
-        .error-details h4 i {
-          margin-right: 0.5rem;
-          color: var(--warning-color);
-        }
-
-        .error-details p {
-          font-size: 0.875rem;
-          color: var(--text-muted);
-          margin-bottom: 0.5rem;
-        }
-
-        .error-details p:last-child {
-          margin-bottom: 0;
-        }
-
-        .error-details ul {
-          margin: 0.5rem 0;
-          padding-left: 1.5rem;
-        }
-
-        .error-details li {
-          font-size: 0.875rem;
-          color: var(--text-muted);
-          margin-bottom: 0.25rem;
-        }
-
-        /* Permission Info */
-        .permission-info {
-          background-color: rgba(255, 193, 7, 0.1);
-          border: 1px solid rgba(255, 193, 7, 0.2);
-          border-radius: var(--border-radius);
-          padding: 1rem;
-          margin-bottom: 1.5rem;
-        }
-
-        .permission-info h4 {
-          font-size: 0.875rem;
-          font-weight: 600;
-          color: #856404;
-          margin-bottom: 0.5rem;
-          display: flex;
-          align-items: center;
-        }
-
-        .permission-info h4 i {
-          margin-right: 0.5rem;
-        }
-
-        .permission-info p {
-          font-size: 0.875rem;
-          color: #856404;
-          margin: 0;
-        }
-
-        /* User Info */
-        .user-info {
-          background-color: rgba(23, 162, 184, 0.1);
-          border: 1px solid rgba(23, 162, 184, 0.2);
-          border-radius: var(--border-radius);
-          padding: 1rem;
-          margin-bottom: 1.5rem;
-          display: flex;
-          align-items: center;
-          text-align: left;
-        }
-
-        .user-avatar {
-          width: 50px;
-          height: 50px;
-          border-radius: 50%;
-          background-color: var(--info-color);
-          color: white;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 1.25rem;
-          margin-right: 1rem;
-          flex-shrink: 0;
-        }
-
-        .user-details h4 {
-          font-size: 0.875rem;
-          font-weight: 600;
-          color: #0c5460;
-          margin-bottom: 0.25rem;
-        }
-
-        .user-details p {
-          font-size: 0.75rem;
-          color: #0c5460;
-          margin: 0;
-        }
-
-        /* Action Buttons */
-        .error-actions {
-          display: flex;
-          flex-direction: column;
-          gap: 1rem;
-          align-items: center;
-        }
-
-        .btn {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          padding: 0.75rem 1.5rem;
-          font-size: 0.875rem;
-          font-weight: 500;
-          border-radius: var(--border-radius);
-          border: none;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          text-decoration: none;
-          min-width: 150px;
-        }
-
-        .btn-primary {
-          background-color: var(--primary-color);
-          color: white;
-        }
-
-        .btn-primary:hover {
-          background-color: var(--primary-hover);
-          text-decoration: none;
-        }
-
-        .btn-outline {
-          background-color: transparent;
-          border: 1px solid var(--border-color);
-          color: var(--text-color);
-        }
-
-        .btn-outline:hover {
-          background-color: var(--light-color);
-          text-decoration: none;
-        }
-
-        .btn-success {
-          background-color: var(--success-color);
-          color: white;
-        }
-
-        .btn-success:hover {
-          background-color: #218838;
-          text-decoration: none;
-        }
-
-        .btn-warning {
-          background-color: var(--warning-color);
-          color: #212529;
-        }
-
-        .btn-warning:hover {
-          background-color: #e0a800;
-          text-decoration: none;
-        }
-
-        .btn-icon {
-          margin-right: 0.5rem;
-        }
-
-        .btn-group {
-          display: flex;
-          gap: 1rem;
-          flex-wrap: wrap;
-          justify-content: center;
-        }
-
-        /* Footer */
-        .error-footer {
-          padding: 1.5rem 2rem;
-          background-color: var(--light-color);
-          border-top: 1px solid var(--border-color);
-          text-align: center;
-        }
-
-        .error-footer p {
-          font-size: 0.75rem;
-          color: var(--text-muted);
-          margin: 0;
-        }
-
-        .error-footer a {
-          color: var(--primary-color);
-          font-weight: 500;
-        }
-
-        /* Help Section */
-        .help-section {
-          margin-top: 1.5rem;
-          padding-top: 1.5rem;
-          border-top: 1px solid var(--border-color);
-        }
-
-        .help-title {
-          font-size: 1rem;
-          font-weight: 600;
-          color: var(--text-color);
-          margin-bottom: 1rem;
-        }
-
-        .help-items {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-          gap: 1rem;
-          text-align: left;
-        }
-
-        .help-item {
-          display: flex;
-          align-items: flex-start;
-          padding: 0.75rem;
-          background-color: var(--light-color);
-          border-radius: var(--border-radius);
-          transition: background-color 0.3s ease;
-        }
-
-        .help-item:hover {
-          background-color: #e2e6ea;
-        }
-
-        .help-item i {
-          color: var(--primary-color);
-          margin-right: 0.75rem;
-          margin-top: 0.125rem;
-          flex-shrink: 0;
-        }
-
-        .help-item-content h5 {
-          font-size: 0.875rem;
-          font-weight: 600;
-          margin-bottom: 0.25rem;
-        }
-
-        .help-item-content p {
-          font-size: 0.75rem;
-          color: var(--text-muted);
-          margin: 0;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-          .error-container {
-            margin: 1rem;
-          }
-          
-          .error-header {
-            padding: 1.5rem 1rem 1rem;
-          }
-          
-          .error-body {
-            padding: 1rem;
-          }
-          
-          .error-footer {
-            padding: 1rem;
-          }
-          
-          .error-code {
-            font-size: 2rem;
-          }
-          
-          .error-title {
-            font-size: 1.25rem;
-          }
-          
-          .btn-group {
-            flex-direction: column;
-            align-items: stretch;
-          }
-          
-          .btn {
-            width: 100%;
-          }
-          
-          .help-items {
-            grid-template-columns: 1fr;
-          }
-          
-          .user-info {
-            flex-direction: column;
-            text-align: center;
-          }
-          
-          .user-avatar {
-            margin-right: 0;
-            margin-bottom: 0.5rem;
-          }
-        }
-
-        /* Animation for page load */
-        .error-card {
-          animation: slideUp 0.5s ease-out;
-        }
-
-        @keyframes slideUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        /* Different error types */
-        .error-card.error-403 {
-          border-top-color: var(--danger-color);
-        }
-
-        .error-card.error-404 {
-          border-top-color: var(--warning-color);
-        }
-
-        .error-card.error-500 {
-          border-top-color: var(--secondary-color);
-        }
-
-        .error-card.error-permission {
-          border-top-color: var(--warning-color);
-        }
-
-        .error-icon.error-403 {
-          background-color: var(--danger-color);
-        }
-
-        .error-icon.error-404 {
-          background-color: var(--warning-color);
-        }
-
-        .error-icon.error-500 {
-          background-color: var(--secondary-color);
-        }
-
-        .error-icon.error-permission {
-          background-color: var(--warning-color);
-        }
-    </style>
-</head>
 <body>
-    <div class="error-container">
-        <div class="error-card error-permission">
-            <!-- Error Header -->
-            <div class="error-header">
+  <div class="error-container">
+    <div class="error-card error-permission">
+      <!-- Error Header -->
+      <div class="error-header">
                 <div class="error-icon error-permission">
-                    <i class="fas fa-user-shield"></i>
+                  <i class="fas fa-user-shield"></i>
                 </div>
                 <div class="error-code">403</div>
                 <h1 class="error-title">Access Denied</h1>
-            </div>
+              </div>
 
-            <!-- Error Body -->
-            <div class="error-body">
+              <!-- Error Body -->
+              <div class="error-body">
                 <p class="error-message">
                     You don't have permission to access this page.
-                </p>
+                  </p>
 
                 <!-- Current User Info -->
                 <div class="user-info">
-                    <div class="user-avatar">
+                  <div class="user-avatar">
                         <i class="fas fa-user"></i>
-                    </div>
-                    <div class="user-details">
+                      </div>
+                      <div class="user-details">
                         <h4>Current User: {{user}}</h4>
                         <p>Role: {{current_role}}</p>
                         <p>Department: Chemistry Department</p>
                         {% comment %} <p>Lab: Main Laboratory</p> {% endcomment %}
-                    </div>
+                      </div>
                 </div>
 
                 <!-- Permission Requirements -->
                 <div class="permission-info">
-                    <h4>
-                        <i class="fas fa-key"></i>
-                        Required Permission
-                    </h4>
-                    <p>This page requires Laboratory Coordinator (LC) privileges. Only users with LC role can access machine management features.</p>
+                  <h4>
+                    <i class="fas fa-key"></i>
+                    Required Permission
+                  </h4>
+                  <p>This page requires Laboratory Coordinator (LC) privileges. Only users with LC role can access machine management features.</p>
                 </div>
-
+                
                 <!-- Error Details -->
                 <div class="error-details">
                     <h4>
-                        <i class="fas fa-info-circle"></i>
+                      <i class="fas fa-info-circle"></i>
                         What does this mean?
-                    </h4>
-                    <p>You attempted to access a restricted resource that requires elevated permissions.</p>
+                      </h4>
+                      <p>You attempted to access a restricted resource that requires elevated permissions.</p>
                     <p><strong>Specific Issue:</strong> You are not assigned as a Laboratory Coordinator (LC) for this laboratory.</p>
                     <p><strong>Required Role:</strong> Laboratory Coordinator (LC)</p>
                     <p><strong>Your Current Role:</strong> Lab Technician</p>
                     
                     <h4 style="margin-top: 1rem;">
-                        <i class="fas fa-list-ul"></i>
+                      <i class="fas fa-list-ul"></i>
                         What can LC users do?
-                    </h4>
-                    <ul>
+                      </h4>
+                      <ul>
                         <li>Manage laboratory machines and equipment</li>
                         <li>Create and assign tasks to team members</li>
                         <li>Access administrative reports and analytics</li>
                         <li>Modify laboratory settings and configurations</li>
                         <li>Approve maintenance requests and schedules</li>
                     </ul>
-                </div>
-
+                  </div>
+                  
                 <!-- Action Buttons -->
                 <div class="error-actions">
-                    <div class="btn-group">
-                        <a href="/" class="btn btn-primary">
-                            <i class="fas fa-home btn-icon"></i>
-                            Go to Dashboard
+                  <div class="btn-group">
+                    <a href="/" class="btn btn-primary">
+                      <i class="fas fa-home btn-icon"></i>
+                      Go to Dashboard
                         </a>
                         
-                    </div>
-                    
-                    <div class="btn-group">
+                      </div>
+                      
+                      <div class="btn-group">
                         <a href="/contact-admin" class="btn btn-warning">
                             <i class="fas fa-envelope btn-icon"></i>
                             Request Access
-                        </a>
-                        <button onclick="history.back()" class="btn btn-outline">
+                          </a>
+                          <button onclick="history.back()" class="btn btn-outline">
                             <i class="fas fa-arrow-left btn-icon"></i>
                             Go Back
-                        </button>
-                    </div>
-                </div>
-
+                          </button>
+                        </div>
+                      </div>
+                      
                 <!-- Help Section -->
                 <div class="help-section">
-                    <h3 class="help-title">Need Help?</h3>
+                  <h3 class="help-title">Need Help?</h3>
                     <div class="help-items">
-                        <div class="help-item">
+                      <div class="help-item">
                             <i class="fas fa-user-cog"></i>
                             <div class="help-item-content">
-                                <h5>Contact Administrator</h5>
+                              <h5>Contact Administrator</h5>
                                 <p>Request LC role assignment from your system administrator</p>
+                              </div>
                             </div>
-                        </div>
                         <div class="help-item">
-                            <i class="fas fa-question-circle"></i>
-                            <div class="help-item-content">
+                          <i class="fas fa-question-circle"></i>
+                          <div class="help-item-content">
                                 <h5>View Help Documentation</h5>
                                 <p>Learn about user roles and permissions in LabUI</p>
-                            </div>
+                              </div>
                         </div>
                         <div class="help-item">
                             <i class="fas fa-users"></i>
@@ -600,53 +114,57 @@
                             </div>
                         </div>
                         <div class="help-item">
-                            <i class="fas fa-bug"></i>
-                            <div class="help-item-content">
-                                <h5>Report an Issue</h5>
+                          <i class="fas fa-bug"></i>
+                          <div class="help-item-content">
+                            <h5>Report an Issue</h5>
                                 <p>If you believe this is an error, please report it</p>
+                              </div>
                             </div>
-                        </div>
                     </div>
-                </div>
+                  </div>
             </div>
-
+            
             <!-- Error Footer -->
             <div class="error-footer">
                 <p>
                     If you believe you should have access to this page, please 
                     <a href="/contactus">contact support</a> or your system administrator.
-                </p>
+                  </p>
+                </div>
+              </div>
             </div>
-        </div>
-    </div>
+            
+            {% endblock content %}
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add click tracking for analytics
+            {% block script %}
+            
+            <script>
+              document.addEventListener('DOMContentLoaded', function() {
+                // Add click tracking for analytics
             document.querySelectorAll('.btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    // Track error page interactions
-                    console.log('Error page action:', this.textContent.trim());
-                });
+              button.addEventListener('click', function() {
+                // Track error page interactions
+                console.log('Error page action:', this.textContent.trim());
+              });
             });
-
+            
             // Auto-redirect after a certain time (optional)
             // setTimeout(() => {
-            //     window.location.href = '/';
-            // }, 30000); // 30 seconds
-
-            // Add keyboard navigation
+              //     window.location.href = '/';
+              // }, 30000); // 30 seconds
+              
+              // Add keyboard navigation
             document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    history.back();
-                } else if (e.key === 'Enter' && e.ctrlKey) {
-                    window.location.href = '/';
-                }
+              if (e.key === 'Escape') {
+                history.back();
+              } else if (e.key === 'Enter' && e.ctrlKey) {
+                window.location.href = '/';
+              }
             });
-        });
-
-        // Function to show different error types
-        function showError(errorType, errorCode, title, message, details = {}) {
+          });
+          
+          // Function to show different error types
+          function showError(errorType, errorCode, title, message, details = {}) {
             const errorCard = document.querySelector('.error-card');
             const errorIcon = document.querySelector('.error-icon');
             const codeElement = document.querySelector('.error-code');
@@ -661,22 +179,22 @@
             codeElement.textContent = errorCode;
             titleElement.textContent = title;
             messageElement.textContent = message;
-
+            
             // Update icon based on error type
             const iconMap = {
-                '403': 'fas fa-user-shield',
-                '404': 'fas fa-search',
-                '500': 'fas fa-server',
+              '403': 'fas fa-user-shield',
+              '404': 'fas fa-search',
+              '500': 'fas fa-server',
                 'permission': 'fas fa-key'
-            };
-
+              };
+              
             errorIcon.querySelector('i').className = iconMap[errorCode] || 'fas fa-exclamation-triangle';
         }
-
+        
         // Example usage for different error types:
         // showError('404', '404', 'Page Not Found', 'The page you are looking for does not exist.');
         // showError('500', '500', 'Server Error', 'An internal server error occurred.');
         // showError('permission', '403', 'Access Denied', 'You are not the LC so you cannot access this page.');
     </script>
-</body>
-</html>
+    {% endblock script %}
+  

@@ -1,96 +1,22 @@
-<!DOCTYPE html>
-{% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - LabUI</title>
+{% extends "base.html" %}
+{% block content %}
 
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
-
-</head>
-<body>
-    <div class="layout">
-        <!-- Sidebar Navigation -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <i class="fas fa-flask"></i>
-                <h1>LabUI</h1>
-            </div>
-            <nav class="sidebar-nav">
-                <ul>
-                    <li class="active">
-                        <a href="/"><i class="fas fa-home"></i> Dashboard</a>
-                    </li>
-                    <li>
-                        <a href="/tasks"><i class="fas fa-tasks"></i> Tasks</a>
-                    </li>
-                    <li>
-                        <a href="/reports"><i class="fas fa-chart-bar"></i> Reports</a>
-                    </li>
-                    <li>
-                        <a href="/floor-plan"><i class="fas fa-map"></i> Floor Plan</a>
-                    </li>
-                    <li>
-                        <a href="/machines"><i class="fas fa-cogs"></i> Machines</a>
-                    </li>
-                    <li>
-                        <a href="/teams"><i class="fas fa-users"></i> Teams</a>
-                    </li>
-                    <li>
-                        <a href="/contactus"><i class="fas fa-envelope"></i> Contact</a>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Top Navigation -->
-            <header class="top-nav">
-                <button class="menu-toggle">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <div class="search-container">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search tasks, machines, reports...">
-                </div>
-                <div class="user-menu">
-                    <div class="notifications">
-                        <i class="fas fa-bell"></i>
-                        <span class="badge">3</span>
-                    </div>
-                    <div class="user-profile">
-                        <span class="user-name">{{ request.user }}</span>
-                        <i class="fas fa-chevron-down"></i>
-                        <div class="dropdown-menu">
-                            <a href="/profile"><i class="fas fa-user"></i> Profile</a>
-                            <a href="/passchange/"><i class="fas fa-cog"></i> Change Password</a>
-                            <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                        </div>
-                    </div>
-                </div>
-            </header>
-
-            <!-- Dashboard Content -->
-            <div class="content-wrapper">
+<!-- Dashboard Content -->
+<div class="content-wrapper">
                 <div class="page-header">
                     <h2>Dashboard</h2>
                     <div class="page-actions">
                         {% comment %} <button class="btn btn-outline">
                             <i class="fas fa-download btn-icon"></i> Export
-                        </button> {% endcomment %}
-                        
+                            </button> {% endcomment %}
+                            
+                        </div>
                     </div>
-                </div>
-
-                <!-- Stats Row -->
-                <div class="stats-row">
-                    <div class="stat-card">
-                        <div class="stat-icon tasks">
+                    
+                    <!-- Stats Row -->
+                    <div class="stats-row">
+                        <div class="stat-card">
+                            <div class="stat-icon tasks">
                             <i class="fas fa-tasks"></i>
                         </div>
                         <div class="stat-value"> {{tasks.count}} </div>
@@ -122,15 +48,15 @@
                 <!-- Dashboard Grid -->
                 <div class="dashboard-grid">
                     <!-- Calendar -->
-                     
+                    
                    {% include "dash_partials/calendar/dash_calendar_html.html" %}
-                    <!-- Recent Tasks -->
-                      
-                        <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">Laboratory Analytics Dashboard</h3>
-            <button class="btn btn-outline btn-sm">
-                <i class="fas fa-expand"></i> Full Screen
+                   <!-- Recent Tasks -->
+                    {% comment %}
+                   <div class="card">
+                       <div class="card-header">
+                           <h3 class="card-title">Laboratory Analytics Dashboard</h3>
+                           <button class="btn btn-outline btn-sm">
+                               <i class="fas fa-expand"></i> Full Screen
             </button>
         </div>
         <div class="card-body">
@@ -188,7 +114,7 @@
                         </div>
                     </div>
                 </div>
-
+                
                 <!-- Chart 3: Weekly Reports Trend -->
                 <div class="chart-item reports">
                     <div class="chart-header">
@@ -242,7 +168,7 @@
                         </div>
                     </div>
                 </div>
-
+                
                 <!-- Chart 5: Team Performance -->
                 <div class="chart-item users">
                     <div class="chart-header">
@@ -323,7 +249,7 @@
                         </div>
                     </div>
                 </div>
-
+                
                 <!-- Chart 8: Monthly Activity -->
                 <div class="chart-item reports">
                     <div class="chart-header">
@@ -350,7 +276,7 @@
                         </div>
                     </div>
                 </div>
-
+                
                 <!-- Chart 9: Priority Distribution -->
                 <div class="chart-item tasks">
                     <div class="chart-header">
@@ -377,7 +303,7 @@
                         </div>
                     </div>
                 </div>
-
+                
                 <!-- Chart 10: Lab Comparison -->
                 <div class="chart-item performance">
                     <div class="chart-header">
@@ -404,7 +330,7 @@
                         </div>
                     </div>
                 </div>
-
+                
                 <!-- Chart 11: Time Analysis -->
                 <div class="chart-item users">
                     <div class="chart-header">
@@ -431,7 +357,7 @@
                         </div>
                     </div>
                 </div>
-
+                
                 <!-- Chart 12: Resource Usage -->
                 <div class="chart-item maintenance">
                     <div class="chart-header">
@@ -461,33 +387,78 @@
             </div>
         </div>
     </div>
-                    
+     {% endcomment %}
                     
                     <div class="card">
-                      <div class="card-header">
+                        <div class="card-header">
                             <h3 class="card-title">Upcoming Tasks</h3>
                             <button class="btn btn-outline btn-sm">
                                 <i class="fas fa-eye"></i> View All
-                              </button>
+                            </button>
                             </div>
                             <div class="card-body">
-                            <div class="task-list">
+                                <div class="task-list">
                                 
-                              {% for task in tasks %}
-                              
-                              <div class="task-list-item" onclick="location.href='/task/{{task.id}}'">
-                                <div class="task-content">
-                                  <div class="task-title">{{task.title}}</div>
-                                  <div class="task-meta">Due:{{task.due_date}} Oct 25, 2023 • Assigned to: {% for asigned in task.assigned.all %}
-                                    | {{asigned}}
-                                      {% endfor %} </div>
-                                    </div>
+                                    {% for task in tasks %}
+                                    
+                                    <div class="task-list-item" onclick="location.href='/task/{{task.id}}'">
+                                        <div class="task-content">
+                                            <div class="task-title">{{task.title}}</div>
+                                            <div class="task-meta">Due:{{task.due_date}} Oct 25, 2023 • Assigned to: {% for asigned in task.assigned.all %}
+                                                | {{asigned}}
+                                                {% endfor %} </div>
+                                            </div>
                                     <div class="task-priority high">High</div>
                                   </div>
                                   {% endfor %}
-
+                                  
                                   
                                   <div class="task-list-item">
+                                      
+                                      <div class="task-content">
+                                      <div class="task-title">Weekly Equipment Check</div>
+                                      <div class="task-meta">Due: Oct 22, 2023 • Assigned to: Sarah Johnson</div>
+                                    </div>
+                                    <div class="task-priority medium">Medium</div>
+                                </div>
+                                <div class="task-list-item">
+                                    <div class="task-content">
+                                        <div class="task-title">Update Lab Inventory</div>
+                                        <div class="task-meta">Completed: Oct 18, 2023 • Assigned to: Emily Davis</div>
+                                      </div>
+                                      <div class="task-priority low">Low</div>
+                                    </div>
+                                    <div class="task-list-item">
+                                        
+                                        <div class="task-content">
+                                      <div class="task-title">Weekly Equipment Check</div>
+                                      <div class="task-meta">Due: Oct 22, 2023 • Assigned to: Sarah Johnson</div>
+                                    </div>
+                                    <div class="task-priority medium">Medium</div>
+                                </div>
+                                <div class="task-list-item">
+                                    <div class="task-content">
+                                        <div class="task-title">Update Lab Inventory</div>
+                                        <div class="task-meta">Completed: Oct 18, 2023 • Assigned to: Emily Davis</div>
+                                      </div>
+                                      <div class="task-priority low">Low</div>
+                                    </div>
+                                  <div class="task-list-item">
+                                      
+                                      <div class="task-content">
+                                          <div class="task-title">Weekly Equipment Check</div>
+                                          <div class="task-meta">Due: Oct 22, 2023 • Assigned to: Sarah Johnson</div>
+                                    </div>
+                                    <div class="task-priority medium">Medium</div>
+                                </div>
+                                <div class="task-list-item">
+                                    <div class="task-content">
+                                        <div class="task-title">Update Lab Inventory</div>
+                                        <div class="task-meta">Completed: Oct 18, 2023 • Assigned to: Emily Davis</div>
+                                    </div>
+                                    <div class="task-priority low">Low</div>
+                                </div>
+                                <div class="task-list-item">
                                     
                                     <div class="task-content">
                                       <div class="task-title">Weekly Equipment Check</div>
@@ -499,14 +470,74 @@
                                     <div class="task-content">
                                         <div class="task-title">Update Lab Inventory</div>
                                         <div class="task-meta">Completed: Oct 18, 2023 • Assigned to: Emily Davis</div>
-                                      </div>
+                                    </div>
+                                    <div class="task-priority low">Low</div>
+                                </div>
+                                <div class="task-list-item">
+                                    
+                                    <div class="task-content">
+                                        <div class="task-title">Weekly Equipment Check</div>
+                                        <div class="task-meta">Due: Oct 22, 2023 • Assigned to: Sarah Johnson</div>
+                                    </div>
+                                    <div class="task-priority medium">Medium</div>
+                                </div>
+                                <div class="task-list-item">
+                                    <div class="task-content">
+                                        <div class="task-title">Update Lab Inventory</div>
+                                        <div class="task-meta">Completed: Oct 18, 2023 • Assigned to: Emily Davis</div>
+                                    </div>
+                                    <div class="task-priority low">Low</div>
+                                </div>
+                                  <div class="task-list-item">
+                                      
+                                    <div class="task-content">
+                                        <div class="task-title">Weekly Equipment Check</div>
+                                      <div class="task-meta">Due: Oct 22, 2023 • Assigned to: Sarah Johnson</div>
+                                    </div>
+                                    <div class="task-priority medium">Medium</div>
+                                </div>
+                                <div class="task-list-item">
+                                    <div class="task-content">
+                                        <div class="task-title">Update Lab Inventory</div>
+                                        <div class="task-meta">Completed: Oct 18, 2023 • Assigned to: Emily Davis</div>
+                                    </div>
                                     <div class="task-priority low">Low</div>
                                   </div>
                                   <div class="task-list-item">
+                                      
+                                      <div class="task-content">
+                                          <div class="task-title">Weekly Equipment Check</div>
+                                          <div class="task-meta">Due: Oct 22, 2023 • Assigned to: Sarah Johnson</div>
+                                    </div>
+                                    <div class="task-priority medium">Medium</div>
+                                </div>
+                                <div class="task-list-item">
+                                    <div class="task-content">
+                                        <div class="task-title">Update Lab Inventory</div>
+                                        <div class="task-meta">Completed: Oct 18, 2023 • Assigned to: Emily Davis</div>
+                                      </div>
+                                      <div class="task-priority low">Low</div>
+                                    </div>
+                                    <div class="task-list-item">
+                                    
+                                        <div class="task-content">
+                                            <div class="task-title">Weekly Equipment Check</div>
+                                            <div class="task-meta">Due: Oct 22, 2023 • Assigned to: Sarah Johnson</div>
+                                        </div>
+                                    <div class="task-priority medium">Medium</div>
+                                </div>
+                                <div class="task-list-item">
+                                    <div class="task-content">
+                                        <div class="task-title">Update Lab Inventory</div>
+                                        <div class="task-meta">Completed: Oct 18, 2023 • Assigned to: Emily Davis</div>
+                                    </div>
+                                    <div class="task-priority low">Low</div>
+                                </div>
+                                <div class="task-list-item">
                                     
                                     <div class="task-content">
-                                      <div class="task-title">Weekly Equipment Check</div>
-                                      <div class="task-meta">Due: Oct 22, 2023 • Assigned to: Sarah Johnson</div>
+                                        <div class="task-title">Weekly Equipment Check</div>
+                                        <div class="task-meta">Due: Oct 22, 2023 • Assigned to: Sarah Johnson</div>
                                     </div>
                                     <div class="task-priority medium">Medium</div>
                                 </div>
@@ -516,184 +547,79 @@
                                         <div class="task-meta">Completed: Oct 18, 2023 • Assigned to: Emily Davis</div>
                                       </div>
                                     <div class="task-priority low">Low</div>
+                                </div>
+                                  <div class="task-list-item">
+                                      
+                                      <div class="task-content">
+                                          <div class="task-title">Weekly Equipment Check</div>
+                                          <div class="task-meta">Due: Oct 22, 2023 • Assigned to: Sarah Johnson</div>
+                                        </div>
+                                        <div class="task-priority medium">Medium</div>
+                                    </div>
+                                    <div class="task-list-item">
+                                        <div class="task-content">
+                                            <div class="task-title">Update Lab Inventory</div>
+                                            <div class="task-meta">Completed: Oct 18, 2023 • Assigned to: Emily Davis</div>
+                                        </div>
+                                        <div class="task-priority low">Low</div>
                                   </div>
                                   <div class="task-list-item">
-                                    
-                                    <div class="task-content">
-                                      <div class="task-title">Weekly Equipment Check</div>
-                                      <div class="task-meta">Due: Oct 22, 2023 • Assigned to: Sarah Johnson</div>
+                                      
+                                      <div class="task-content">
+                                          <div class="task-title">Weekly Equipment Check</div>
+                                          <div class="task-meta">Due: Oct 22, 2023 • Assigned to: Sarah Johnson</div>
+                                        </div>
+                                        <div class="task-priority medium">Medium</div>
                                     </div>
-                                    <div class="task-priority medium">Medium</div>
+                                    <div class="task-list-item">
+                                        <div class="task-content">
+                                            <div class="task-title">Update Lab Inventory</div>
+                                            <div class="task-meta">Completed: Oct 18, 2023 • Assigned to: Emily Davis</div>
+                                      </div>
+                                      <div class="task-priority low">Low</div>
+                                  </div>
+                                  <div class="task-list-item">
+                                      
+                                      <div class="task-content">
+                                          <div class="task-title">Weekly Equipment Check</div>
+                                          <div class="task-meta">Due: Oct 22, 2023 • Assigned to: Sarah Johnson</div>
+                                        </div>
+                                        <div class="task-priority medium">Medium</div>
                                 </div>
                                 <div class="task-list-item">
                                     <div class="task-content">
                                         <div class="task-title">Update Lab Inventory</div>
                                         <div class="task-meta">Completed: Oct 18, 2023 • Assigned to: Emily Davis</div>
                                       </div>
-                                    <div class="task-priority low">Low</div>
-                                  </div>
-                                  <div class="task-list-item">
-                                    
-                                    <div class="task-content">
-                                      <div class="task-title">Weekly Equipment Check</div>
-                                      <div class="task-meta">Due: Oct 22, 2023 • Assigned to: Sarah Johnson</div>
+                                      <div class="task-priority low">Low</div>
                                     </div>
-                                    <div class="task-priority medium">Medium</div>
-                                </div>
-                                <div class="task-list-item">
-                                    <div class="task-content">
-                                        <div class="task-title">Update Lab Inventory</div>
-                                        <div class="task-meta">Completed: Oct 18, 2023 • Assigned to: Emily Davis</div>
-                                      </div>
-                                    <div class="task-priority low">Low</div>
-                                  </div>
                                   <div class="task-list-item">
                                     
-                                    <div class="task-content">
-                                      <div class="task-title">Weekly Equipment Check</div>
-                                      <div class="task-meta">Due: Oct 22, 2023 • Assigned to: Sarah Johnson</div>
-                                    </div>
-                                    <div class="task-priority medium">Medium</div>
-                                </div>
-                                <div class="task-list-item">
-                                    <div class="task-content">
-                                        <div class="task-title">Update Lab Inventory</div>
-                                        <div class="task-meta">Completed: Oct 18, 2023 • Assigned to: Emily Davis</div>
-                                      </div>
-                                    <div class="task-priority low">Low</div>
-                                  </div>
-                                  <div class="task-list-item">
-                                    
-                                    <div class="task-content">
-                                      <div class="task-title">Weekly Equipment Check</div>
-                                      <div class="task-meta">Due: Oct 22, 2023 • Assigned to: Sarah Johnson</div>
-                                    </div>
-                                    <div class="task-priority medium">Medium</div>
-                                </div>
-                                <div class="task-list-item">
-                                    <div class="task-content">
-                                        <div class="task-title">Update Lab Inventory</div>
-                                        <div class="task-meta">Completed: Oct 18, 2023 • Assigned to: Emily Davis</div>
-                                      </div>
-                                    <div class="task-priority low">Low</div>
-                                  </div>
-                                  <div class="task-list-item">
-                                    
-                                    <div class="task-content">
-                                      <div class="task-title">Weekly Equipment Check</div>
-                                      <div class="task-meta">Due: Oct 22, 2023 • Assigned to: Sarah Johnson</div>
-                                    </div>
-                                    <div class="task-priority medium">Medium</div>
-                                </div>
-                                <div class="task-list-item">
-                                    <div class="task-content">
-                                        <div class="task-title">Update Lab Inventory</div>
-                                        <div class="task-meta">Completed: Oct 18, 2023 • Assigned to: Emily Davis</div>
-                                      </div>
-                                    <div class="task-priority low">Low</div>
-                                  </div>
-                                  <div class="task-list-item">
-                                    
-                                    <div class="task-content">
-                                      <div class="task-title">Weekly Equipment Check</div>
-                                      <div class="task-meta">Due: Oct 22, 2023 • Assigned to: Sarah Johnson</div>
-                                    </div>
-                                    <div class="task-priority medium">Medium</div>
-                                </div>
-                                <div class="task-list-item">
-                                    <div class="task-content">
-                                        <div class="task-title">Update Lab Inventory</div>
-                                        <div class="task-meta">Completed: Oct 18, 2023 • Assigned to: Emily Davis</div>
-                                      </div>
-                                    <div class="task-priority low">Low</div>
-                                  </div>
-                                  <div class="task-list-item">
-                                    
-                                    <div class="task-content">
-                                      <div class="task-title">Weekly Equipment Check</div>
-                                      <div class="task-meta">Due: Oct 22, 2023 • Assigned to: Sarah Johnson</div>
-                                    </div>
-                                    <div class="task-priority medium">Medium</div>
-                                </div>
-                                <div class="task-list-item">
-                                    <div class="task-content">
-                                        <div class="task-title">Update Lab Inventory</div>
-                                        <div class="task-meta">Completed: Oct 18, 2023 • Assigned to: Emily Davis</div>
-                                      </div>
-                                    <div class="task-priority low">Low</div>
-                                  </div>
-                                  <div class="task-list-item">
-                                    
-                                    <div class="task-content">
-                                      <div class="task-title">Weekly Equipment Check</div>
-                                      <div class="task-meta">Due: Oct 22, 2023 • Assigned to: Sarah Johnson</div>
-                                    </div>
-                                    <div class="task-priority medium">Medium</div>
-                                </div>
-                                <div class="task-list-item">
-                                    <div class="task-content">
-                                        <div class="task-title">Update Lab Inventory</div>
-                                        <div class="task-meta">Completed: Oct 18, 2023 • Assigned to: Emily Davis</div>
-                                      </div>
-                                    <div class="task-priority low">Low</div>
-                                  </div>
-                                  <div class="task-list-item">
-                                    
-                                    <div class="task-content">
-                                      <div class="task-title">Weekly Equipment Check</div>
-                                      <div class="task-meta">Due: Oct 22, 2023 • Assigned to: Sarah Johnson</div>
-                                    </div>
-                                    <div class="task-priority medium">Medium</div>
-                                </div>
-                                <div class="task-list-item">
-                                    <div class="task-content">
-                                        <div class="task-title">Update Lab Inventory</div>
-                                        <div class="task-meta">Completed: Oct 18, 2023 • Assigned to: Emily Davis</div>
-                                      </div>
-                                    <div class="task-priority low">Low</div>
-                                  </div>
-                                  <div class="task-list-item">
-                                    
-                                    <div class="task-content">
-                                      <div class="task-title">Weekly Equipment Check</div>
-                                      <div class="task-meta">Due: Oct 22, 2023 • Assigned to: Sarah Johnson</div>
-                                    </div>
-                                    <div class="task-priority medium">Medium</div>
-                                </div>
-                                <div class="task-list-item">
-                                    <div class="task-content">
-                                        <div class="task-title">Update Lab Inventory</div>
-                                        <div class="task-meta">Completed: Oct 18, 2023 • Assigned to: Emily Davis</div>
-                                      </div>
-                                    <div class="task-priority low">Low</div>
-                                  </div>
-                                  <div class="task-list-item">
-                                    
-                                    <div class="task-content">
-                                      <div class="task-title">HPLC Maintenance</div>
+                                      <div class="task-content">
+                                          <div class="task-title">HPLC Maintenance</div>
                                         <div class="task-meta">Due: Oct 30, 2023 • Assigned to: Michael Brown</div>
                                       </div>
                                       <div class="task-priority medium">Medium</div>
                                 </div>
                                 <div class="task-list-item">
                                     
-                                  <div class="task-content">
-                                    <div class="task-title">Safety Training Session</div>
+                                    <div class="task-content">
+                                        <div class="task-title">Safety Training Session</div>
                                         <div class="task-meta">Due: Nov 5, 2023 • Assigned to: All Team</div>
-                                      </div>
-                                      <div class="task-priority low">Low</div>
                                     </div>
-                                  </div>
+                                    <div class="task-priority low">Low</div>
+                                </div>
+                            </div>
                         </div>
-                      </div>
                     </div>
-                  </div>
+                    </div>
                 </div>
-        </main>
-      </div>
-      
-    <!-- Add/Edit Task Modal -->
-    <div class="modal-backdrop" id="taskModalBackdrop"></div>
+                </div>
+            </main>
+        </div>
+        
+        <!-- Add/Edit Task Modal -->
+        <div class="modal-backdrop" id="taskModalBackdrop"></div>
     <div class="modal" id="taskModal">
       <div class="modal-header">
             <h3 class="modal-title" id="taskModalTitle">Add New Task</h3>
@@ -705,7 +631,7 @@
             <button class="btn btn-primary" id="saveTaskBtn">Save Task</button>
         </div>
     </div>
-
+    
     <!-- Task Details Modal -->
     <div class="modal-backdrop" id="taskDetailsBackdrop"></div>
     <div class="modal" id="taskDetailsModal">
@@ -721,15 +647,19 @@
             <button class="btn btn-success" id="completeTaskBtn">View Task</button>
         </div>
     </div>
+    {% endblock content %}
 
+    {% block script %}
+    
+    
     <script>
-            
-
+        
+        
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize all charts
             initializeCharts();
         });
-
+        
         function initializeCharts() {
             // Chart 1: Task Status Distribution (Doughnut)
             new Chart(document.getElementById('taskStatusChart'), {
@@ -754,7 +684,7 @@
                     }
                 }
             });
-
+            
             // Chart 2: Machine Status (Bar)
             new Chart(document.getElementById('machineStatusChart'), {
                 type: 'bar',
@@ -776,7 +706,7 @@
                     }
                 }
             });
-
+            
             // Chart 3: Weekly Reports (Line)
             new Chart(document.getElementById('reportsChart'), {
                 type: 'line',
@@ -826,7 +756,7 @@
                     }
                 }
             });
-
+            
             // Chart 5: Team Performance (Radar)
             new Chart(document.getElementById('teamChart'), {
                 type: 'radar',
@@ -853,7 +783,7 @@
                     }
                 }
             });
-
+            
             // Chart 6: Maintenance Schedule (Horizontal Bar)
             new Chart(document.getElementById('maintenanceChart'), {
                 type: 'bar',
@@ -894,7 +824,7 @@
                             'rgba(23, 162, 184, 0.7)',
                             'rgba(255, 193, 7, 0.7)',
                             'rgba(220, 53, 69, 0.7)'
-                        ]
+                            ]
                     }]
                 },
                 options: {
@@ -903,7 +833,7 @@
                     plugins: { legend: { position: 'bottom' } }
                 }
             });
-
+            
             // Chart 8: Monthly Activity (Mixed)
             new Chart(document.getElementById('activityChart'), {
                 type: 'bar',
@@ -953,7 +883,7 @@
                     plugins: { legend: { position: 'bottom' } }
                 }
             });
-
+            
             // Chart 10: Lab Comparison (Grouped Bar)
             new Chart(document.getElementById('labComparisonChart'), {
                 type: 'bar',
@@ -979,7 +909,7 @@
                     }
                 }
             });
-
+            
             // Chart 11: Time Analysis (Stacked Area)
             new Chart(document.getElementById('timeChart'), {
                 type: 'line',
@@ -1009,7 +939,7 @@
                     }
                 }
             });
-
+            
             // Chart 12: Resource Usage (Stacked Bar)
             new Chart(document.getElementById('resourceChart'), {
                 type: 'bar',
@@ -1049,10 +979,9 @@
             }
         });
  
-            {% include 'dash_partials/calendar/dash_calendar_js.html' %}
-            
+        {% include 'dash_partials/calendar/dash_calendar_js.html' %}
+        
             
 
     </script>
-</body>
-</html>
+    {% endblock script %}

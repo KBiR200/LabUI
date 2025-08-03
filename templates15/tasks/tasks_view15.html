@@ -766,9 +766,9 @@
                     <li>
                         <a href="/lab"><i class="fas fa-cogs"></i> Laberatory</a>
                     </li>
-                    <li >
+                    {% comment %} <li >
                         <a href="/floor-plan"><i class="fas fa-map"></i> Floor Plan</a>
-                    </li>
+                    </li> {% endcomment %}
                     <li>
                         <a href="/teams"><i class="fas fa-users"></i> Teams</a>
                     </li>
@@ -783,28 +783,7 @@
     <!-- Main Content -->
     <main class="main-content">
         <!-- Top Navigation -->
-        <header class="top-nav">
-            <div class="search-container">
-                <i class="fas fa-search"></i>
-                <input type="text" placeholder="Search tasks..." id="searchInput">
-            </div>
-            <div class="user-menu">
-                <div class="notifications">
-                    <i class="fas fa-bell"></i>
-                    <span class="badge">3</span>
-                </div>
-                <div class="user-profile">
-                     
-                    <span class="user-name">User</span>
-                    <i class="fas fa-chevron-down"></i>
-                    <div class="dropdown-menu">
-                        <a href="/profile"><i class="fas fa-user"></i> Profile</a>
-                        <a  href='{% url 'profile'  %}'><i class="fas fa-cog"></i> Change Password</a>
-                        <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                    </div>
-                </div>
-            </div>
-        </header>
+  {% include "dash_partials/top_bar.html" %}
 
         <!-- Task View Content -->
         <div class="content-wrapper">

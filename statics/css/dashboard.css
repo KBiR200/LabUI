@@ -822,7 +822,7 @@
 
     .card-body {
         padding: 0;
-        height: 800px;
+        max-height: 800px;
         overflow-y: auto;
         overflow-x: hidden;
     }

@@ -129,9 +129,13 @@
           <h4 class="machine-name"> {{machine.name}} </h4>
           <div class="machine-category">{{machine.category}}</div>
       </div>
-      <div class="machine-status inactive">
+      <div class="machine-status {% if machine.status %}
+      active
+      {% else %}
+       inactive
+      {% endif %}">
           <i class="fas fa-check-circle"></i>
-          Inactive
+          {{machine.status|yesno:"Active,Inactive"}}
       </div>
   </div>
   <div class="machine-body">

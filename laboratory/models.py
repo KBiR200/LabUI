@@ -25,7 +25,7 @@ class Machine(models.Model):
     name          = models.CharField(max_length=50)
     machine_responsible= models.ForeignKey(
         User, on_delete=models.CASCADE, null=True, blank=True, related_name='machine_responsible')
-    # machine_responsible = models.ForeignKey(User, on_delete=models.CASCADE, null=True
+
     form_template = models.TextField(default='…')
     category      = models.ForeignKey(
                         Machine_Category,

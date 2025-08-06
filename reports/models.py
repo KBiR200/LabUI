@@ -6,8 +6,15 @@ from chem import settings
 from django.utils.timezone import now
 # Create your models here.
 class Tasks(models.Model):
+    class Urgency(models.IntegerChoices):
+        LOW = 1, 'Low'
+        MEDIUM = 2, 'Medium'
+        HIGH = 3, 'High'
+        CRITICAL = 4, 'Critical'
+
+
     title = models.TextField()
-    # description = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
     creator = models.ForeignKey(User, on_delete=models.CASCADE,
                                  related_name='created_task')
     assigned = models.ManyToManyField(User, default=None, blank=True,
@@ -16,6 +23,11 @@ class Tasks(models.Model):
                              related_name='team_task', blank=True, null=True)
     workers_count = models.IntegerField( default=1)
     data = models.JSONField(blank=True)
+
+    urgency = models.IntegerField(
+        choices=Urgency.choices,
+        default=Urgency.LOW
+    )  # 1: low, 2: medium, 3: high, 4: critical
     status = models.IntegerField(name='status', default=0)
     created_at = models.DateTimeField(default=now)
     start_date = models.DateTimeField(default=now)

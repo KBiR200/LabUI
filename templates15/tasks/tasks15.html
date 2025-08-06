@@ -570,6 +570,14 @@
           color: var(--success-color);
         }
 
+        .badge-critical {
+          background-color: rgba(255, 60, 60, 0.18);
+          color: #ff3e3eff;
+        }
+        .badge-warning {
+          background-color: rgba(255, 193, 7, 0.1);
+          color: #d39e00;
+        }
         .badge-warning {
           background-color: rgba(255, 193, 7, 0.1);
           color: #d39e00;
@@ -699,6 +707,7 @@
                                     <th>Assignee</th>
                                     <th>Requested By</th>
                                     <th>Status</th>
+                                    <th>Urgency</th>
                                     <th>Due Date</th>
                                     <th>Actions</th>
                                 </tr>
@@ -713,22 +722,33 @@
                                         <div class="task-id">Task ID: {{ task.id }}</div>
                                         <div class="task-id">Workers needed for Task: {{ task.workers_count }}</div>
                                     </td>
+                                    
+                                    
                                     <td>
                                         <div class="task-assignee">
                                             {% comment %}   {% endcomment %}
                                             <span>{{ task.assigned.all|join:", " }}</span>
-                                        </div>
-                                    </td>
+                                          </div>
+                                        </td>
                                     <td><span>{{ task.creator }}</span></td>
                                     {% comment %} filter by the words of the tabs  {% endcomment %}
                                     {% if task.status == 0 %}
                                         <td><span class="badge-warning" >Pending</span></td>
-                                    {% elif task.status == 1 %}
+                                        {% elif task.status == 1 %}
                                         <td><span class="badge-danger" >In Progress</span></td>
-                                    {% elif task.status == 2 %}
+                                        {% elif task.status == 2 %}
                                         <td><span class="badge-success" >Completed</span></td>
-                                    {% endif %}
-                                
+                                        {% endif %}
+                                        
+                              {% if task.urgency == 1 %}
+                                            <td><span class="badge-secondary" >{{ task.get_urgency_display }}</span></td>
+                                        {% elif task.urgency == 2 %}
+                                            <td><span class="badge-warning" >{{ task.get_urgency_display }}</span></td>
+                                        {% elif task.urgency == 3 %}
+                                            <td><span class="badge-danger" >{{ task.get_urgency_display }}</span></td>
+                                        {% elif task.urgency == 4 %}
+                                            <td><span class="badge-critical" >{{ task.get_urgency_display }}</span></td>
+                                        {% endif %} 
                                     <td>{{ task.due_date|date:"D, d M Y H:i" }}</td>
                                     <td>
                                         <div class="actions-dropdown">
@@ -827,29 +847,41 @@
             initMobileMenu();
         });
 
-        function initTaskFilters() {
-          const filterTabs = document.querySelectorAll('.filter-tab');
-      
-          filterTabs.forEach(tab => {
-              tab.addEventListener('click', function() {
-                  // Remove active class from all tabs
-                  filterTabs.forEach(t => t.classList.remove('active'));
-                  
-                  // Add active class to clicked tab
-                  this.classList.add('active');
-                  
-                  // Get filter value and filter tasks
-                  const filter = this.getAttribute('data-filter');
-                  filterTasksByStatus(filter);
-              });
-          });
-      
-          // Trigger the default filter based on the active tab (In Progress).
-          const defaultTab = document.querySelector('.filter-tab.active');
-          if (defaultTab) {
-              filterTasksByStatus(defaultTab.getAttribute('data-filter'));
-          }
-      }
+function initTaskFilters() {
+    const filterTabs = document.querySelectorAll('.filter-tab');
+
+    // Read ?status= from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const defaultFilter = urlParams.get('status') || 'all';
+
+    filterTabs.forEach(tab => {
+        // Set active class based on URL
+        const tabFilter = tab.getAttribute('data-filter');
+        if (tabFilter === defaultFilter) {
+            tab.classList.add('active');
+        }
+
+        tab.addEventListener('click', function () {
+            // Remove active class from all tabs
+            filterTabs.forEach(t => t.classList.remove('active'));
+
+            // Add active class to clicked tab
+            this.classList.add('active');
+
+            // Filter tasks
+            const filter = this.getAttribute('data-filter');
+            filterTasksByStatus(filter);
+
+            // Optionally update URL without reloading
+            const newUrl = new URL(window.location);
+            newUrl.searchParams.set('status', filter);
+            window.history.replaceState({}, '', newUrl);
+        });
+    });
+
+    // Apply filter on page load
+    filterTasksByStatus(defaultFilter);
+}
 
         function filterTasksByStatus(status) {
             const rows = document.querySelectorAll('tbody tr');

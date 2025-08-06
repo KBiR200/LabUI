@@ -201,7 +201,7 @@ def tasks(request):
     tasks = Tasks.objects.filter(
         Q(creator__in=related_users) |
         Q(assigned__in=related_users)
-    ).distinct().order_by('-created_at')
+    ).distinct().order_by('-urgency','-created_at')
 
     q_task = []
     for t in tasks:
@@ -246,10 +246,11 @@ def create_task15(request):
         start_date = request.POST['start_date']
         workers_count = request.POST.get('workers_count', 1)
         form_attachment = request.FILES.getlist('attachment')
-        task = Tasks.objects.create(creator=request.user, data=data, title = title, due_date=due_date,start_date=start_date, workers_count=workers_count)
+        print(f"Urgency: {request.POST.get('urgency')}")
+        task = Tasks.objects.create(creator=request.user, data=data, title = title, due_date=due_date,start_date=start_date, workers_count=workers_count, urgency=request.POST.get('urgency'))
         task.save()
         print(f'task: {title} is created')
-        print(form_attachment)
+
         for i in form_attachment:
             print(i)
             r= Task_attachment.objects.create(task=task, attachment=i)

@@ -442,6 +442,7 @@ body {
 }
 
 .task-title {
+  color: var(--text-color);
   font-weight: 600;
   margin-bottom: 0.25rem;
 }
@@ -768,7 +769,7 @@ body {
 
         <!-- Metrics Cards -->
         <div class="metrics-grid">
-            <div class="metric-card"  onclick="window.location.href=' {% url "tasks" %}'" style="cursor: pointer;">
+            <div class="metric-card"  onclick="window.location.href=' {% url "tasks" %}?status=progress'" style="cursor: pointer;">
                 <div class="metric-icon tasks">
                     <i class="fas fa-list-ul"></i>
                 </div>
@@ -797,7 +798,7 @@ body {
                     <p>Reports This Week</p>
                 </div>
             </div>
-            <div class="metric-card">
+            <div class="metric-card" onclick="window.location.href=' {% url "tasks" %}?status=pending'" style="cursor: pointer;">
                 <div class="metric-icon alerts">
                     <i class="fas fa-exclamation-triangle"></i>
                 </div>
@@ -812,19 +813,15 @@ body {
         <div class="quick-actions">
             <h2 class="section-title">Quick Actions</h2>
             <div class="actions-grid">
-                <button class="action-btn primary">
+                <button class="action-btn primary" onclick="window.location.href='{% url 'new_task' %}'">
                     <i class="fas fa-plus"></i>
                     Create Task
                 </button>
-                <button class="action-btn outline">
+                <button class="action-btn outline"  onclick="window.location.href='{% url 'tasks' %}?status=pending'">
                     <i class="fas fa-search"></i>
                     View Available Tasks
                 </button>
-                <button class="action-btn outline">
-                    <i class="fas fa-file-alt"></i>
-                    Submit Report
-                </button>
-                <button class="action-btn outline">
+                <button class="action-btn outline" onclick="window.location.href='{% url 'lab' %}'">
                     <i class="fas fa-cog"></i>
                     Equipment Status
                 </button>
@@ -882,6 +879,55 @@ body {
                                 <span class="task-status accept">Accept</span>
                             </div>
                         </div>
+                        
+
+                        {% for task in tasks_urgent %}
+                        
+
+                        {% if task.get_urgency_display == 'Critical' %}
+                        <div class="task-item urgent">
+                            <div class="task-header">
+                                <div>
+                                    <div class="task-title">{{task.title}}</div>
+                                    <div class="task-description">{{task.description}}</div>
+                                    <div class="task-meta">
+                                        <span><i class="fas fa-clock"></i> {{task.due_date}}</span>
+                                        <span><i class="fas fa-flag"></i> {{task.get_urgency_display}}</span>
+                                        {% if task.assigned.all %}
+                                        
+                                        <span><i class="fas fa-user"></i> {% for user in task.assigned.all%} {{user}} {% endfor %}</span>
+                                        {% else %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <span class="task-status accept" onclick="window.location.href='{% url 'show_task' task.id %}'">View ></span>
+                            </div>
+                        </div>
+                        
+                        {% else %}
+                        
+                        <div class="task-item warning">
+                            <div class="task-header">
+                                <div>
+                                    <div class="task-title">{{task.title}}</div>
+                                    <div class="task-description">{{task.description}}</div>
+                                    <div class="task-meta">
+                                        <span><i class="fas fa-clock"></i> {{task.due_date}}</span>
+                                        <span><i class="fas fa-flag"></i> {{task.get_urgency_display}}</span>
+                                        {% if task.assigned.all %}
+                                        
+                                        <span><i class="fas fa-user"></i> {% for user in task.assigned.all%} {{user}}, {% endfor %}</span>
+                                        {% else %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <span class="task-status progress" onclick="window.location.href='{% url 'show_task' task.id %}'">View ></span>
+                            </div>
+                        </div>
+                        
+                        {% endif %}
+                        {% endfor %}
 
                         <div class="task-item warning">
                             <div class="task-header">
@@ -1006,7 +1052,7 @@ body {
                         </div>
                     </div>
                     <div class="view-all">
-                        <a href="#">View all my tasks</a>
+                        <a href=" {% url "tasks" %}?status=progress ">View all my tasks</a>
                     </div>
                 </div>
 
@@ -1016,18 +1062,30 @@ body {
                         <h3 class="card-title">Equipment Status</h3>
                     </div>
                     <div class="card-body">
-                        <div class="equipment-item">
+                        
+                      {% for machine in machines %}
+                      <div class="equipment-item" onclick="window.location.href='{% url 'machine_view' machine.id %}'" style="cursor: pointer;">
                             <div class="equipment-info">
-                                <h4>PCR Machine #001</h4>
-                                <p>Lab Room A</p>
+                                <h4>{{machine.name}}</h4>
+                                <p>{{machine.lab.name}}</p>
                             </div>
+                            {% if  machine.status %}
                             <div class="equipment-status available">
                                 <div class="status-indicator available"></div>
                                 Available
                             </div>
+                            
+                            {% else %}
+                            <div class="equipment-status maintenance">
+                                <div class="status-indicator maintenance"></div>
+                                UnAvailable
+                            </div>
+                            {% endif %}
                         </div>
+                      
+                      {% endfor %}
 
-                        <div class="equipment-item">
+                        {% comment %} <div class="equipment-item">
                             <div class="equipment-info">
                                 <h4>HPLC System</h4>
                                 <p>Lab Room B</p>
@@ -1036,21 +1094,12 @@ body {
                                 <div class="status-indicator in-use"></div>
                                 In Use
                             </div>
-                        </div>
+                        </div> {% endcomment %}
 
-                        <div class="equipment-item">
-                            <div class="equipment-info">
-                                <h4>Centrifuge #003</h4>
-                                <p>Lab Room C</p>
-                            </div>
-                            <div class="equipment-status maintenance">
-                                <div class="status-indicator maintenance"></div>
-                                Maintenance
-                            </div>
-                        </div>
+                       
                     </div>
                     <div class="view-all">
-                        <a href="#">View all equipment</a>
+                        <a href=" {% url "lab" %} ">View all equipment</a>
                     </div>
                 </div>
 

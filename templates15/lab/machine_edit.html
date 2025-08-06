@@ -837,8 +837,8 @@
                     <!-- Current Machine Info Display -->
                     <div class="machine-info-display">
                         <div class="machine-info-row">
-                            <span class="machine-info-label">Current Machine:</span>
-                            <span class="machine-info-value">Shimadzu UV-1800 Spectrophotometer</span>
+                            <span class="machine-info-label">Current Machine name:</span>
+                            <span class="machine-info-value">{{machine.name}}</span>
                         </div>
                         <div class="machine-info-row">
                             <span class="machine-info-label">Status:</span>
@@ -892,7 +892,7 @@
                                            id="name" 
                                            name="name" 
                                            class="form-control" 
-                                           value="Shimadzu UV-1800 Spectrophotometer"
+                                           value="{{machine.name}}"
                                            placeholder="e.g., Shimadzu UV-1800 Spectrophotometer"
                                            required>
                                     <div class="form-help">Enter a descriptive name that includes the manufacturer and model if applicable.</div>

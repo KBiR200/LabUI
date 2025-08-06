@@ -925,10 +925,18 @@
                     <div class="machine-title-container">
                         <h1 class="machine-title">{{machine.name}}</h1>
                         <div class="machine-subtitle">{{machine.category}} • {{machine.lab}}</div>
+                        {% if machine.status %}
+                        <div class="machine-status-large active">
+                            <i class="fas fa-check-circle"></i>
+                            Active
+                        </div>
+                        
+                        {% else %}
                         <div class="machine-status-large inactive">
                             <i class="fas fa-check-circle"></i>
                             Inactive
                         </div>
+                        {% endif %}
                     </div>
                     <div class="machine-actions-container">
                         <button class="btn btn-outline">

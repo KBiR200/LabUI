@@ -1,6 +1,8 @@
 from enum import member
 from platform import machine
 import profile
+from django.utils import timezone
+from datetime import timedelta
 from django.shortcuts import render, redirect
 from main.models import Project, Laberatory, Machine, Team, Machine_Category, UserProfile
 from reports.models import Report, Tasks
@@ -81,8 +83,8 @@ def logout_view(request):
 
 @login_required(login_url='signin')
 def dashboard(request):
-    print(request.user.groups.all())
-    machines = Machine.objects.filter(status=True)
+    
+    machines = Machine.objects.all().order_by('-status')
     tasks = Tasks.objects.filter(status=1, assigned=request.user).order_by('-created_at')
     new_tasks = Tasks.objects.filter(status=0).order_by('-created_at')
     tasks_history = Tasks.objects.filter(assigned=request.user).order_by('-created_at')
@@ -92,8 +94,12 @@ def dashboard(request):
         'tasks': tasks,
         'new_tasks': new_tasks,
         'tasks_history': tasks_history,
+        'tasks_urgent': Tasks.objects.filter(
+            Q(urgency=4)| Q(due_date__lte = timezone.now() + timedelta(hours=48))
+            , Q(assigned=request.user) | Q(assigned=None)).order_by('-urgency','due_date'),
         'reports':report
     }
+
     return render(request, 'templates16/dashboard.html', context)
 
 @login_required(login_url='signin')

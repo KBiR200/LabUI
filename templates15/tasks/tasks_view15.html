@@ -855,7 +855,12 @@
                             <span class="info-label">Task Type</span>
                             <span class="info-value">Calibration</span>
                           </div>
+                        <div class="info-item">
+                            <span class="info-label">Task urgency</span>
+                            <span class="info-value badge-warning">{{task.get_urgency_display}}</span>
+                          </div>
                         </div>
+                        
                         <div class="task-description">
                       <span class="info-label">Task Description</span>
                         <p>{{task.data}}</p>
@@ -1056,10 +1061,10 @@
                       {% for comment in comments %}
                       
                       <div class="comment">
-                        <img src=" " alt="User Avatar" class="comment-avatar">
+                        <span class="fa-solid fa-circle-user fa-2xl comment-avatar"></span>
                         <div class="comment-content">
                           <div class="comment-header">
-                            <span class="comment-author">{{comment.user}}</span>
+                            <span class="comment-author">{{comment.user.first_name}} {{comment.user.last_name}}</span>
                                     <span class="comment-time"> {{comment.created}} </span>
                                   </div>
                                   <div class="comment-text">
@@ -1095,7 +1100,7 @@
                         <form action="{% url 'add_comment' task.id %}" method="post" class="add-comment-form-wrapper">
                           {% csrf_token %}
                           <div class="add-comment">
-                            <img src="{{ user.profile.avatar_url }}" alt="{{ user.get_full_name }}" class="add-comment-avatar">
+                            <span class="fa-solid fa-circle-user fa-2xl comment-avatar"></span>
                             <div class="add-comment-form">
                               <textarea
                                 name="comment_body"

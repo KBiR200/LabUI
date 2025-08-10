@@ -1,9 +1,9 @@
-from re import L
+
 from django.shortcuts import render
 from laboratory.models import *
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
-from django.contrib.auth.models import User
+
 
 # Create your views here.
 def lab(request):

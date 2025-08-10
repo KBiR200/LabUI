@@ -1,12 +1,10 @@
-from enum import member
-from platform import machine
-import profile
+
+
 from django.utils import timezone
 from datetime import timedelta
 from django.shortcuts import render, redirect
-from main.models import Project, Laberatory, Machine, Team, Machine_Category, UserProfile
+from main.models import Machine, Team
 from reports.models import Report, Tasks
-from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout

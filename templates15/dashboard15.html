@@ -163,7 +163,37 @@ body {
 .action-btn.primary:hover {
   background: var(--primary-hover);
 }
+.sidebar-nav ul {
+          padding: 1rem 0;
+        }
 
+        .sidebar-nav li {
+          margin-bottom: 0.25rem;
+        }
+
+        .sidebar-nav a {
+          display: flex;
+          align-items: center;
+          padding: 0.75rem 1rem;
+          color: rgba(255, 255, 255, 0.7);
+          transition: all 0.3s ease;
+        }
+
+        .sidebar-nav a:hover {
+          color: white;
+          background-color: rgba(255, 255, 255, 0.1);
+          text-decoration: none;
+        }
+
+        .sidebar-nav li.active a {
+          color: white;
+          background-color: var(--primary-color);
+        }
+
+        .sidebar-nav i {
+          margin-right: 0.75rem;
+          font-size: 1rem;
+        }
 .action-btn.outline {
   background: transparent;
   color: var(--text-color);
@@ -866,7 +896,7 @@ body {
                         <span class="urgent-badge">3 Urgent</span>
                     </div>
                     <div class="card-body">
-                        <div class="task-item urgent">
+                        {% comment %} <div class="task-item urgent">
                             <div class="task-header">
                                 <div>
                                     <div class="task-title">PCR Machine Calibration</div>
@@ -878,7 +908,7 @@ body {
                                 </div>
                                 <span class="task-status accept">Accept</span>
                             </div>
-                        </div>
+                        </div> {% endcomment %}
                         
 
                         {% for task in tasks_urgent %}
@@ -929,7 +959,7 @@ body {
                         {% endif %}
                         {% endfor %}
 
-                        <div class="task-item warning">
+                        {% comment %} <div class="task-item warning">
                             <div class="task-header">
                                 <div>
                                     <div class="task-title">Sample Analysis Report</div>
@@ -941,7 +971,7 @@ body {
                                 </div>
                                 <span class="task-status progress">In Progress</span>
                             </div>
-                        </div>
+                        </div> {% endcomment %}
                     </div>
                 </div>
 
@@ -1143,6 +1173,42 @@ body {
   
 <script >
   {% include "dash_partials/calendar/dash_calendar_js.html" %}
+
+          document.addEventListener('DOMContentLoaded', function() {
+
+            // Initialize dropdown menus
+            initDropdowns();
+
+        });
+          function initDropdowns() {
+            const dropdownTriggers = document.querySelectorAll('.user-profile, .actions-dropdown');
+
+            dropdownTriggers.forEach(trigger => {
+                trigger.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const dropdown = this.querySelector('.dropdown-menu');
+                    
+                    if (dropdown) {
+                        const isVisible = dropdown.style.display === 'block';
+                        
+                        // Close all dropdowns first
+                        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                            menu.style.display = 'none';
+                        });
+                        
+                        // Toggle current dropdown
+                        dropdown.style.display = isVisible ? 'none' : 'block';
+                    }
+                });
+            });
+
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function() {
+                document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                    menu.style.display = 'none';
+                });
+            });
+        }
 </script>
 
     

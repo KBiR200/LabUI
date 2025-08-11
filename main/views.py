@@ -98,7 +98,7 @@ def dashboard(request):
         'reports':report
     }
 
-    return render(request, 'templates16/dashboard.html', context)
+    return render(request, 'dashboard15.html', context)
 
 @login_required(login_url='signin')
 def userprofile(request):

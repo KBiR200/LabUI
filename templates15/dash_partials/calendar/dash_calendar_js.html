@@ -52,18 +52,7 @@ class CalendarManager {
     dayAfter.setDate(today.getDate() + 2)
 
     return [
-      {
-        id: 1,
-        title: "Template",
-        description: "Urgent calibration required for PCR-001 before next batch",
-        date: this.formatDate(today),
-        time: "14:00",
-        priority: "high",
-        category: "calibration",
-        assignee: "john-smith",
-        machine: "pcr-cycler",
-        completed: false,
-      },
+
 
                       {% for task in tasks %}
                 {

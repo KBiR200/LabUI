@@ -4,7 +4,7 @@ from django.utils import timezone
 from datetime import timedelta
 from django.shortcuts import render, redirect
 from main.models import Machine, Team
-from reports.models import Report, Tasks
+from reports.models import Report, Tasks, Task_comment
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -90,6 +90,7 @@ def dashboard(request):
     context = {
         'machines': machines,
         'tasks': tasks,
+        'comments': Task_comment.comments_for_user_tasks(request.user).order_by('-created'),
         'new_tasks': new_tasks,
         'tasks_history': tasks_history,
         'tasks_urgent': Tasks.objects.filter(
@@ -97,7 +98,7 @@ def dashboard(request):
             , Q(assigned=request.user) | Q(assigned=None)).order_by('-urgency','due_date'),
         'reports':report
     }
-
+    print(f"""comments: {Task_comment.comments_for_user_tasks(request.user)}""")
     return render(request, 'dashboard15.html', context)
 
 @login_required(login_url='signin')

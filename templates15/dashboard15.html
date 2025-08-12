@@ -979,35 +979,28 @@ body {
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Available Tasks</h3>
-                        <span style="color: var(--primary-color); font-size: 0.875rem;">12 unassigned</span>
+                        <span style="color: var(--primary-color); font-size: 0.875rem;">{{new_tasks.count}} unassigned</span>
                     </div>
                     <div class="card-body no-padding">
-                        <div class="available-task">
-                            <div class="task-info">
-                                <h4>Spectrophotometer Maintenance <span style="background: rgba(40, 167, 69, 0.1); color: var(--success-color); padding: 0.125rem 0.5rem; border-radius: 0.75rem; font-size: 0.7rem; font-weight: 500; margin-left: 0.5rem;">Maintenance</span></h4>
-                                <p>Routine maintenance and cleaning of UV-Vis spectrophotometer SP-003</p>
-                                <p><i class="fas fa-user"></i> Dr. Johnson • <i class="fas fa-clock"></i> 1 hour ago • <i class="fas fa-clock"></i> Est. 2 hours</p>
-                            </div>
-                            <div class="task-actions">
-                                <button class="btn-sm btn-outline">View Details</button>
-                                <button class="btn-sm btn-primary">Accept</button>
-                            </div>
-                        </div>
 
-                        <div class="available-task">
-                            <div class="task-info">
-                                <h4>Chemical Inventory Count <span style="background: rgba(23, 162, 184, 0.1); color: var(--info-color); padding: 0.125rem 0.5rem; border-radius: 0.75rem; font-size: 0.7rem; font-weight: 500; margin-left: 0.5rem;">Inventory</span></h4>
-                                <p>Monthly inventory count for chemical storage room B</p>
-                                <p><i class="fas fa-user"></i> Dr. Wilson • <i class="fas fa-clock"></i> 3 hours ago • <i class="fas fa-clock"></i> Est. 3 hours</p>
-                            </div>
-                            <div class="task-actions">
-                                <button class="btn-sm btn-outline">View Details</button>
-                                <button class="btn-sm btn-primary">Accept</button>
-                            </div>
-                        </div>
+                      {% for task in new_tasks %}
+                      <div class="available-task">
+                          <div class="task-info">
+                              <h4> {{task.title}} <span style="background: rgba(40, 167, 69, 0.1); color: var(--success-color); padding: 0.125rem 0.5rem; border-radius: 0.75rem; font-size: 0.7rem; font-weight: 500; margin-left: 0.5rem;">Available</span></h4>
+                              <p> {{task.description}} </p>
+                              <p><i class="fas fa-user"></i> {{task.creator}} • <i class="fa-solid fa-circle-exclamation"></i> {{task.get_urgency_display}} • <i class="fas fa-clock"></i> {{task.due_date}} </p>
+                          </div>
+                          <div class="task-actions">
+                              <button class="btn-sm btn-primary" onclick="window.location.href='{% url 'show_task' task.id %}'">View</button>
+                          </div>
+                      </div>
+                      
+                      {% endfor %}
+
+                    
                     </div>
                     <div class="view-all">
-                        <a href="#">View all available tasks</a>
+                        <a href="{% url "tasks" %}?status=pending">View all available tasks</a>
                     </div>
                 </div>
 
@@ -1136,27 +1129,31 @@ body {
                 <!-- Messages -->
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Messages</h3>
+                        <h3 class="card-title">Updates</h3>
                         <span style="color: var(--primary-color); font-size: 0.875rem;">2 new</span>
                     </div>
-                    <div class="card-body no-padding">
-                        <div class="message-item">
-                            <div class="message-avatar">DA</div>
-                            <div class="message-content">
-                                <h4>Dr. Anderson</h4>
-                                <p>Question about the sample preparation protocol for task #4521</p>
-                                <div class="message-time">3 minutes ago</div>
-                            </div>
-                        </div>
+                    <div class="card-body">
+                        
+                      {% for cmnt in comments %}
+                      <div class="message-item" onclick="window.location.href='{% url 'show_task' cmnt.Task.id %}'" style="cursor: pointer;">
+                          {% comment %} <div class="message-avatar">DA</div> {% endcomment %}
+                          <div class="message-content">
+                              <h4>{{cmnt.Task.title}}</h4>
+                              <p>{{cmnt.body}}</p>
+                              <div class="message-time"><i class="fas fa-user"></i> {{cmnt.user}} • <i class="fas fa-clock"></i> {{cmnt.created}}</div>
+                          </div>
+                      </div>
+                      
+                      {% endfor %}
 
-                        <div class="message-item">
+                        {% comment %} <div class="message-item">
                             <div class="message-avatar" style="background: var(--success-color);">LM</div>
                             <div class="message-content">
                                 <h4>Lab Manager</h4>
                                 <p>Reminder: Safety training session tomorrow at 2 PM</p>
                                 <div class="message-time">2 hours ago</div>
                             </div>
-                        </div>
+                        </div> {% endcomment %}
                     </div>
                     <div class="view-all">
                         <a href="#">View all messages</a>

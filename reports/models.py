@@ -2,6 +2,7 @@ from django.db import models
 from main.models import Project , Machine, Team
 from django.contrib.auth.models import User
 import os
+from django.db.models import Q
 from chem import settings
 from django.utils.timezone import now
 # Create your models here.
@@ -91,3 +92,8 @@ class Task_comment(models.Model):
 
     class Meta: 
         ordering = ('created',) 
+        
+    @classmethod
+    def comments_for_user_tasks(cls, user):
+        """Return all comments on tasks assigned to the given user."""
+        return cls.objects.filter(Q(Task__assigned=user) | Q(Task__creator=user)).exclude(Q(user=user) | ~Q(Task__status=1)).select_related('Task', 'user').distinct()

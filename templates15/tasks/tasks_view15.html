@@ -1064,11 +1064,11 @@
                         <span class="fa-solid fa-circle-user fa-2xl comment-avatar"></span>
                         <div class="comment-content">
                           <div class="comment-header">
-                            <span class="comment-author">{{comment.user.first_name}} {{comment.user.last_name}}</span>
+                            <span class="comment-author">{{comment.user}}</span>
                                     <span class="comment-time"> {{comment.created}} </span>
                                   </div>
                                   <div class="comment-text">
-                                    <p> {{comment.body}} </p>
+                                    <p> {{comment.body|linebreaksbr}} </p>
                                   </div>
                                   {% comment %} <div class="comment-actions">
                                     <a href="#" class="comment-action">Reply</a>

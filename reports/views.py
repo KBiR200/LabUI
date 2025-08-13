@@ -293,6 +293,8 @@ def show_task(request, pk):
         print(auth)
     print(task.assigned.all().count())
     print(task.title)
+    for c in comments:
+        print(c.user, c.user_id, c.user.first_name, c.user.last_name)
     # print(reo.author.all())
     return render(request, 'tasks/tasks_view15.html', {"task":task, "report":reo, "comments":comments})
 

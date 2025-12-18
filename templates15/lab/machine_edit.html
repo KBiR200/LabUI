@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Machine - LabUI</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% extends "base.html" %}
+    {% block styles %}
+    
     <style>
         /* Base Styles */
         :root {
@@ -738,69 +734,9 @@
           }
         }
     </style>
-</head>
-<body>
-    <div class="layout">
-        <!-- Sidebar Navigation -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <i class="fas fa-flask"></i>
-                <h1>LabUI</h1>
-            </div>
-            <nav class="sidebar-nav">
-                <ul>
-                    <li>
-                        <a href="/"><i class="fas fa-home"></i> Dashboard</a>
-                    </li>
-                    <li>
-                        <a href="/tasks"><i class="fas fa-tasks"></i> Tasks</a>
-                    </li>
-                    <li>
-                        <a href="/reports"><i class="fas fa-chart-bar"></i> Reports</a>
-                    </li>
-                    <li>
-                        <a href="/floor-plan"><i class="fas fa-map"></i> Floor Plan</a>
-                    </li>
-                    <li class="active">
-                        <a href="/machines"><i class="fas fa-cogs"></i> Machines</a>
-                    </li>
-                    <li>
-                        <a href="/teams"><i class="fas fa-users"></i> Teams</a>
-                    </li>
-                    <li>
-                        <a href="/contactus"><i class="fas fa-envelope"></i> Contact</a>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
+            {% endblock styles %}
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Top Navigation -->
-            <header class="top-nav">
-                <button class="menu-toggle">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <div class="search-container">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search...">
-                </div>
-                <div class="user-menu">
-                    <div class="notifications">
-                        <i class="fas fa-bell"></i>
-                        <span class="badge">3</span>
-                    </div>
-                    <div class="user-profile">
-                        <span class="user-name">User</span>
-                        <i class="fas fa-chevron-down"></i>
-                        <div class="dropdown-menu">
-                            <a href="/profile"><i class="fas fa-user"></i> Profile</a>
-                            <a href="/passchange/"><i class="fas fa-cog"></i> Change Password</a>
-                            <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                        </div>
-                    </div>
-                </div>
-            </header>
+{% block content %}
 
             <!-- Edit Machine Content -->
             <div class="content-wrapper">
@@ -1072,9 +1008,9 @@ This model features a compact design with a spectral bandwidth of 1 nm and a wav
                     </form>
                 </div>
             </div>
-        </main>
-    </div>
+       {% endblock content %}
 
+{% block script %}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize UI components
@@ -1433,5 +1369,4 @@ This model features a compact design with a spectral bandwidth of 1 nm and a wav
         // Initialize auto-save (uncomment if needed)
         // initAutoSave();
     </script>
-</body>
-</html>
+{% endblock script %}

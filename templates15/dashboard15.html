@@ -185,123 +185,121 @@ body {
   color: var(--text-muted);
   font-size: 1rem;
 }
- /* Top Navigation */
-    .top-nav {
-      height: var(--header-height);
-      background-color: var(--card-bg);
-      border-bottom: 1px solid var(--border-color);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 1.5rem;
-      position: sticky;
-      top: 0;
-      z-index: 900;
-      box-shadow: var(--shadow);
-    }
+/* Top Navigation */
+        .top-nav {
+          height: var(--header-height);
+          background-color: var(--card-bg);
+          border-bottom: 1px solid var(--border-color);
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 1.5rem;
+          position: sticky;
+          top: 0;
+          z-index: 900;
+          box-shadow: var(--shadow);
+        }
 
-    .search-container {
-      position: relative;
-      width: 300px;
-    }
+        .search-container {
+          position: relative;
+          width: 300px;
+        }
 
-    .search-container i {
-      position: absolute;
-      left: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-muted);
-    }
+        .search-container i {
+          position: absolute;
+          left: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+          color: var(--text-muted);
+        }
 
-    .search-container input {
-      width: 100%;
-      padding: 0.5rem 0.5rem 0.5rem 2rem;
-      border: 1px solid var(--border-color);
-      border-radius: var(--border-radius);
-      font-size: 0.875rem;
-    }
+        .search-container input {
+          width: 100%;
+          padding: 0.5rem 0.5rem 0.5rem 2rem;
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius);
+          font-size: 0.875rem;
+        }
 
-    .user-menu {
-      display: flex;
-      align-items: center;
-    }
+        .user-menu {
+          display: flex;
+          align-items: center;
+        }
 
-    .notifications {
-      position: relative;
-      margin-right: 1.5rem;
-      cursor: pointer;
-    }
+        .notifications {
+          position: relative;
+          margin-right: 1.5rem;
+          cursor: pointer;
+        }
 
-    .notifications i {
-      font-size: 1.25rem;
-      color: var(--text-muted);
-    }
+        .notifications i {
+          font-size: 1.25rem;
+          color: var(--text-muted);
+        }
 
-    .badge {
-      position: absolute;
-      top: -8px;
-      right: -8px;
-      background-color: var(--danger-color);
-      color: white;
-      border-radius: 50%;
-      width: 18px;
-      height: 18px;
-      font-size: 0.7rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+        .badge {
+          position: absolute;
+          top: -8px;
+          right: -8px;
+          background-color: var(--danger-color);
+          color: white;
+          border-radius: 50%;
+          width: 18px;
+          height: 18px;
+          font-size: 0.7rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
 
-    .user-profile {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      position: relative;
-    }
+        .user-profile {
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          position: relative;
+        }
 
-    .user-profile img {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      margin-right: 0.5rem;
-    }
+        .user-profile img {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          margin-right: 0.5rem;
+        }
 
-    .user-name {
-      font-weight: 500;
-      margin-right: 0.5rem;
-    }
+        .user-name {
+          font-weight: 500;
+          margin-right: 0.5rem;
+        }
 
-    .dropdown-menu {
-      position: absolute;
-      top: 100%;
-      right: 0;
-      background-color: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: var(--border-radius);
-      box-shadow: var(--shadow-lg);
-      min-width: 180px;
-      z-index: 1000;
-      display: none;
-    }
+        .dropdown-menu {
+          position: absolute;
+          top: 100%;
+          right: 0;
+          background-color: var(--card-bg);
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius);
+          box-shadow: var(--shadow-lg);
+          min-width: 180px;
+          z-index: 1000;
+          display: none;
+        }
 
-    .dropdown-menu a {
-      display: flex;
-      align-items: center;
-      padding: 0.75rem 1rem;
-      color: var(--text-color);
-      transition: background-color 0.3s ease;
-    }
+        .dropdown-menu a {
+          display: flex;
+          align-items: center;
+          padding: 0.75rem 1rem;
+          color: var(--text-color);
+          transition: background-color 0.3s ease;
+        }
 
-    .dropdown-menu a:hover {
-      background-color: var(--light-color);
-      text-decoration: none;
-    }
+        .dropdown-menu a:hover {
+          background-color: var(--light-color);
+          text-decoration: none;
+        }
 
-    .dropdown-menu i {
-      margin-right: 0.5rem;
-    }
-
-
+        .dropdown-menu i {
+          margin-right: 0.5rem;
+        }
 /* Metrics Cards */
 .metrics-grid {
   display: grid;
@@ -1102,31 +1100,7 @@ body {
             <!-- Left Column -->
             <div class="left-column">
                 <!-- Calendar - FIXED: Only one calendar container -->
-                <div class="calendar-container">
-                    <div class="calendar-header">
-                        <div class="calendar-nav">
-                            <button id="prevMonth">
-                                <i class="fas fa-chevron-left"></i>
-                            </button>
-                            <div class="calendar-month-year" id="monthYear">
-                                October 2023
-                            </div>
-                            <button id="nextMonth">
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
-                        </div>
-                        <div class="calendar-view-toggle">
-                            <button class="view-btn active" data-view="month">Month</button>
-                            <button class="view-btn" data-view="week">Week</button>
-                            <button class="view-btn" data-view="day">Day</button>
-                        </div>
-                    </div>
-                    <div class="calendar-body">
-                        <div class="calendar-grid" id="calendarGrid">
-                            <!-- Calendar will be generated by JavaScript -->
-                        </div>
-                    </div>
-                </div>
+                {% include "dash_partials/calendar/dash_calendar_html.html" %}
 
                 <!-- Priority Tasks & Alerts -->
                 <div class="card">

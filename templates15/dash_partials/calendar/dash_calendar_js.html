@@ -59,8 +59,8 @@ class CalendarManager {
                         id: {{ task.id }},
                         title: '{{ task.title }}',
                         description: 'new',
-                        date: '{{task.due_date|date:"Y-m-d"}}',
-                        time: '{{task.due_date|time:"H:i"}}',
+                        start: '{{task.start_date|date:"Y-m-d"}}',
+                        end: '{{task.due_date|date:"Y-m-d"}}',
                         priority: 'high',
                         category: 'calibration',
                         assignee: '{{task.assigned.all|join:", "}}',
@@ -218,7 +218,14 @@ class CalendarManager {
 
   getTasksForDate(date) {
     const dateStr = this.formatDate(date)
-    return this.tasks.filter((task) => task.date === dateStr)
+    const checkDate = new Date(dateStr)
+    checkDate.setUTCHours(0, 0, 0, 0)
+
+    return this.tasks.filter(task => {
+      const startDate = new Date(task.start)
+      const endDate = new Date(task.end)
+      return checkDate >= startDate && checkDate <= endDate
+    })
   }
 
   formatDate(date) {

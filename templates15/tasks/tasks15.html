@@ -689,9 +689,9 @@
 
                 <!-- Task Filters -->
                 <div class="task-filters">
-                    <div class="filter-tab active" data-filter="all">All Tasks</div>
+                    <div class="filter-tab" data-filter="all">All Tasks</div>
                     <div class="filter-tab" data-filter="pending">Pending</div>
-                    <div class="filter-tab " data-filter="progress">In Progress</div>
+                    <div class="filter-tab active" data-filter="progress">In Progress</div>
                     <div class="filter-tab" data-filter="completed">Completed</div>
                     <div class="filter-tab" data-filter="overdue">Overdue</div>
 
@@ -852,7 +852,11 @@ function initTaskFilters() {
 
     // Read ?status= from the URL
     const urlParams = new URLSearchParams(window.location.search);
-    const defaultFilter = urlParams.get('status') || 'all';
+    const defaultFilter = urlParams.get('status') || 'progress';
+
+      // Remove active class from all tabs first
+    filterTabs.forEach(t => t.classList.remove('active'));
+
 
     filterTabs.forEach(tab => {
         // Set active class based on URL

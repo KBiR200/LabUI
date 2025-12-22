@@ -1,6 +1,7 @@
 
 from django.shortcuts import render
 from laboratory.models import *
+from reports.models import Machine_comment, Machine_attachment
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 
@@ -14,6 +15,21 @@ def lab(request):
 
 def machine(request, pk):
     machine = get_object_or_404(Machine, id=pk)
+    
+    if request.method == 'POST':
+        if 'body' in request.POST:
+            Machine_comment.objects.create(
+                machine=machine,
+                user=request.user,
+                body=request.POST.get('body')
+            )
+        elif 'attachment' in request.FILES:
+            Machine_attachment.objects.create(
+                machine=machine,
+                attachment=request.FILES.get('attachment')
+            )
+        return redirect('machine_view', pk=pk)
+        
     return render(request, 'lab/machine.html', {'machine': machine})
 
 def machine_add(request):

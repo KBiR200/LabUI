@@ -1026,69 +1026,37 @@
 
                                 <!-- Comments Tab -->
                                 <div class="tab-content" id="comments-tab">
-                                    <div class="comments-container">
-                                        <!-- Comment 1 -->
+                                    <div class="comments-container">                                        
+                                        {% for comment in machine.comments.all %}
                                         <div class="comment">
-                                            <div class="comment-avatar">JS</div>
+                                            <div class="comment-avatar">{{ comment.user.username|first|upper }}</div>
                                             <div class="comment-content">
                                                 <div class="comment-header">
-                                                    <div class="comment-author">John Smith</div>
-                                                    <div class="comment-date">2023-09-15 10:23 AM</div>
+                                                    <div class="comment-author">{{ comment.user.username }}</div>
+                                                    <div class="comment-date">{{ comment.created|date:"Y-m-d H:i" }}</div>
                                                 </div>
                                                 <div class="comment-text">
-                                                    <p>Completed the monthly calibration check today. All parameters are within acceptable ranges. The baseline stability has improved after the recent maintenance.</p>
+                                                    <p>{{ comment.body }}</p>
                                                 </div>
-                                                <div class="comment-actions">
+                                                {% comment %} <div class="comment-actions">
                                                     <div class="comment-action">Reply</div>
                                                     <div class="comment-action">Edit</div>
-                                                </div>
+                                                </div> {% endcomment %}
                                             </div>
                                         </div>
-
-                                        <!-- Comment 2 -->
-                                        <div class="comment">
-                                            <div class="comment-avatar">SJ</div>
-                                            <div class="comment-content">
-                                                <div class="comment-header">
-                                                    <div class="comment-author">Sarah Johnson</div>
-                                                    <div class="comment-date">2023-08-22 02:45 PM</div>
-                                                </div>
-                                                <div class="comment-text">
-                                                    <p>Noticed some fluctuations in readings when using the instrument for extended periods. It might need a check on the lamp stability. Otherwise, it's working well for routine analyses.</p>
-                                                </div>
-                                                <div class="comment-actions">
-                                                    <div class="comment-action">Reply</div>
-                                                    <div class="comment-action">Edit</div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Comment 3 -->
-                                        <div class="comment">
-                                            <div class="comment-avatar">MB</div>
-                                            <div class="comment-content">
-                                                <div class="comment-header">
-                                                    <div class="comment-author">Michael Brown</div>
-                                                    <div class="comment-date">2023-07-10 09:15 AM</div>
-                                                </div>
-                                                <div class="comment-text">
-                                                    <p>Replaced the deuterium lamp today as part of scheduled maintenance. The instrument is now showing improved performance in the UV range. Also updated the firmware to the latest version (v2.5.3).</p>
-                                                </div>
-                                                <div class="comment-actions">
-                                                    <div class="comment-action">Reply</div>
-                                                    <div class="comment-action">Edit</div>
-                                                </div>
-                                            </div>
-                                        </div>
-
+                                        {% empty %}
+                                        <p>No comments yet.</p>
+                                        {% endfor %}
+                                        
                                         <!-- Add Comment Form -->
-                                        <div class="comment-form">
+                                        <form method="post" class="comment-form">
+                                            {% csrf_token %}
                                             <div class="comment-form-header">Add a Comment</div>
-                                            <textarea class="comment-textarea" placeholder="Write your comment here..."></textarea>
-                                            <button class="btn btn-primary">
+                                            <textarea name="body" class="comment-textarea" placeholder="Write your comment here..." required></textarea>
+                                            <button type="submit" class="btn btn-primary">
                                                 <i class="fas fa-comment btn-icon"></i> Post Comment
                                             </button>
-                                        </div>
+                                        </form>
                                     </div>
                                 </div>
 
@@ -1329,7 +1297,7 @@
     </div>
 {% endblock content %}
 
-{% block scripts %}
+{% block script %}
 
 
     <script>
@@ -1343,7 +1311,7 @@
             // Initialize tabs
             initTabs();
         });
-
+        
         function initDropdowns() {
             const dropdownTriggers = document.querySelectorAll('.user-profile');
             
@@ -1381,27 +1349,27 @@
         }
 
         function initTabs() {
-            const tabs = document.querySelectorAll('.tab');
-            
-            tabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    // Remove active class from all tabs
-                    tabs.forEach(t => t.classList.remove('active'));
-                    
-                    // Add active class to clicked tab
-                    this.classList.add('active');
-                    
-                    // Hide all tab content
-                    document.querySelectorAll('.tab-content').forEach(content => {
-                        content.classList.remove('active');
-                    });
-                    
-                    // Show the corresponding tab content
-                    const tabId = this.getAttribute('data-tab');
-                    document.getElementById(tabId + '-tab').classList.add('active');
+          const tabs = document.querySelectorAll('.tab');
+
+          tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+              // Remove active class from all tabs
+              tabs.forEach(t => t.classList.remove('active'));
+
+              // Add active class to clicked tab
+              this.classList.add('active');
+
+              // Hide all tab content
+              document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+              });
+
+              // Show the corresponding tab content
+              const tabId = this.getAttribute('data-tab');
+              document.getElementById(tabId + '-tab').classList.add('active');
                 });
             });
         }
     </script>
 
-    {% endblock scripts %}
+{% endblock script %}

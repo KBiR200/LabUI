@@ -854,9 +854,8 @@ function initTaskFilters() {
     const urlParams = new URLSearchParams(window.location.search);
     const defaultFilter = urlParams.get('status') || 'progress';
 
-      // Remove active class from all tabs first
+    // Remove active class from all tabs first
     filterTabs.forEach(t => t.classList.remove('active'));
-
 
     filterTabs.forEach(tab => {
         // Set active class based on URL

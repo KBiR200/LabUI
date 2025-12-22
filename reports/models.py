@@ -97,3 +97,31 @@ class Task_comment(models.Model):
     def comments_for_user_tasks(cls, user):
         """Return all comments on tasks assigned to the given user."""
         return cls.objects.filter(Q(Task__assigned=user) | Q(Task__creator=user)).exclude(Q(user=user) | ~Q(Task__status=1)).select_related('Task', 'user').distinct()
+
+
+def machine_custom_upload_to(instance, filename):
+    base, extension = os.path.splitext(filename)
+    new_filename = f"{base}_{now():%Y%m%dT%H%M%S}{extension}"
+    return os.path.join("machine_attachments/", new_filename)
+
+class Machine_attachment(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    machine = models.ForeignKey(Machine, related_name="attachments", on_delete=models.CASCADE)
+    attachment = models.FileField(upload_to=machine_custom_upload_to, blank=True, null=True)
+    
+    class Meta: 
+        ordering = ('created',)
+
+class Machine_comment(models.Model): 
+    machine = models.ForeignKey(Machine,
+                             on_delete=models.CASCADE,
+                             related_name='comments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    body = models.TextField() 
+    created = models.DateTimeField(auto_now_add=True) 
+
+    class Meta: 
+        ordering = ('created',) 
+        
+    def __str__(self):
+        return f'Comment by {self.user} on {self.machine}'

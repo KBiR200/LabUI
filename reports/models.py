@@ -101,7 +101,7 @@ class Task_comment(models.Model):
 
 def machine_custom_upload_to(instance, filename):
     base, extension = os.path.splitext(filename)
-    new_filename = f"{base}_{now():%Y%m%dT%H%M%S}{extension}"
+    new_filename = f"{base}{extension}"
     return os.path.join("machine_attachments/", new_filename)
 
 class Machine_attachment(models.Model):
@@ -111,6 +111,10 @@ class Machine_attachment(models.Model):
     
     class Meta: 
         ordering = ('created',)
+        
+    @property
+    def filename(self):
+        return os.path.basename(self.attachment.name) if self.attachment else ''
 
 class Machine_comment(models.Model): 
     machine = models.ForeignKey(Machine,
